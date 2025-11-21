@@ -1,0 +1,27 @@
+---
+interface Props {
+	href?: string;
+	variant?: 'primary' | 'ghost';
+	size?: 'md' | 'lg';
+}
+
+const { href, variant = 'primary', size = 'md' } = Astro.props as Props;
+const base = 'inline-flex items-center justify-center rounded-md font-semibold transition focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-white';
+const variants = {
+	primary: 'bg-primary text-white hover:bg-primary-light shadow-sm',
+	ghost: 'border border-primary text-primary hover:bg-primary/5'
+};
+const sizes = {
+	md: 'px-4 py-2 text-sm',
+	lg: 'px-5 py-3 text-base'
+};
+---
+{href ? (
+	<a class={`${base} ${variants[variant]} ${sizes[size]}`} href={href}>
+		<slot />
+	</a>
+) : (
+	<button class={`${base} ${variants[variant]} ${sizes[size]}`} type="button">
+		<slot />
+	</button>
+)}

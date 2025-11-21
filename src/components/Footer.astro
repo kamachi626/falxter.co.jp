@@ -1,0 +1,23 @@
+---
+const footerNav = [
+	{ label: '会社概要', href: '/company' },
+	{ label: 'プライバシーポリシー', href: '/privacy' },
+	{ label: 'お問い合わせ', href: '/contact' }
+];
+---
+<footer class="border-t border-gray-200 bg-gray-50">
+	<div class="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-8 md:flex-row md:items-center md:justify-between md:px-6">
+		<div>
+			<p class="text-sm font-semibold text-primary">FALXTER K.K.</p>
+			<p class="mt-1 text-xs text-gray-600">小さなチームで、柔軟かつ丁寧にソフトウェアをつくります。</p>
+		</div>
+		<nav class="flex flex-wrap gap-3 text-xs text-gray-700" aria-label="フッターナビ">
+			{footerNav.map((item) => (
+				<a class="rounded px-2 py-1 transition hover:bg-white hover:text-primary" href={item.href}>{item.label}</a>
+			))}
+		</nav>
+	</div>
+	<div class="bg-white py-3 text-center text-[11px] text-gray-500">
+		© 2014-2025 FALXTER K.K. All rights reserved.
+	</div>
+</footer>

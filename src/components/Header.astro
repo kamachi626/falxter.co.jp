@@ -1,0 +1,44 @@
+---
+const navItems = [
+	{ label: 'ホーム', href: '/' },
+	{ label: 'サービス', href: '/services' },
+	{ label: 'スキル', href: '/skills' },
+	{ label: '事例紹介', href: '/works' },
+	{ label: '会社概要', href: '/company' },
+	{ label: 'お知らせ', href: '/news' },
+	{ label: 'お問い合わせ', href: '/contact' }
+];
+---
+<header class="border-b border-gray-200">
+	<div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 md:px-6">
+		<a class="text-xl font-semibold text-primary" href="/" aria-label="FALXTER K.K.">
+		FALXTER K.K.
+		</a>
+		<button class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-gray-200 text-gray-800 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary md:hidden" type="button" aria-label="メニュー" id="menu-toggle">
+		<svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+		<path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16" />
+		</svg>
+		</button>
+		<nav class="hidden items-center gap-6 text-sm md:flex" aria-label="主要ナビゲーション">
+		{navItems.map((item) => (
+		<a class="font-medium text-gray-700 transition hover:text-primary" href={item.href}>{item.label}</a>
+		))}
+		</nav>
+	</div>
+	<div class="mobile-menu hidden border-t border-gray-200 md:hidden" id="mobile-menu">
+		<div class="mx-auto flex max-w-6xl flex-col space-y-2 px-4 py-3 md:px-6">
+		{navItems.map((item) => (
+		<a class="block rounded-md px-3 py-2 text-sm font-medium text-gray-800 transition hover:bg-gray-50 hover:text-primary" href={item.href}>{item.label}</a>
+		))}
+		</div>
+	</div>
+	<script>
+		const toggle = document.getElementById('menu-toggle');
+		const menu = document.getElementById('mobile-menu');
+		if (toggle && menu) {
+			toggle.addEventListener('click', () => {
+				menu.classList.toggle('hidden');
+			});
+		}
+	</script>
+</header>

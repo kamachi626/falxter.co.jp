@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { newsList } from '../../data/news';
+
+const { slug } = Astro.params;
+const article = newsList.find((item) => item.slug === slug);
+
+if (!article) {
+	throw new Error('Article not found');
+}
+---
+<BaseLayout title={`${article.title} | お知らせ | FALXTER株式会社`} description={article.description}>
+	<PageHeader title={article.title} subtitle={article.description} />
+	<section class="mx-auto max-w-4xl px-4 py-12 md:px-6 md:py-16">
+		<div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+			<p class="text-xs font-semibold text-primary">{article.category}</p>
+			<p class="mt-1 text-xs text-gray-600">{article.date}</p>
+			<div class="prose prose-sm max-w-none text-gray-800 md:prose-base">
+				<p>こちらはサンプルの詳細ページです。実際の本文は後日差し替え予定です。小規模なチームで迅速に対応し、リモートでも円滑にコミュニケーションを取りながら開発を進めます。</p>
+				<p>業務システムやWebアプリ、ECサイト構築まで幅広くサポートします。技術的なご相談や具体的な要件のご相談があればお気軽にお問い合わせください。</p>
+			</div>
+		</div>
+	</section>
+</BaseLayout>

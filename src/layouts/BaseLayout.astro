@@ -1,0 +1,39 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+	title?: string;
+	description?: string;
+	url?: string;
+	image?: string;
+}
+
+const { title = 'FALXTER株式会社 | ソフトウェア開発・Webシステム開発', description = 'FALXTER株式会社は小規模ながらフルスタックで柔軟に対応するソフトウェア開発会社です。業務システムからWebアプリ、ECサイトまで支援します。', url = 'https://falxter.co.jp', image = 'https://falxter.co.jp/ogp.png' } = Astro.props as Props;
+---
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>{title}</title>
+	<meta name="description" content={description} />
+	<meta property="og:site_name" content="FALXTER株式会社" />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content={title} />
+	<meta property="og:description" content={description} />
+	<meta property="og:url" content={url} />
+	<meta property="og:image" content={image} />
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body class="min-h-screen bg-white text-gray-900">
+	<div class="flex min-h-screen flex-col">
+		<Header />
+		<main class="flex-1">
+			<slot />
+		</main>
+		<Footer />
+	</div>
+</body>
+</html>
