@@ -1,0 +1,73 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHeader from '@components/PageHeader.astro';
+import Section from '@components/Section.astro';
+import Button from '@components/Button.astro';
+---
+<BaseLayout title="お問い合わせ | FALXTER株式会社" description="お問い合わせフォーム">
+<PageHeader title="お問い合わせ" description="案件の相談やお見積りなど、お気軽にご連絡ください。" />
+<Section>
+<div class="card p-6">
+<form id="contactForm" class="space-y-4" novalidate>
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-neutral-800" for="name">お名前</label>
+<input id="name" name="name" type="text" required class="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100" placeholder="山田 太郎" />
+<p class="text-xs text-red-700 hidden" data-error-name>お名前を入力してください。</p>
+</div>
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-neutral-800" for="email">メールアドレス</label>
+<input id="email" name="email" type="email" required class="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100" placeholder="info@example.com" />
+<p class="text-xs text-red-700 hidden" data-error-email>メールアドレスを正しく入力してください。</p>
+</div>
+<div class="space-y-2">
+<label class="block text-sm font-semibold text-neutral-800" for="message">お問い合わせ内容</label>
+<textarea id="message" name="message" required rows="5" class="w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100" placeholder="ご相談内容をお聞かせください"></textarea>
+<p class="text-xs text-red-700 hidden" data-error-message>お問い合わせ内容を入力してください。</p>
+</div>
+<div class="flex items-center gap-3">
+<Button type="submit" label="送信" />
+<span id="formStatus" class="text-sm text-primary-700"></span>
+</div>
+</form>
+</div>
+</Section>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+const form = document.getElementById('contactForm');
+const status = document.getElementById('formStatus');
+if (!form || !status) return;
+
+const showError = (selector: string, visible: boolean) => {
+const el = form.querySelector(selector) as HTMLElement | null;
+if (el) {
+el.classList.toggle('hidden', !visible);
+}
+};
+
+form.addEventListener('submit', (event) => {
+event.preventDefault();
+const name = (form.querySelector('#name') as HTMLInputElement).value.trim();
+const email = (form.querySelector('#email') as HTMLInputElement).value.trim();
+const message = (form.querySelector('#message') as HTMLTextAreaElement).value.trim();
+
+let valid = true;
+showError('[data-error-name]', name === '');
+showError('[data-error-message]', message === '');
+if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+showError('[data-error-email]', true);
+valid = false;
+} else {
+showError('[data-error-email]', false);
+}
+
+if (!valid || !name || !message) {
+status.textContent = '';
+return;
+}
+
+status.textContent = '送信しました。担当者よりご連絡いたします。';
+form.reset();
+});
+});
+</script>
+</BaseLayout>

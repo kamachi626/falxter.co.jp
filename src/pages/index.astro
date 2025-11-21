@@ -1,0 +1,142 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Section from '@components/Section.astro';
+import Button from '@components/Button.astro';
+import Card from '@components/Card.astro';
+import Badge from '@components/Badge.astro';
+import { services } from '@data/services';
+import { works } from '@data/works';
+import { newsList } from '@data/news';
+
+const heroServices = services.slice(0, 3);
+const featuredWorks = works.slice(0, 3);
+const latestNews = newsList.slice(0, 3);
+const strengths = [
+{
+title: '小規模ならではの柔軟性',
+description: '意思決定の速さと機動力を活かし、変化に合わせて素早く提案・対応します。',
+},
+{
+title: 'フルスタック対応',
+description: '要件定義からインフラ、フロントエンド・バックエンドまで一気通貫で支援します。',
+},
+{
+title: 'リモートファースト',
+description: 'オンライン中心で全国どこからでもコミュニケーションを行い、透明性の高い進行を実現します。',
+},
+];
+---
+<BaseLayout>
+<section class="section-spacing bg-gradient-to-b from-white to-neutral-50">
+<div class="container grid gap-10 lg:grid-cols-2 lg:items-center">
+<div class="space-y-6">
+<p class="text-sm font-semibold uppercase tracking-[0.2em] text-primary-700">The Software Development Company.</p>
+<h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-neutral-900 leading-tight">FALXTER株式会社 | ソフトウェア開発・Webシステム開発</h1>
+<p class="text-lg text-neutral-700">業務システムからWebアプリ、EC、コーポレートサイトまで。小さなチームで丁寧に伴走し、確かな品質で届けます。</p>
+<div class="flex flex-wrap gap-3">
+<Button href="/services" label="サービスを見る" />
+<Button href="/contact" label="お問い合わせ" variant="ghost" />
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-neutral-700">
+<div class="card p-4 space-y-1">
+<p class="text-xs font-semibold text-primary-700">会社規模</p>
+<p class="text-lg font-bold">従業員1名の小規模体制</p>
+</div>
+<div class="card p-4 space-y-1">
+<p class="text-xs font-semibold text-primary-700">拠点</p>
+<p class="text-lg font-bold">東京都八王子市 / リモート対応</p>
+</div>
+</div>
+</div>
+<div class="card p-6 space-y-4">
+<p class="text-sm font-semibold text-primary-700">主要サービス</p>
+<div class="space-y-3">
+{heroServices.map((service) => (
+<div class="border-b last:border-0 border-neutral-100 pb-3 last:pb-0">
+<h3 class="text-lg font-bold text-neutral-900">{service.title}</h3>
+<p class="text-sm text-neutral-700">{service.description}</p>
+<div class="mt-2 flex flex-wrap gap-2">
+{service.stack.map((tech) => (
+<Badge label={tech} />
+))}
+</div>
+</div>
+))}
+</div>
+</div>
+</div>
+</section>
+
+<Section eyebrow="Services" title="提供サービス" description="業務システムからWebサイト制作まで、目的に合わせて柔軟に支援します。">
+<div class="grid gap-6 md:grid-cols-2">
+{services.map((service) => (
+<Card title={service.title} description={service.description} subtitle="SERVICE">
+<p class="text-xs font-semibold text-neutral-600">想定クライアント</p>
+<p>{service.clients}</p>
+<p class="text-xs font-semibold text-neutral-600">開発内容の例</p>
+<ul class="list-disc list-inside space-y-1">
+{service.features.map((item) => (
+<li>{item}</li>
+))}
+</ul>
+<p class="text-xs font-semibold text-neutral-600">使用技術例</p>
+<div class="flex flex-wrap gap-2">
+{service.stack.map((tech) => (
+<Badge label={tech} />
+))}
+</div>
+</Card>
+))}
+</div>
+</Section>
+
+<Section eyebrow="Strength" title="強み・特徴" description="小さなチームだからこそ、伴走の距離感とスピードを大切にしています。">
+<div class="grid gap-6 md:grid-cols-3">
+{strengths.map((item) => (
+<Card title={item.title} description={item.description} subtitle="VALUE" />
+))}
+</div>
+</Section>
+
+<Section eyebrow="Works" title="主な開発実績" description="業務システム、EC、Webアプリなど幅広くご相談いただいています。">
+<div class="grid gap-6 md:grid-cols-3">
+{featuredWorks.map((work) => (
+<Card title={work.title} subtitle={work.category} description={work.description}>
+<p class="text-xs font-semibold text-neutral-600">使用技術</p>
+<div class="flex flex-wrap gap-2">
+{work.tech.map((tech) => (
+<Badge label={tech} />
+))}
+</div>
+<p class="text-xs font-semibold text-neutral-600 mt-2">担当範囲</p>
+<p>{work.scope}</p>
+</Card>
+))}
+</div>
+</Section>
+
+<Section eyebrow="News" title="お知らせ" description="最新情報や技術ブログをお届けします。">
+<div class="grid gap-4 md:grid-cols-3">
+{latestNews.map((news) => (
+<div class="card p-4 space-y-2">
+<p class="text-xs font-semibold text-neutral-500">{news.date} / {news.category}</p>
+<h3 class="text-lg font-bold text-neutral-900">{news.title}</h3>
+<p class="text-sm text-neutral-700">{news.excerpt}</p>
+<a class="inline-flex items-center text-sm font-semibold text-primary-700 hover:text-primary-800" href={`/news/${news.slug}`}>詳しく見る →</a>
+</div>
+))}
+</div>
+<div>
+<Button href="/news" label="お知らせ一覧" variant="ghost" />
+</div>
+</Section>
+
+<section class="section-spacing bg-primary-700">
+<div class="container flex flex-col gap-4 sm:items-center sm:text-center">
+<p class="text-sm font-semibold uppercase tracking-[0.2em] text-primary-100">Contact</p>
+<h2 class="text-3xl font-bold text-white">まずはお気軽にご相談ください</h2>
+<p class="text-neutral-100 max-w-2xl">要件が固まっていない段階でも歓迎です。オンラインミーティングで課題をお伺いし、最適な進め方をご提案します。</p>
+<Button href="/contact" label="お問い合わせ" variant="primary" />
+</div>
+</section>
+</BaseLayout>

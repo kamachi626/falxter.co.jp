@@ -1,0 +1,10 @@
+---
+const { title, description } = Astro.props as { title: string; description?: string };
+---
+<header class="bg-neutral-50 border-b border-neutral-100">
+<div class="container py-10 sm:py-14 space-y-3">
+<p class="text-sm font-semibold uppercase tracking-[0.2em] text-primary-700">FALXTER K.K.</p>
+<h1 class="text-3xl sm:text-4xl font-bold text-neutral-900">{title}</h1>
+{description && <p class="max-w-3xl text-neutral-700">{description}</p>}
+</div>
+</header>

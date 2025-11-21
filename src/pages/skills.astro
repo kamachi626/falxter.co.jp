@@ -1,0 +1,23 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHeader from '@components/PageHeader.astro';
+import Section from '@components/Section.astro';
+import { skillCategories } from '@data/skills';
+---
+<BaseLayout title="スキル | FALXTER株式会社" description="使用技術と対応可能なスキル領域の一覧">
+<PageHeader title="スキル・技術スタック" description="バックエンドを中心に、フロントエンド・クラウドまで横断的に対応します。" />
+<Section eyebrow="Skills" title="対応技術">
+<div class="grid gap-6 md:grid-cols-2">
+{skillCategories.map((category) => (
+<div class="card p-5 space-y-3">
+<p class="text-sm font-semibold text-primary-700">{category.name}</p>
+<ul class="flex flex-wrap gap-2 text-sm text-neutral-800">
+{category.items.map((item) => (
+<li class="rounded-full bg-neutral-100 px-3 py-1 font-semibold">{item}</li>
+))}
+</ul>
+</div>
+))}
+</div>
+</Section>
+</BaseLayout>

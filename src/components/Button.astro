@@ -1,0 +1,23 @@
+---
+const { href = '#', label, variant = 'primary', type = 'link' } = Astro.props as {
+href?: string;
+label: string;
+variant?: 'primary' | 'ghost';
+type?: 'link' | 'button' | 'submit';
+};
+
+const baseClass = 'inline-flex items-center justify-center gap-2 rounded-full px-5 py-2 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600';
+const variants = {
+primary: 'bg-primary-700 text-white hover:bg-primary-800 focus-visible:outline-primary-700',
+ghost: 'bg-white text-primary-700 border border-primary-100 hover:bg-primary-50 focus-visible:outline-primary-700',
+};
+---
+{type === 'link' ? (
+<a href={href} class={`${baseClass} ${variants[variant]}`}>
+{label}
+</a>
+) : (
+<button type={type} class={`${baseClass} ${variants[variant]}`}>
+{label}
+</button>
+)}
