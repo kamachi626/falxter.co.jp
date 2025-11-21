@@ -1,0 +1,17 @@
+---
+interface Props {
+	title?: string;
+	link?: string;
+}
+---
+<article class="card-shadow rounded-lg bg-white p-6">
+	{Astro.props.title && <h3 class="text-lg font-semibold text-gray-900">{Astro.props.title}</h3>}
+	<div class={Astro.props.title ? 'mt-3 space-y-3 text-gray-700 leading-relaxed' : 'space-y-3 text-gray-700 leading-relaxed'}>
+		<slot />
+	</div>
+	{Astro.props.link && (
+		<div class="mt-4">
+			<a href={Astro.props.link} class="text-sm font-semibold text-primary hover:text-primary-dark">詳しく見る</a>
+		</div>
+	)}
+</article>

@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Section from '../../components/Section.astro';
+import { newsList } from '../../data/news';
+
+const sortedNews = [...newsList].sort((a, b) => (a.date < b.date ? 1 : -1));
+---
+<BaseLayout title="お知らせ・News | FALXTER株式会社" description="FALXTER株式会社のお知らせや技術ブログ、メンテナンス情報を掲載します。">
+	<PageHeader title="お知らせ" description="最新情報やブログ更新、メンテナンス予定などをお知らせします。" badge="News" />
+	<Section>
+		<div class="space-y-4">
+			{sortedNews.map((item) => (
+				<a href={`/news/${item.slug}`} class="block rounded-lg border border-gray-200/80 bg-white px-5 py-4 hover:border-primary hover:shadow-sm transition-shadow">
+					<div class="flex flex-wrap items-center gap-3 text-sm text-gray-700">
+						<span class="badge bg-primary/10 text-primary">{item.category}</span>
+						<span>{new Date(item.date).toLocaleDateString('ja-JP')}</span>
+					</div>
+					<p class="mt-1 text-lg font-semibold text-gray-900">{item.title}</p>
+				</a>
+			))}
+		</div>
+	</Section>
+</BaseLayout>

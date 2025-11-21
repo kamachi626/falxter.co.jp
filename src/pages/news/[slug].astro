@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import Section from '../../components/Section.astro';
+import { newsList } from '../../data/news';
+
+const { slug } = Astro.params;
+const entry = newsList.find((item) => item.slug === slug);
+
+if (!entry) {
+	Astro.response.status = 404;
+}
+---
+<BaseLayout title={entry ? `${entry.title} | お知らせ` : 'お知らせ'} description={entry?.content ?? 'FALXTER株式会社のお知らせ詳細ページです。'}>
+	{entry ? (
+		<>
+			<PageHeader title={entry.title} description={entry.content} badge={entry.category} />
+			<Section>
+				<div class="prose prose-gray max-w-3xl">
+					<p class="text-sm text-gray-700">{new Date(entry.date).toLocaleDateString('ja-JP')}</p>
+					<p class="mt-4 leading-relaxed text-gray-800">{entry.content}</p>
+					<p class="mt-6 text-gray-700">※本ページはサンプルのダミー記事です。</p>
+				</div>
+			</Section>
+		</>
+	) : (
+		<PageHeader title="記事が見つかりません" description="指定されたお知らせは存在しないか、削除されました。" />
+	)}
+</BaseLayout>

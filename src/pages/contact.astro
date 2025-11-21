@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Section from '../components/Section.astro';
+---
+<BaseLayout title="お問い合わせ | FALXTER株式会社" description="FALXTER株式会社へのお問い合わせフォームです。オンライン相談も受け付けています。">
+	<PageHeader title="お問い合わせ" description="プロジェクトのご相談・お見積りなどお気軽にご連絡ください。" badge="Contact" />
+	<Section>
+		<div class="card-shadow mx-auto max-w-3xl rounded-lg bg-white p-6">
+			<form id="contact-form" class="space-y-4" novalidate>
+				<div class="space-y-2">
+					<label for="name">お名前</label>
+					<input id="name" name="name" type="text" required placeholder="例: 山田 太郎" />
+				</div>
+				<div class="space-y-2">
+					<label for="email">メールアドレス</label>
+					<input id="email" name="email" type="email" required placeholder="example@falxter.co.jp" />
+				</div>
+				<div class="space-y-2">
+					<label for="message">お問い合わせ内容</label>
+					<textarea id="message" name="message" rows="5" required placeholder="ご相談内容をご記入ください"></textarea>
+				</div>
+				<p id="form-error" class="hidden text-sm text-red-600"></p>
+				<button type="submit" class="btn-primary w-full">送信する</button>
+			</form>
+			<p id="form-success" class="mt-4 hidden rounded-md bg-primary/10 px-4 py-3 text-sm font-semibold text-primary">送信しました。担当者より追ってご連絡いたします。</p>
+		</div>
+	</Section>
+	<script>
+		const form = document.getElementById('contact-form');
+		const errorEl = document.getElementById('form-error');
+		const successEl = document.getElementById('form-success');
+		form?.addEventListener('submit', (event) => {
+			event.preventDefault();
+			if (!form) return;
+			const formData = new FormData(form);
+			const name = (formData.get('name') ?? '').toString().trim();
+			const email = (formData.get('email') ?? '').toString().trim();
+			const message = (formData.get('message') ?? '').toString().trim();
+			const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			if (!name || !email || !message) {
+				errorEl?.classList.remove('hidden');
+				errorEl!.textContent = '未入力の項目があります。すべて入力してください。';
+				successEl?.classList.add('hidden');
+				return;
+			}
+			if (!emailPattern.test(email)) {
+				errorEl?.classList.remove('hidden');
+				errorEl!.textContent = 'メールアドレスの形式を確認してください。';
+				successEl?.classList.add('hidden');
+				return;
+			}
+			errorEl?.classList.add('hidden');
+			successEl?.classList.remove('hidden');
+			form.reset();
+		});
+	</script>
+</BaseLayout>

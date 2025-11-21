@@ -1,0 +1,49 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	description?: string;
+	url?: string;
+	image?: string;
+	ogType?: string;
+}
+
+const baseUrl = 'https://falxter.co.jp';
+const metaTitle = `${Astro.props.title}`;
+const metaDescription = Astro.props.description ?? 'FALXTER株式会社は小規模で柔軟なソフトウェア開発パートナーです。業務システム開発、Webアプリ制作、ECサイト構築をシンプルに高品質で支援します。';
+const metaUrl = Astro.props.url ?? new URL(Astro.url.pathname, baseUrl).toString();
+const metaImage = Astro.props.image ?? 'https://falxter.co.jp/og-image.png';
+const ogType = Astro.props.ogType ?? 'website';
+---
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{metaTitle}</title>
+		<meta name="description" content={metaDescription} />
+		<meta property="og:site_name" content="FALXTER K.K." />
+		<meta property="og:title" content={metaTitle} />
+		<meta property="og:description" content={metaDescription} />
+		<meta property="og:type" content={ogType} />
+		<meta property="og:url" content={metaUrl} />
+		<meta property="og:image" content={metaImage} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={metaTitle} />
+		<meta name="twitter:description" content={metaDescription} />
+		<meta name="twitter:image" content={metaImage} />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+	</head>
+	<body class="bg-white text-gray-900">
+		<div class="min-h-screen flex flex-col">
+			<Header />
+			<main class="flex-1">
+				<slot />
+			</main>
+			<Footer />
+		</div>
+	</body>
+</html>

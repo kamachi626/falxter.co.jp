@@ -1,0 +1,23 @@
+---
+interface Props {
+	title?: string;
+	subtitle?: string;
+	id?: string;
+	background?: 'default' | 'muted';
+}
+
+const bgClass = Astro.props.background === 'muted' ? 'bg-gray-50' : 'bg-white';
+---
+<section id={Astro.props.id} class={`section-padding ${bgClass}`}>
+	<div class="container-base">
+		{Astro.props.title && (
+			<div class="max-w-3xl">
+				<h2 class="section-title">{Astro.props.title}</h2>
+				{Astro.props.subtitle && <p class="section-subtitle">{Astro.props.subtitle}</p>}
+			</div>
+		)}
+		<div class="mt-8">
+			<slot />
+		</div>
+	</div>
+</section>
