@@ -1,0 +1,23 @@
+---
+export interface Props {
+	label: string
+	href?: string
+	variant?: 'primary' | 'ghost'
+	type?: 'button' | 'submit' | 'reset'
+}
+
+const { label, href, variant = 'primary', type = 'button' } = Astro.props
+const baseClass = 'inline-flex items-center justify-center gap-2 rounded-full px-5 py-2 font-semibold transition shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2'
+const styleClass = variant === 'primary'
+	? 'bg-primary-700 text-white hover:bg-primary-600 focus-visible:ring-primary-500'
+	: 'border border-primary-200 text-primary-700 hover:bg-primary-50 focus-visible:ring-primary-500'
+---
+{href ? (
+	<a href={href} class={`${baseClass} ${styleClass}`}>
+		{label}
+	</a>
+) : (
+	<button type={type} class={`${baseClass} ${styleClass}`}>
+		{label}
+	</button>
+)}

@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import PageHeader from '../components/PageHeader.astro'
+import Section from '../components/Section.astro'
+import Button from '../components/Button.astro'
+import { newsList } from '../data/news'
+
+const sortedNews = [...newsList].sort((a, b) => b.date.localeCompare(a.date))
+---
+<BaseLayout title="お知らせ一覧 | FALXTER株式会社" description="FALXTER株式会社のお知らせ・技術ブログ・メンテナンス情報などを掲載しています。" url="https://falxter.co.jp/news">
+	<Header slot="header" />
+	<PageHeader
+		title="お知らせ"
+		description="お知らせ・技術ブログ・メンテナンス情報などの最新情報をお届けします。"
+		breadcrumb={[{ label: 'ホーム', href: '/' }, { label: 'お知らせ', href: '/news' }]}
+	/>
+	<Section subtitle="News" title="最新情報">
+		<div class="space-y-4">
+			{sortedNews.map((item) => (
+				<article class="card-base flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+					<div class="space-y-1">
+						<p class="text-xs text-gray-500">{item.date} / {item.category}</p>
+						<h2 class="text-base font-semibold text-gray-900">{item.title}</h2>
+						{item.summary && <p class="text-sm text-gray-600">{item.summary}</p>}
+					</div>
+					{item.slug && <Button label="詳細" href={`/news/${item.slug}`} variant="ghost" />}
+				</article>
+			))}
+		</div>
+	</Section>
+	<Footer slot="footer" />
+</BaseLayout>

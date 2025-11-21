@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	color: #1f2937;
+	background-color: #ffffff;
+	font-family: 'Noto Sans JP', system-ui, sans-serif;
+}
+
+a {
+	@apply text-primary-700 hover:text-primary-600 transition-colors;
+}
+
+body {
+	@apply bg-white text-gray-800 leading-relaxed antialiased;
+}
+
+.container-base {
+	@apply mx-auto max-w-6xl px-4 md:px-6 lg:px-8;
+}
+
+.section-spacing {
+	@apply py-12 md:py-16 lg:py-20;
+}
+
+.card-base {
+	@apply bg-white border border-gray-100 shadow-sm rounded-xl p-6 hover:shadow-md transition-shadow;
+}
+
+.heading-accent {
+	@apply text-primary-700 font-semibold tracking-wide uppercase text-sm;
+}
+
+input,
+textarea {
+	@apply w-full rounded-md border border-gray-200 px-3 py-2 text-base outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition;
+}
+
+button:focus-visible,
+a:focus-visible {
+	@apply outline-none ring-2 ring-primary-500 ring-offset-2;
+}

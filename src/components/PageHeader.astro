@@ -1,0 +1,28 @@
+---
+export interface Props {
+	title: string
+	description?: string
+	breadcrumb?: { label: string; href?: string }[]
+}
+
+const { title, description, breadcrumb } = Astro.props
+---
+<section class="bg-gray-50 border-b border-gray-100">
+	<div class="container-base py-10 md:py-14 space-y-4">
+		{breadcrumb && (
+			<nav aria-label="breadcrumb" class="text-sm text-gray-500 flex flex-wrap gap-2">
+				{breadcrumb.map((item, index) => (
+					<div class="flex items-center gap-2" aria-current={index === breadcrumb.length - 1 ? 'page' : undefined}>
+						{item.href ? <a href={item.href} class="hover:text-primary-700">{item.label}</a> : <span>{item.label}</span>}
+						{index < breadcrumb.length - 1 && <span aria-hidden="true">/</span>}
+					</div>
+				))}
+			</nav>
+		)}
+		<div class="space-y-2">
+			<p class="heading-accent">The Software Development Company.</p>
+			<h1 class="text-3xl font-bold text-gray-900 md:text-4xl">{title}</h1>
+			{description && <p class="text-lg text-gray-600 max-w-3xl">{description}</p>}
+		</div>
+	</div>
+</section>

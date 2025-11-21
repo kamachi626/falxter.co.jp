@@ -1,0 +1,62 @@
+---
+const navLinks = [
+	{ label: 'ホーム', href: '/' },
+	{ label: 'サービス', href: '/services' },
+	{ label: 'スキル', href: '/skills' },
+	{ label: '事例紹介', href: '/works' },
+	{ label: '会社概要', href: '/company' },
+	{ label: 'お知らせ', href: '/news' },
+	{ label: 'お問い合わせ', href: '/contact' }
+]
+---
+<header class="sticky top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur">
+	<div class="container-base flex items-center justify-between py-4">
+		<a class="text-xl font-bold text-primary-700" href="/" aria-label="FALXTER K.K.">
+			FALXTER K.K.
+		</a>
+		<nav class="hidden items-center gap-8 text-sm font-medium text-gray-700 md:flex" aria-label="primary">
+			{navLinks.map((link) => (
+				<a class="hover:text-primary-700 transition-colors" href={link.href}>{link.label}</a>
+			))}
+		</nav>
+		<div class="md:hidden">
+			<button
+				class="inline-flex items-center rounded-md border border-gray-200 px-3 py-2 text-gray-700 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+				aria-label="メニューを開閉"
+				aria-expanded="false"
+				data-menu-toggle
+			>
+				<svg class="h-5 w-5" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M4 6h16M4 12h16M4 18h16" />
+				</svg>
+			</button>
+		</div>
+	</div>
+	<div class="md:hidden">
+		<div class="container-base">
+			<nav
+				class="hidden flex-col gap-4 border-t border-gray-100 py-4 text-sm font-medium text-gray-700"
+				aria-label="mobile"
+				data-mobile-menu
+			>
+				{navLinks.map((link) => (
+					<a class="block rounded-md px-2 py-2 hover:bg-gray-50" href={link.href}>{link.label}</a>
+				))}
+			</nav>
+		</div>
+	</div>
+</header>
+<script>
+	const toggle = document.querySelector('[data-menu-toggle]')
+	const menu = document.querySelector('[data-mobile-menu]')
+	if (toggle && menu) {
+		toggle.addEventListener('click', () => {
+			const isOpen = menu.classList.contains('hidden')
+			menu.classList.toggle('hidden', !isOpen)
+			toggle.setAttribute('aria-expanded', String(isOpen))
+			toggle.innerHTML = isOpen
+				? '<svg class="h-5 w-5" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M6 18L18 6" /></svg>'
+				: '<svg class="h-5 w-5" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16" /></svg>'
+		})
+	}
+</script>
