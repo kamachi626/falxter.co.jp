@@ -1,0 +1,16 @@
+---
+interface Props {
+	title: string;
+	description?: string;
+	badge?: string;
+}
+---
+<header class="bg-gray-50 border-b border-gray-200/80">
+	<div class="container-base py-10 sm:py-14">
+		<div class="max-w-3xl space-y-3">
+			{Astro.props.badge && <span class="badge">{Astro.props.badge}</span>}
+			<h1 class="text-3xl sm:text-4xl font-semibold text-gray-900">{Astro.props.title}</h1>
+			{Astro.props.description && <p class="text-gray-700 leading-relaxed">{Astro.props.description}</p>}
+		</div>
+	</div>
+</header>

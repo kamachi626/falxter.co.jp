@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Section from '../components/Section.astro';
+import Card from '../components/Card.astro';
+import { services } from '../data/services';
+---
+<BaseLayout title="サービス紹介 | FALXTER株式会社" description="業務システム開発、Webアプリケーション、ECサイト構築、Webサイト制作などのサービスを紹介します。">
+	<PageHeader title="サービス紹介" description="業務要件に合わせて設計し、小回りよく実装・改善します。" badge="Services" />
+	<Section>
+		<div class="grid gap-6 md:grid-cols-2">
+			{services.map((service) => (
+				<Card title={service.name}>
+					<p class="text-sm font-semibold text-primary">{service.category}</p>
+					<p>{service.description}</p>
+					<div class="mt-4 space-y-2 text-sm text-gray-700">
+						<p class="font-semibold">想定クライアント</p>
+						<ul class="list-disc space-y-1 pl-5">
+							{service.clients.map((client) => <li>{client}</li>)}
+						</ul>
+						<p class="font-semibold">開発内容の例</p>
+						<ul class="list-disc space-y-1 pl-5">
+							{service.examples.map((example) => <li>{example}</li>)}
+						</ul>
+						<p class="font-semibold">使用技術例</p>
+						<ul class="flex flex-wrap gap-2">
+							{service.tech.map((tech) => (
+								<span class="badge bg-primary/5 text-primary">{tech}</span>
+							))}
+						</ul>
+					</div>
+				</Card>
+			))}
+		</div>
+	</Section>
+</BaseLayout>

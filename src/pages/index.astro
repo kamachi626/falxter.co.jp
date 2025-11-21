@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Button from '../components/Button.astro';
+import Card from '../components/Card.astro';
+import { services } from '../data/services';
+import { works } from '../data/works';
+import { newsList } from '../data/news';
+
+const latestServices = services.slice(0, 3);
+const latestWorks = works.slice(0, 3);
+const latestNews = newsList.slice(0, 3);
+---
+<BaseLayout title="FALXTER株式会社 | ソフトウェア開発・Webシステム開発" description="FALXTER株式会社は小規模で柔軟なソフトウェア開発パートナー。業務システム開発、Webアプリケーション、ECサイト、Webサイト制作を幅広く支援します。">
+	<section class="section-padding bg-gray-50">
+		<div class="container-base grid gap-10 lg:grid-cols-2 lg:items-center">
+			<div class="space-y-6">
+				<span class="badge">The Software Development Company.</span>
+				<h1 class="text-4xl sm:text-5xl font-semibold text-gray-900 leading-tight">FALXTER株式会社<br class="hidden sm:block" />小さく強く、伴走する開発チーム</h1>
+				<p class="text-lg text-gray-700 leading-relaxed">基幹業務システムからWebアプリ、EC・サイト制作まで、フルスタックに寄り添う開発パートナー。1名体制ならではの小回りと責任感で、要件整理から実装・運用まで一気通貫で支援します。</p>
+				<div class="flex flex-wrap gap-3">
+					<Button href="/contact" label="お問い合わせ" />
+					<Button href="/services" label="サービスを見る" variant="secondary" />
+				</div>
+			</div>
+			<div class="relative">
+				<div class="card-shadow rounded-xl bg-white p-8">
+					<h2 class="text-lg font-semibold text-gray-900">できること</h2>
+					<ul class="mt-4 space-y-3 text-gray-700">
+						<li class="flex items-start gap-3">
+							<span class="mt-1 inline-flex h-3 w-3 rounded-full bg-primary"></span>
+							<span>業務システム・基幹系の開発と改善</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<span class="mt-1 inline-flex h-3 w-3 rounded-full bg-primary"></span>
+							<span>Webアプリ・APIの設計から実装</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<span class="mt-1 inline-flex h-3 w-3 rounded-full bg-primary"></span>
+							<span>ECサイト構築・Shopify/EC-CUBEカスタマイズ</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<span class="mt-1 inline-flex h-3 w-3 rounded-full bg-primary"></span>
+							<span>コーポレートサイトなど静的サイト制作</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<Section title="サービス" subtitle="業務システムからWebアプリ、ECまで幅広く対応します。">
+		<div class="grid gap-6 md:grid-cols-2">
+			{latestServices.map((service) => (
+				<Card title={service.name}>
+					<p>{service.description}</p>
+					<ul class="mt-3 flex flex-wrap gap-2 text-sm text-gray-700">
+						{service.tech.map((item) => (
+							<span class="badge bg-primary/5 text-primary">{item}</span>
+						))}
+					</ul>
+				</Card>
+			))}
+		</div>
+		<div class="mt-6">
+			<Button href="/services" label="サービス一覧を見る" variant="secondary" />
+		</div>
+	</Section>
+
+	<Section title="強み" subtitle="小さな会社ならではの柔軟さとフルスタック対応。" background="muted">
+		<div class="grid gap-6 md:grid-cols-3">
+			<Card title="柔軟な進め方">
+				<p>スモールスタートから段階的な拡張まで、予算とスケジュールに合わせて伴走します。</p>
+			</Card>
+			<Card title="フルスタック">
+				<p>要件整理・設計・フロント・バックエンド・インフラまで一気通貫で担当します。</p>
+			</Card>
+			<Card title="リモート対応">
+				<p>オンライン会議・チャット中心で迅速にコミュニケーション。遠隔でも滞りなく進行します。</p>
+			</Card>
+		</div>
+	</Section>
+
+	<Section title="主な開発実績" subtitle="最近のプロジェクトから一部を抜粋して掲載しています。">
+		<div class="grid gap-6 md:grid-cols-3">
+			{latestWorks.map((work) => (
+				<Card title={work.title}>
+					<p class="text-sm font-semibold text-primary">{work.category}</p>
+					<p>{work.overview}</p>
+					<ul class="mt-3 flex flex-wrap gap-2 text-xs text-gray-700">
+						{work.tech.map((item) => (
+							<span class="badge bg-primary/5 text-primary">{item}</span>
+						))}
+					</ul>
+				</Card>
+			))}
+		</div>
+		<div class="mt-6">
+			<Button href="/works" label="実績一覧を見る" variant="secondary" />
+		</div>
+	</Section>
+
+	<Section title="お知らせ" subtitle="会社からのお知らせや技術ブログをお届けします。" background="muted">
+		<div class="grid gap-4">
+			{latestNews.map((item) => (
+				<a href={`/news/${item.slug}`} class="card-shadow rounded-lg bg-white px-5 py-4 hover:shadow-md transition-shadow">
+					<div class="flex flex-wrap items-center gap-3 text-sm text-gray-700">
+						<span class="font-semibold text-primary">{item.category}</span>
+						<span>{new Date(item.date).toLocaleDateString('ja-JP')}</span>
+					</div>
+					<p class="mt-1 text-lg font-semibold text-gray-900">{item.title}</p>
+				</a>
+			))}
+		</div>
+		<div class="mt-6">
+			<Button href="/news" label="お知らせ一覧を見る" variant="secondary" />
+		</div>
+	</Section>
+
+	<section class="section-padding bg-primary text-white">
+		<div class="container-base flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+			<div class="space-y-2">
+				<h2 class="text-2xl font-semibold">一緒に次のプロジェクトを進めませんか？</h2>
+				<p class="text-white/90">要件整理の壁打ち、既存システムの改善相談など、まずはお気軽にご連絡ください。</p>
+			</div>
+			<Button href="/contact" label="お問い合わせ" variant="secondary" />
+		</div>
+	</section>
+</BaseLayout>
