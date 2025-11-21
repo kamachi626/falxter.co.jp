@@ -1,0 +1,32 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHeader from '@components/PageHeader.astro';
+import Section from '@components/Section.astro';
+---
+<BaseLayout title="会社概要 | FALXTER株式会社" description="FALXTER株式会社の会社情報、所在地、事業内容">
+<PageHeader title="会社概要" description="小さなチームだからこそ、丁寧に寄り添いながらソフトウェア開発を行います。" />
+<Section eyebrow="Company" title="企業情報">
+<div class="card p-6">
+<dl class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-4 text-sm text-neutral-800">
+<dt class="font-semibold text-neutral-600">会社名</dt>
+<dd class="sm:col-span-2">FALXTER株式会社（FALXTER K.K.）</dd>
+<dt class="font-semibold text-neutral-600">所在地</dt>
+<dd class="sm:col-span-2">東京都八王子市南町0-0-0</dd>
+<dt class="font-semibold text-neutral-600">代表者</dt>
+<dd class="sm:col-span-2">代表取締役　佐々木 太郎</dd>
+<dt class="font-semibold text-neutral-600">設立</dt>
+<dd class="sm:col-span-2">2014年9月12日</dd>
+<dt class="font-semibold text-neutral-600">資本金</dt>
+<dd class="sm:col-span-2">3,000,000円</dd>
+<dt class="font-semibold text-neutral-600">従業員数</dt>
+<dd class="sm:col-span-2">1名</dd>
+<dt class="font-semibold text-neutral-600">取引銀行</dt>
+<dd class="sm:col-span-2">○○銀行 八王子支店</dd>
+<dt class="font-semibold text-neutral-600">事業内容</dt>
+<dd class="sm:col-span-2">業務システム開発、Webアプリケーション開発、ECサイト構築、Webサイト制作</dd>
+<dt class="font-semibold text-neutral-600">連絡先</dt>
+<dd class="sm:col-span-2">Tel: 00-0000-0000 / Email: info@falxter.co.jp</dd>
+</dl>
+</div>
+</Section>
+</BaseLayout>

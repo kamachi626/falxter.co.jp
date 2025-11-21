@@ -1,0 +1,22 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHeader from '@components/PageHeader.astro';
+import Section from '@components/Section.astro';
+import { newsList } from '@data/news';
+
+const sortedNews = newsList.sort((a, b) => (a.date > b.date ? -1 : 1));
+---
+<BaseLayout title="お知らせ | FALXTER株式会社" description="FALXTER株式会社からのお知らせ、技術ブログ、メンテナンス情報">
+<PageHeader title="お知らせ" description="最新のお知らせや技術ブログの更新情報をお届けします。" />
+<Section eyebrow="News" title="ニュース一覧">
+<div class="space-y-4">
+{sortedNews.map((news) => (
+<a href={`/news/${news.slug}`} class="card p-4 flex flex-col gap-1 hover:border-primary-100 focus-within:border-primary-100" aria-label={`${news.title}の詳細`}>
+<p class="text-xs font-semibold text-neutral-500">{news.date} / {news.category}</p>
+<h3 class="text-lg font-bold text-neutral-900">{news.title}</h3>
+<p class="text-sm text-neutral-700">{news.excerpt}</p>
+</a>
+))}
+</div>
+</Section>
+</BaseLayout>

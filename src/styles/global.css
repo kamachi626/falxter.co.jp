@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+color: theme('colors.neutral.900');
+background-color: theme('colors.white');
+}
+
+a {
+@apply text-primary-700 hover:text-primary-800 transition-colors;
+}
+
+body {
+@apply font-sans bg-white text-neutral-900 antialiased;
+}
+
+main {
+@apply min-h-screen;
+}
+
+.container {
+@apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.card {
+@apply bg-white shadow-card rounded-xl border border-neutral-100;
+}
+
+.section-spacing {
+@apply py-12 sm:py-16 lg:py-20;
+}

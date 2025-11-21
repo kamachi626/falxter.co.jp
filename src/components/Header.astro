@@ -1,0 +1,35 @@
+---
+const navItems = [
+{ href: '/', label: 'ホーム' },
+{ href: '/services', label: 'サービス' },
+{ href: '/skills', label: 'スキル' },
+{ href: '/works', label: '事例紹介' },
+{ href: '/company', label: '会社概要' },
+{ href: '/news', label: 'お知らせ' },
+{ href: '/contact', label: 'お問い合わせ' },
+];
+---
+<header class="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-neutral-100">
+<div class="container flex items-center justify-between py-4">
+<a href="/" class="flex items-center gap-2 font-bold text-lg text-primary-800" aria-label="FALXTER K.K. ホーム">
+<span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary-100 text-primary-800 font-bold">F</span>
+<span>FALXTER K.K.</span>
+</a>
+<nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-neutral-800">
+{navItems.map((item) => (
+<a class="hover:text-primary-700 transition-colors" href={item.href}>{item.label}</a>
+))}
+</nav>
+<details class="relative md:hidden">
+<summary class="flex items-center gap-2 rounded-full border border-neutral-200 px-3 py-2 text-sm font-semibold text-neutral-800 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-700" aria-label="メニュー">
+<span class="sr-only">メニュー</span>
+<span class="h-0.5 w-5 bg-neutral-800 shadow-[0_6px_0_0_currentColor,0_-6px_0_0_currentColor]"></span>
+</summary>
+<div class="absolute right-0 mt-3 w-56 rounded-xl border border-neutral-100 bg-white shadow-card p-3 space-y-1">
+{navItems.map((item) => (
+<a class="block rounded-lg px-3 py-2 text-sm font-semibold text-neutral-800 hover:bg-primary-50" href={item.href}>{item.label}</a>
+))}
+</div>
+</details>
+</div>
+</header>

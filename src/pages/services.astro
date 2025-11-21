@@ -1,0 +1,33 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHeader from '@components/PageHeader.astro';
+import Section from '@components/Section.astro';
+import Card from '@components/Card.astro';
+import Badge from '@components/Badge.astro';
+import { services } from '@data/services';
+---
+<BaseLayout title="サービス | FALXTER株式会社" description="業務システム開発、Webアプリ開発、ECサイト構築、Webサイト制作のサービス紹介">
+<PageHeader title="サービス" description="課題に応じて柔軟に組み合わせ、小さなチームでスピード感をもって提供します。" />
+<Section eyebrow="Services" title="提供内容">
+<div class="grid gap-6 md:grid-cols-2">
+{services.map((service) => (
+<Card title={service.title} description={service.description} subtitle="SERVICE">
+<p class="text-xs font-semibold text-neutral-600">想定クライアント</p>
+<p>{service.clients}</p>
+<p class="text-xs font-semibold text-neutral-600">開発内容の例</p>
+<ul class="list-disc list-inside space-y-1">
+{service.features.map((feature) => (
+<li>{feature}</li>
+))}
+</ul>
+<p class="text-xs font-semibold text-neutral-600">使用技術例</p>
+<div class="flex flex-wrap gap-2">
+{service.stack.map((tech) => (
+<Badge label={tech} />
+))}
+</div>
+</Card>
+))}
+</div>
+</Section>
+</BaseLayout>

@@ -1,0 +1,18 @@
+---
+const { title, subtitle, description, children } = Astro.props as {
+title: string;
+subtitle?: string;
+description?: string;
+children?: any;
+};
+---
+<div class="card p-6 space-y-3 h-full">
+<div class="space-y-1">
+<p class="text-sm font-semibold text-primary-700">{subtitle}</p>
+<h3 class="text-lg font-bold text-neutral-900">{title}</h3>
+</div>
+{description && <p class="text-sm text-neutral-700">{description}</p>}
+<div class="space-y-2 text-sm text-neutral-700">
+<slot />
+</div>
+</div>

@@ -1,0 +1,23 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PageHeader from '@components/PageHeader.astro';
+import Section from '@components/Section.astro';
+import { newsList } from '@data/news';
+
+const { slug } = Astro.params;
+const article = newsList.find((item) => item.slug === slug);
+
+if (!article) {
+throw new Error('記事が見つかりません');
+}
+---
+<BaseLayout title={`${article.title} | お知らせ | FALXTER株式会社`} description={article.excerpt} url={`https://falxter.co.jp/news/${article.slug}`}>
+<PageHeader title={article.title} description={`${article.date} / ${article.category}`} />
+<Section>
+<div class="card p-6 space-y-4 text-neutral-800 leading-relaxed">
+<p>{article.excerpt}</p>
+<p>こちらの詳細ページはサンプルとして仮の文章を配置しています。実際の公開時には記事本文を差し替えてください。</p>
+<p>小規模チームならではの柔軟性を活かし、お客様の状況に合わせた開発体制とコミュニケーションを設計します。</p>
+</div>
+</Section>
+</BaseLayout>
