@@ -1,0 +1,21 @@
+---
+export interface Props {
+	title?: string
+	subtitle?: string
+	background?: 'default' | 'muted'
+}
+
+const { title, subtitle, background = 'default' } = Astro.props
+const bgClass = background === 'muted' ? 'bg-gray-50' : 'bg-white'
+---
+<section class={`section-spacing ${bgClass}`}>
+	<div class="container-base space-y-6">
+		{title && (
+			<header class="space-y-2">
+				<p class="heading-accent">{subtitle ?? 'Section'}</p>
+				<h2 class="text-2xl font-bold text-gray-900 md:text-3xl">{title}</h2>
+			</header>
+		)}
+		<slot />
+	</div>
+</section>

@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import Header from '../../components/Header.astro'
+import Footer from '../../components/Footer.astro'
+import PageHeader from '../../components/PageHeader.astro'
+import Section from '../../components/Section.astro'
+import { newsList } from '../../data/news'
+
+const { slug } = Astro.params
+const item = newsList.find((entry) => entry.slug === slug)
+if (!item) {
+	return Astro.redirect('/news')
+}
+---
+<BaseLayout title={`${item.title} | お知らせ | FALXTER株式会社`} description={item.summary ?? 'FALXTER株式会社からのお知らせです。'} url={`https://falxter.co.jp/news/${item.slug}`}>
+	<Header slot="header" />
+	<PageHeader
+		title={item.title}
+		description={item.summary ?? ''}
+		breadcrumb={[{ label: 'ホーム', href: '/' }, { label: 'お知らせ', href: '/news' }, { label: item.title }]}
+	/>
+	<Section subtitle="News" title="記事">
+		<article class="card-base space-y-4 text-gray-800 leading-relaxed">
+			<p class="text-sm text-gray-500">{item.date} / {item.category}</p>
+			<p>このページはダミーの詳細記事です。後日CMSやMarkdownと連携することを想定しています。本文にはサービスのアップデートや開発裏話などを記載できます。</p>
+			<p>現時点ではお問い合わせフォームやメールでのご連絡を歓迎しています。お気軽にご相談ください。</p>
+		</article>
+	</Section>
+	<Footer slot="footer" />
+</BaseLayout>

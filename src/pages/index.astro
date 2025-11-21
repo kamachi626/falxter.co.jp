@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import Section from '../components/Section.astro'
+import Button from '../components/Button.astro'
+import { services } from '../data/services'
+import { works } from '../data/works'
+import { newsList } from '../data/news'
+
+const description = '業務システムからWeb、ECまで、小さく速く価値を届けるソフトウェア開発会社。'
+---
+<BaseLayout title="FALXTER株式会社 | ソフトウェア開発・Webシステム開発" description={description}>
+	<Header slot="header" />
+	<section class="bg-gray-50">
+		<div class="container-base section-spacing grid items-center gap-10 md:grid-cols-2">
+			<div class="space-y-4">
+				<p class="heading-accent">The Software Development Company.</p>
+				<h1 class="text-3xl font-bold text-gray-900 md:text-4xl">FALXTER株式会社</h1>
+				<p class="text-lg text-gray-700 leading-relaxed">{description}</p>
+				<div class="flex flex-wrap gap-3">
+					<Button label="サービスを見る" href="/services" />
+					<Button label="お問い合わせ" href="/contact" variant="ghost" />
+				</div>
+			</div>
+			<div class="card-base bg-white shadow-md">
+				<h2 class="text-lg font-semibold text-gray-900 mb-2">主要サービス</h2>
+				<ul class="space-y-3 text-gray-700">
+					<li class="flex items-start gap-2">
+						<span class="mt-1 h-2 w-2 rounded-full bg-primary-600" aria-hidden="true"></span>
+						<span>業務システム開発 / Webアプリケーション開発</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="mt-1 h-2 w-2 rounded-full bg-primary-600" aria-hidden="true"></span>
+						<span>ECサイト構築（EC-CUBE / Shopify）</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="mt-1 h-2 w-2 rounded-full bg-primary-600" aria-hidden="true"></span>
+						<span>Webサイト制作・技術コンサルティング</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+	<Section title="提供サービス" subtitle="Services">
+		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+			{services.slice(0, 4).map((service) => (
+				<article class="card-base">
+					<h3 class="text-lg font-semibold text-gray-900">{service.title}</h3>
+					<p class="mt-2 text-sm text-gray-600">{service.description}</p>
+					<p class="mt-3 text-xs font-semibold text-gray-500">想定クライアント</p>
+					<p class="text-sm text-gray-700">{service.clients}</p>
+					<p class="mt-3 text-xs font-semibold text-gray-500">使用技術</p>
+					<div class="flex flex-wrap gap-2 mt-1">
+						{service.tech.map((item) => (
+							<span class="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700">{item}</span>
+						))}
+					</div>
+				</article>
+			))}
+		</div>
+	</Section>
+	<Section title="強み・特徴" subtitle="Strengths" background="muted">
+		<div class="grid gap-6 md:grid-cols-3">
+			{[
+				{ title: '小規模ならではの柔軟さ', body: '意思決定が早く、変化に合わせた開発スコープ調整ができます。' },
+				{ title: 'フルスタック対応', body: '要件整理からフロント・バックエンド・インフラまで一気通貫で担当。' },
+				{ title: 'リモート・セキュア対応', body: 'リモート開発やセキュアなリモートデスクトップ環境での作業にも対応します。' }
+			].map((item) => (
+				<article class="card-base">
+					<h3 class="text-lg font-semibold text-gray-900">{item.title}</h3>
+					<p class="mt-2 text-sm text-gray-700">{item.body}</p>
+				</article>
+			))}
+		</div>
+	</Section>
+	<Section title="開発実績ダイジェスト" subtitle="Works">
+		<div class="grid gap-6 md:grid-cols-3">
+			{works.slice(0, 3).map((work) => (
+				<article class="card-base">
+					<h3 class="text-lg font-semibold text-gray-900">{work.name}</h3>
+					<p class="mt-2 text-sm text-gray-700">{work.summary}</p>
+					<p class="mt-3 text-xs font-semibold text-gray-500">使用技術</p>
+					<div class="flex flex-wrap gap-2 mt-1">
+						{work.tech.map((item) => (
+							<span class="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700">{item}</span>
+						))}
+					</div>
+				</article>
+			))}
+		</div>
+	</Section>
+	<Section title="お知らせ" subtitle="News" background="muted">
+		<div class="grid gap-4">
+			{newsList.slice(0, 3).map((item) => (
+				<article class="card-base flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+					<div>
+						<p class="text-xs text-gray-500">{item.date} / {item.category}</p>
+						<h3 class="text-base font-semibold text-gray-900">{item.title}</h3>
+						{item.summary && <p class="text-sm text-gray-600">{item.summary}</p>}
+					</div>
+					{item.slug && <Button label="詳細を見る" href={`/news/${item.slug}`} variant="ghost" />}
+				</article>
+			))}
+		</div>
+	</Section>
+	<Section subtitle="Contact" title="お問い合わせはこちら">
+		<div class="grid gap-6 md:grid-cols-2">
+			<div class="space-y-3">
+				<h3 class="text-xl font-semibold text-gray-900">小さな課題もお気軽に</h3>
+				<p class="text-gray-700">要件整理のご相談、既存システムの改善、技術選定の壁打ちなど、早めのご相談でリスクを減らします。</p>
+				<Button label="お問い合わせフォームへ" href="/contact" />
+			</div>
+			<div class="card-base">
+				<p class="text-sm text-gray-600">対応時間: 平日 10:00-18:00（日本時間）</p>
+				<p class="text-sm text-gray-600">メール: info@falxter.co.jp</p>
+				<p class="text-sm text-gray-600">所在地: 東京都八王子市</p>
+			</div>
+		</div>
+	</Section>
+	<Footer slot="footer" />
+</BaseLayout>

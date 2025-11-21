@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import PageHeader from '../components/PageHeader.astro'
+import Section from '../components/Section.astro'
+---
+<BaseLayout title="会社概要 | FALXTER株式会社" description="FALXTER株式会社の会社情報・所在地などを掲載しています。" url="https://falxter.co.jp/company">
+	<Header slot="header" />
+	<PageHeader
+		title="会社概要"
+		description="小規模ながらフルスタックで価値を届けるソフトウェア開発会社です。"
+		breadcrumb={[{ label: 'ホーム', href: '/' }, { label: '会社概要', href: '/company' }]}
+	/>
+	<Section subtitle="Company" title="基本情報">
+		<div class="grid gap-6 md:grid-cols-2">
+			<dl class="card-base grid grid-cols-3 gap-x-4 gap-y-3 text-sm text-gray-800">
+				<dt class="font-semibold text-gray-600">会社名</dt><dd class="col-span-2">FALXTER株式会社</dd>
+				<dt class="font-semibold text-gray-600">英文社名</dt><dd class="col-span-2">FALXTER K.K.</dd>
+				<dt class="font-semibold text-gray-600">所在地</dt><dd class="col-span-2">東京都八王子市</dd>
+				<dt class="font-semibold text-gray-600">代表者</dt><dd class="col-span-2">代表取締役　佐藤 直樹</dd>
+				<dt class="font-semibold text-gray-600">設立</dt><dd class="col-span-2">2014年9月12日</dd>
+				<dt class="font-semibold text-gray-600">資本金</dt><dd class="col-span-2">3,000,000円</dd>
+				<dt class="font-semibold text-gray-600">従業員数</dt><dd class="col-span-2">1名</dd>
+				<dt class="font-semibold text-gray-600">取引銀行</dt><dd class="col-span-2">八王子信用金庫　本店</dd>
+			</dl>
+			<div class="card-base space-y-3 text-sm text-gray-700">
+				<h2 class="text-lg font-semibold text-gray-900">事業内容</h2>
+				<ul class="list-disc space-y-2 pl-5">
+					<li>業務システム・Webアプリケーションの受託開発</li>
+					<li>ECサイト構築（EC-CUBE / Shopify など）</li>
+					<li>Webサイト制作・技術コンサルティング</li>
+				</ul>
+				<h2 class="text-lg font-semibold text-gray-900">連絡先</h2>
+				<p>電話: 03-1234-5678（ダミー）</p>
+				<p>メール: info@falxter.co.jp</p>
+			</div>
+		</div>
+	</Section>
+	<Footer slot="footer" />
+</BaseLayout>
