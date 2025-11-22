@@ -4,7 +4,11 @@ import PageHeader from '../components/PageHeader.astro';
 import Button from '../components/Button.astro';
 ---
 <BaseLayout title="お問い合わせ | FALXTER株式会社" description="システム開発やサイト制作のご相談はこちらからお問い合わせください。">
-        <PageHeader title="お問い合わせ" subtitle="未入力チェックとメール形式の簡易バリデーションを実装しています。" />
+        <PageHeader
+                title="お問い合わせ"
+                subtitle="未入力チェックとメール形式の簡易バリデーションを実装しています。"
+                image="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1200&q=80"
+        />
         <section class="mx-auto max-w-3xl px-4 py-12 md:px-6 md:py-16">
                 <div class="grid gap-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm md:grid-cols-[1.2fr_1fr] md:p-8">
                         <form class="space-y-5" id="contact-form" novalidate>
