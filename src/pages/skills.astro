@@ -5,10 +5,24 @@ import Section from '../components/Section.astro';
 import { skillCategories } from '../data/skills';
 ---
 <BaseLayout title="スキル・技術スタック | FALXTER株式会社" description="言語、フレームワーク、データベース、クラウドなどの技術スタックをご紹介します。">
-	<PageHeader title="スキル・技術スタック" subtitle="案件に応じて最適な技術を選定し、設計から運用まで支援します。" />
-	<Section title="技術カテゴリ" description="将来の追加に備え、配列からループして表示しています。">
-		<div class="grid gap-6 md:grid-cols-2">
-			{skillCategories.map((category) => (
+        <PageHeader
+                title="スキル・技術スタック"
+                subtitle="案件に応じて最適な技術を選定し、設計から運用まで支援します。"
+                image="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=1200&q=80"
+        />
+        <section class="mx-auto max-w-5xl px-4 pt-8 md:px-6 md:pt-12">
+                <figure class="overflow-hidden rounded-2xl border border-gray-200 shadow-sm">
+                        <img
+                                src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80"
+                                alt="コードエディタと設計図を並べた机"
+                                class="h-72 w-full object-cover"
+                                loading="lazy"
+                        />
+                </figure>
+        </section>
+        <Section title="技術カテゴリ" description="将来の追加に備え、配列からループして表示しています。">
+                <div class="grid gap-6 md:grid-cols-2">
+                        {skillCategories.map((category) => (
 				<div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
 					<h2 class="text-lg font-semibold text-gray-900">{category.category}</h2>
 					<ul class="mt-3 flex flex-wrap gap-2 text-sm text-gray-800">

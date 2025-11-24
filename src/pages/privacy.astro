@@ -3,11 +3,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 ---
 <BaseLayout title="プライバシーポリシー | FALXTER株式会社" description="FALXTER株式会社のプライバシーポリシーのサンプルです。">
-	<PageHeader title="プライバシーポリシー" subtitle="実際の内容は後日更新予定です。" />
-	<section class="mx-auto max-w-4xl px-4 py-12 md:px-6 md:py-16">
-		<div class="prose prose-sm max-w-none rounded-2xl border border-gray-200 bg-white p-6 text-gray-800 shadow-sm md:prose-base">
-			<p>本ページはプライバシーポリシーのダミーです。実際の取り扱い方針は後日改訂し、個人情報の利用目的や安全管理措置を明記します。</p>
-			<p>お問い合わせやサービス提供に必要な範囲でのみ情報を取得し、適切に管理いたします。詳細は正式なポリシー公開後にご確認ください。</p>
+        <PageHeader
+                title="プライバシーポリシー"
+                subtitle="実際の内容は後日更新予定です。"
+                image="https://images.unsplash.com/photo-1472289065668-ce650ac443d2?auto=format&fit=crop&w=1200&q=80"
+        />
+        <section class="mx-auto max-w-4xl px-4 py-12 md:px-6 md:py-16">
+                <figure class="overflow-hidden rounded-2xl border border-gray-200 shadow-sm">
+                        <img
+                                src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1100&q=80"
+                                alt="鍵とノートパソコンを並べたセキュリティイメージ"
+                                class="h-64 w-full object-cover"
+                                loading="lazy"
+                        />
+                </figure>
+                <div class="h-6" aria-hidden="true"></div>
+                <div class="prose prose-sm max-w-none rounded-2xl border border-gray-200 bg-white p-6 text-gray-800 shadow-sm md:prose-base">
+                        <p>本ページはプライバシーポリシーのダミーです。実際の取り扱い方針は後日改訂し、個人情報の利用目的や安全管理措置を明記します。</p>
+                        <p>お問い合わせやサービス提供に必要な範囲でのみ情報を取得し、適切に管理いたします。詳細は正式なポリシー公開後にご確認ください。</p>
 		</div>
 	</section>
 </BaseLayout>
