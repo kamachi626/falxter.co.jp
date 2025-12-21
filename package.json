@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.8.1",
-    "@astrojs/sitemap": "^4.2.0",
+    "@astrojs/sitemap": "^3.6.0",
     "@astrojs/tailwind": "^5.1.0",
     "@types/node": "^22.9.4",
     "autoprefixer": "^10.4.20",
