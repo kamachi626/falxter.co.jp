@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../site.config';
+
+const meta = {
+  title: 'プライバシーポリシー | FALXTER株式会社',
+  description: 'FALXTER株式会社のプライバシーポリシー。取得情報、利用目的、第三者提供、外部サービス利用、保管期間、問い合わせ先について記載しています。'
+};
+---
+<BaseLayout title={meta.title} description={meta.description} path="/privacy">
+  <section class="bg-white py-14">
+    <div class="container-responsive space-y-8">
+      <h1 class="text-2xl font-bold text-gray-900">プライバシーポリシー</h1>
+      <div class="space-y-6 text-sm text-gray-800">
+        <p>FALXTER株式会社（以下「当社」）は、本サイトを通じて取得する個人情報について、以下のとおり取り扱います。</p>
+
+        <div class="space-y-2">
+          <h2 class="text-lg font-semibold text-gray-900">1. 取得する情報</h2>
+          <ul class="list-disc space-y-1 pl-5">
+            <li>お問い合わせフォームにご入力いただく情報（氏名、メールアドレス、会社名、種別、本文など）</li>
+            <li>メールでご連絡いただいた際に取得する情報</li>
+          </ul>
+        </div>
+
+        <div class="space-y-2">
+          <h2 class="text-lg font-semibold text-gray-900">2. 利用目的</h2>
+          <ul class="list-disc space-y-1 pl-5">
+            <li>お問い合わせへの回答、必要な情報提供のため</li>
+            <li>サービスの案内および品質向上のための分析</li>
+          </ul>
+        </div>
+
+        <div class="space-y-2">
+          <h2 class="text-lg font-semibold text-gray-900">3. 第三者提供</h2>
+          <p>法令に基づく場合を除き、ご本人の同意なく第三者に提供することはありません。</p>
+        </div>
+
+        <div class="space-y-2">
+          <h2 class="text-lg font-semibold text-gray-900">4. 外部サービスの利用</h2>
+          <p>お問い合わせフォームの送信には Web3Forms を利用しています。送信されたデータは同サービスを経由して当社に送付されます。</p>
+        </div>
+
+        <div class="space-y-2">
+          <h2 class="text-lg font-semibold text-gray-900">5. 保管期間</h2>
+          <p>取得した情報は、利用目的が達成され次第、適切に廃棄または削除します。</p>
+        </div>
+
+        <div class="space-y-2">
+          <h2 class="text-lg font-semibold text-gray-900">6. 開示・訂正・利用停止</h2>
+          <p>開示・訂正・利用停止等のご希望がある場合は、下記お問い合わせ先までご連絡ください。</p>
+        </div>
+
+        <div class="space-y-2">
+          <h2 class="text-lg font-semibold text-gray-900">7. お問い合わせ先</h2>
+          <p>メール: <a href={`mailto:${siteConfig.email}`} class="text-brand">{siteConfig.email}</a></p>
+        </div>
+
+        <p class="text-xs text-gray-600">※ 本ポリシーは今後変更される場合があります。最新の内容をご確認ください。法務チェックが必要な場合は別途ご相談ください（TODO: 法務確認）。</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

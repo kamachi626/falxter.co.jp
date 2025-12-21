@@ -1,0 +1,43 @@
+---
+import { siteConfig } from '../site.config';
+const year = new Date().getFullYear();
+---
+<footer class="border-t border-gray-200 bg-gray-50">
+  <div class="container-responsive grid gap-6 py-10 md:grid-cols-3">
+    <div class="space-y-3">
+      <div class="flex items-center gap-3">
+        <img src={siteConfig.logoPath} alt={`${siteConfig.companyName} ロゴ`} class="h-10 w-auto" loading="lazy" />
+        <div>
+          <p class="text-base font-semibold text-gray-900">{siteConfig.companyName}</p>
+          <p class="text-sm text-gray-600">{siteConfig.companyNameEn}</p>
+        </div>
+      </div>
+      <div class="text-sm text-gray-700">
+        <p>{siteConfig.address}</p>
+        <p>電話: <a href={`tel:${siteConfig.phone.replace(/-/g, '')}`} class="hover:text-brand">{siteConfig.phone}</a></p>
+        <p>メール: <a href={`mailto:${siteConfig.email}`} class="hover:text-brand">{siteConfig.email}</a></p>
+      </div>
+    </div>
+    <div>
+      <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-600">ナビゲーション</h2>
+      <ul class="grid grid-cols-1 gap-2 text-sm text-gray-700 md:grid-cols-2">
+        {siteConfig.navLinks.map((link) => (
+          <li>
+            <a href={link.href} class="hover:text-brand">{link.label}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="space-y-3">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-600">ポリシー</h2>
+      <ul class="space-y-2 text-sm text-gray-700">
+        {siteConfig.footerLinks.map((link) => (
+          <li>
+            <a href={link.href} class="hover:text-brand">{link.label}</a>
+          </li>
+        ))}
+      </ul>
+      <p class="text-xs text-gray-500">© {year} {siteConfig.companyName}. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

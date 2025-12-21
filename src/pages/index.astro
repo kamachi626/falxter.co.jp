@@ -1,0 +1,157 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { getCollection } from 'astro:content';
+import { siteConfig } from '../site.config';
+
+const works = await getCollection('works');
+const meta = {
+  title: 'FALXTER株式会社 | 小さく速く、堅実に。',
+  description:
+    'FALXTER株式会社は、フルスタックエンジニアが運営する一人会社です。中小企業向けWeb制作、受託開発、保守運用・改善まで、必要十分を最短で提供します。'
+};
+---
+<BaseLayout title={meta.title} description={meta.description}>
+  <Hero
+    eyebrow="小さく速く、堅実に。"
+    title="中小企業のWebサイトから業務システムまで。"
+    description="要件整理から実装・運用改善まで、フルスタックで伴走します。ムダを省き、必要十分な構成で素早く立ち上げ、運用しながら堅実に伸ばします。"
+    primaryText="お問い合わせ"
+    primaryHref="/contact"
+    secondaryText="中小企業向けWeb制作を見る"
+    secondaryHref="/web"
+  />
+
+  <section class="container-responsive space-y-8 py-16">
+    <SectionHeading title="サービス" description="課題整理から実装・運用まで、段階に合わせた支援を提供します。" />
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {[
+        {
+          title: '中小企業向けWeb制作',
+          body: '伝わる構成と導線、速い表示、基本SEOまで。まずは最小構成で公開し、必要に応じて育てます。',
+          href: '/web'
+        },
+        {
+          title: '受託開発（Web/業務システム）',
+          body: '要件整理から設計・実装・テスト・リリースまで。既存システムの改修やリプレイスも対応。',
+          href: '/services'
+        },
+        {
+          title: '保守運用・改善',
+          body: '速度改善、軽微改修、運用の自動化、監視や障害対応フローの整備など、運用コストを下げます。',
+          href: '/services'
+        },
+        {
+          title: '開発支援（エージェント経由含む）',
+          body: 'フルスタックとしてチームに合流し、機能開発と品質改善を前に進めます（業務委託中心）。',
+          href: '/services'
+        },
+        {
+          title: '技術顧問/レビュー',
+          body: 'アーキテクチャ相談、コードレビュー、セキュリティ/運用の観点整理をスポットまたは継続で支援します。',
+          href: '/services'
+        }
+      ].map((item) => (
+        <a
+          href={item.href}
+          class="flex h-full flex-col justify-between rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-brand hover:shadow-md focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+        >
+          <div class="space-y-3">
+            <h3 class="text-lg font-semibold text-gray-900">{item.title}</h3>
+            <p class="text-sm leading-relaxed text-gray-700">{item.body}</p>
+          </div>
+          <span class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-brand">詳しく見る
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 5l7 7-7 7" />
+            </svg>
+          </span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="bg-gray-50 py-16">
+    <div class="container-responsive space-y-10">
+      <SectionHeading title="選ばれる理由" description="小さく始め、運用しながら改善することで、リスクを抑えながら成果を積み上げます。" />
+      <div class="grid gap-6 md:grid-cols-3">
+        {[{
+          title: '必要十分で素早く',
+          body: '最小構成で公開し、運用データを基に伸ばす方針。コストとリスクを抑えながらスピード重視で進めます。'
+        }, {
+          title: 'フルスタックの伴走',
+          body: 'フロントからバックエンド、運用まで一貫対応。社内リソースや既存システムとの整合も考慮します。'
+        }, {
+          title: '運用しやすさを重視',
+          body: '静的生成やシンプルなCMS構成を優先し、管理負荷を抑制。キーボード操作やARIAも考慮したUIを提供します。'
+        }].map((item) => (
+          <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+            <h3 class="text-lg font-semibold text-gray-900">{item.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-gray-700">{item.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="container-responsive space-y-10 py-16">
+    <SectionHeading
+      title="実績（概要のみ公開）"
+      description="守秘のため社名・案件名は非公開です。匿名の概要のみ掲載しています。"
+    />
+    <div class="grid gap-6 md:grid-cols-3">
+      {works.map((item) => (
+        <article class="flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-gray-900">{item.data.title}</h3>
+            <span class="rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">{item.data.industry}</span>
+          </div>
+          <dl class="mt-4 space-y-3 text-sm text-gray-700">
+            <div>
+              <dt class="font-semibold text-gray-800">担当範囲</dt>
+              <dd>{item.data.role}</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-gray-800">技術</dt>
+              <dd>{item.data.tech}</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-gray-800">成果・効果</dt>
+              <dd>{item.data.impact}</dd>
+            </div>
+            <div>
+              <dt class="font-semibold text-gray-800">備考</dt>
+              <dd>{item.data.note ?? '守秘のため非公開'}</dd>
+            </div>
+          </dl>
+        </article>
+      ))}
+    </div>
+    <div class="rounded-2xl border border-dashed border-brand/40 bg-brand/5 p-6 text-sm text-gray-800">
+      その他の案件については守秘義務の範囲で口頭にてお伝えします。まずはお気軽にご相談ください。
+    </div>
+  </section>
+
+  <section class="bg-brand text-white">
+    <div class="container-responsive flex flex-col gap-6 py-14 md:flex-row md:items-center md:justify-between">
+      <div class="space-y-3">
+        <h2 class="text-2xl font-bold">まずは状況をお聞かせください</h2>
+        <p class="text-sm text-white/90">要件が固まっていなくても問題ありません。2営業日以内の返信を心がけています。</p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a
+          href="/contact"
+          class="inline-flex items-center justify-center rounded-lg bg-white px-5 py-3 text-sm font-semibold text-brand shadow-sm transition hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-brand"
+        >
+          お問い合わせ
+        </a>
+        <a
+          href={`mailto:${siteConfig.email}`}
+          class="inline-flex items-center justify-center rounded-lg border border-white px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-brand"
+        >
+          メールで相談する
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

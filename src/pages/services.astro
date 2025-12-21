@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+
+const services = [
+  {
+    title: '中小企業向けWeb制作',
+    description: '伝わる構成と導線、速い表示、基本SEOまで。まずは最小構成で公開し、必要に応じて育てます。',
+    target: '中小企業のコーポレート/採用/サービス紹介サイト',
+    scope: '要件整理、情報設計、デザイン、実装、公開、運用設計',
+    deliverables: 'Astro+Tailwindでの静的サイト、軽量な運用手順、基本SEO設定',
+    href: '/web'
+  },
+  {
+    title: '受託開発（Web/業務システム）',
+    description: '要件整理から設計・実装・テスト・リリースまで。既存システムの改修やリプレイスも対応します。',
+    target: '業務効率化ツール、顧客向けWebアプリなど',
+    scope: '要件定義、設計、実装、テスト、リリース、ドキュメント',
+    deliverables: 'Webアプリケーション、API、運用手順、移行計画（必要に応じて）'
+  },
+  {
+    title: '保守運用・改善',
+    description: '速度改善、軽微改修、運用の自動化、監視や障害対応フローの整備など、運用コストを下げます。',
+    target: '既存サイトやWebアプリの継続改善',
+    scope: 'パフォーマンス改善、軽微改修、自動化、監視設計、問い合わせ導線整備',
+    deliverables: '改善レポート、対応チケット、改善後の手順書'
+  },
+  {
+    title: '開発支援（エージェント経由含む）',
+    description: 'フルスタックとしてチームに合流し、機能開発と品質改善を前に進めます（業務委託中心）。',
+    target: 'スタートアップ、事業会社、受託チーム',
+    scope: '機能開発、コードレビュー、技術選定支援、開発プロセス改善',
+    deliverables: '実装コード、レビュー記録、改善提案ノート'
+  },
+  {
+    title: '技術顧問/レビュー',
+    description: 'アーキテクチャ相談、コードレビュー、セキュリティ/運用の観点整理をスポットまたは継続で支援します。',
+    target: '技術判断や品質向上の相談先を求めるチーム',
+    scope: 'アーキテクチャ相談、セキュリティ・運用観点整理、コード・設計レビュー',
+    deliverables: '改善提案、レビュー結果、優先度付きTODOリスト'
+  }
+];
+
+const meta = {
+  title: 'サービス | FALXTER株式会社',
+  description: '中小企業向けWeb制作、受託開発、保守運用・改善、開発支援、技術顧問/レビューを提供しています。'
+};
+---
+<BaseLayout title={meta.title} description={meta.description} path="/services">
+  <section class="bg-gray-50 py-14">
+    <div class="container-responsive space-y-8">
+      <SectionHeading title="提供サービス" description="段階に合わせて選べるメニュー。必要に応じて組み合わせも可能です。" />
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {services.map((service) => (
+          <article class="flex h-full flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div class="space-y-2">
+              <h2 class="text-lg font-semibold text-gray-900">{service.title}</h2>
+              <p class="text-sm leading-relaxed text-gray-700">{service.description}</p>
+            </div>
+            <dl class="space-y-2 text-sm text-gray-700">
+              <div>
+                <dt class="font-semibold text-gray-800">対象</dt>
+                <dd>{service.target}</dd>
+              </div>
+              <div>
+                <dt class="font-semibold text-gray-800">提供範囲</dt>
+                <dd>{service.scope}</dd>
+              </div>
+              <div>
+                <dt class="font-semibold text-gray-800">成果物例</dt>
+                <dd>{service.deliverables}</dd>
+              </div>
+            </dl>
+            {service.href && (
+              <a
+                href={service.href}
+                class="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-brand hover:underline"
+              >
+                詳細を見る
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 5l7 7-7 7" />
+                </svg>
+              </a>
+            )}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

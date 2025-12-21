@@ -1,0 +1,34 @@
+---
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import OrganizationSchema from '../components/OrganizationSchema.astro';
+import SEO from '../components/SEO.astro';
+import { siteConfig } from '../site.config';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  path?: string;
+  ogImage?: string;
+}
+
+const { title, description, path = Astro.url.pathname, ogImage } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <SEO title={title} description={description} path={path} ogImage={ogImage} />
+    <OrganizationSchema />
+    <meta name="theme-color" content={siteConfig.brandColor} />
+    <link rel="icon" type="image/png" href={siteConfig.logoPath} />
+  </head>
+  <body class="min-h-screen bg-white text-gray-900">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:rounded focus:bg-white focus:px-3 focus:py-2 focus:text-sm focus:text-brand focus:shadow">メインコンテンツへ移動</a>
+    <Header />
+    <main id="main"> <slot /> </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,52 @@
+---
+import { siteConfig } from '../site.config';
+
+const { navLinks, logoPath } = siteConfig;
+const currentPath = Astro.url.pathname;
+---
+<header class="border-b border-gray-200 bg-white">
+  <nav class="container-responsive flex flex-wrap items-center justify-between py-4" aria-label="メインメニュー">
+    <a href="/" class="flex items-center gap-3" aria-label={`${siteConfig.companyName} TOP`}>
+      <img src={logoPath} alt={`${siteConfig.companyName} ロゴ`} class="h-10 w-auto" loading="lazy" />
+      <span class="text-lg font-semibold text-gray-900">{siteConfig.companyName}</span>
+    </a>
+    <button
+      type="button"
+      class="inline-flex items-center rounded-lg p-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-brand md:hidden"
+      aria-controls="nav-menu"
+      aria-expanded="false"
+      data-collapse-toggle="nav-menu"
+    >
+      <span class="sr-only">メニューを開閉</span>
+      <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+    <div class="hidden w-full items-center md:flex md:w-auto" id="nav-menu">
+      <ul class="mt-4 flex flex-col gap-2 rounded-lg border border-gray-100 bg-gray-50 p-4 text-sm md:mt-0 md:flex-row md:items-center md:gap-4 md:border-0 md:bg-white md:p-0">
+        {navLinks.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class={`rounded px-3 py-2 font-medium hover:bg-gray-100 hover:text-brand focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2 ${currentPath === item.href ? 'text-brand' : 'text-gray-700'}`}
+              aria-current={currentPath === item.href ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const toggleButton = document.querySelector('[data-collapse-toggle="nav-menu"]');
+  const menu = document.getElementById('nav-menu');
+
+  toggleButton?.addEventListener('click', () => {
+    const isExpanded = menu?.classList.contains('hidden') === false;
+    menu?.classList.toggle('hidden');
+    toggleButton.setAttribute('aria-expanded', (!isExpanded).toString());
+  });
+</script>
