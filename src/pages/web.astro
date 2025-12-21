@@ -1,0 +1,254 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { siteConfig } from '../site.config';
+
+const steps = [
+  { title: '1 ヒアリング', desc: '目的・制約・スケジュールを共有し、現状資料があれば確認します。' },
+  { title: '2 構成案/導線設計', desc: '情報設計とサイトマップ、CTA設計を提案し、すり合わせます。' },
+  { title: '3 デザイン', desc: 'ワイヤーを基に、ブランドカラーを活かしたミニマルなデザインを作成します。' },
+  { title: '4 実装', desc: 'Astro + Tailwind + Flowbiteで静的に実装し、アクセシビリティも確認します。' },
+  { title: '5 公開', desc: 'ドメイン設定、ホスティング設定、OGPや計測タグ設定を行います。' },
+  { title: '6 改善/保守（任意）', desc: '公開後の微調整や速度改善、軽微改修を継続サポートします。' }
+];
+
+const plans = [
+  {
+    name: 'ライト',
+    price: '税込 198,000円',
+    detail: '1ページ（LP構成） / 納期 2〜3週間 / 修正: デザイン1回・文言微調整1回',
+    features: ['LP構成', '基本SEO/OGP', '問い合わせ導線設計'],
+    highlighted: false
+  },
+  {
+    name: 'スタンダード',
+    price: '税込 498,000円',
+    detail: '5ページ（TOP/サービス/実績/会社概要/問い合わせ） / 納期 4〜6週間 / 修正: デザイン2回・文言微調整2回',
+    features: ['5ページ構成', 'サイトマップ/導線設計', '基本計測タグの設置'],
+    highlighted: true
+  },
+  {
+    name: 'プレミアム',
+    price: '税込 798,000円',
+    detail: '8ページ（スタンダード＋追加コンテンツ） / 納期 6〜8週間 / 修正: デザイン3回・文言微調整3回 / 公開後30日間の軽微調整含む（範囲詳細はTODO）',
+    features: ['追加コンテンツ提案', '公開後30日間の軽微調整', '品質チェックリスト付き'],
+    highlighted: false
+  }
+];
+
+const options = [
+  { title: '写真撮影', price: '55,000円', note: '半日想定、交通費は別途' },
+  { title: '原稿リライト/整形', price: '33,000円', note: '量が多い場合は別途' },
+  { title: 'ドメイン取得代行', price: '実費 + 11,000円' },
+  { title: 'サーバ設定/移管', price: '33,000円', note: '静的ホスティング想定' },
+  { title: '公開後保守', price: '22,000円/月', note: '軽微修正と運用相談、作業量超過は別途' },
+  { title: '追加ページ', price: '22,000円/ページ', note: 'テンプレ流用前提' }
+];
+
+const qualityItems = [
+  { title: '速い表示', desc: '静的生成と軽量な実装で高速表示を優先します。' },
+  { title: 'スマホ最適化', desc: 'モバイルファーストのレスポンシブ設計。' },
+  { title: '基本SEO', desc: 'title/description、OGP、sitemap.xml、robots.txtまで対応。' },
+  { title: 'セキュリティ配慮', desc: '不要なJSを避け、攻撃面を減らします。' },
+  { title: '更新しやすい設計', desc: 'コンテンツ分離と再利用しやすい構成で、増やしやすさを重視。' }
+];
+
+const faqs = [
+  { question: '原稿や写真が揃っていなくても進められますか？', answer: 'はい。必要に応じて構成案から作成し、仮テキストや素材で先に形にします。原稿整形や写真撮影もオプションで対応可能です。' },
+  { question: '公開までのコミュニケーション方法は？', answer: 'オンラインミーティングとチャットを併用します。ステップごとに確認用の資料やステージングを共有します。' },
+  { question: '納期はどのくらい見込めばよいですか？', answer: 'ライトは2〜3週間、スタンダードは4〜6週間、プレミアムは6〜8週間が目安です。要件や素材状況によって前後します。' },
+  { question: '支払い条件は？', answer: '着手金と納品時分割、もしくは完了後一括など柔軟に相談可能です（詳細は契約時に確定）。' },
+  { question: 'CMSは入りますか？', answer: '静的サイトを基本としつつ、必要に応じてヘッドレスCMS連携も検討します（要件次第で別途見積）。' },
+  { question: 'ホスティングはどうなりますか？', answer: '静的ホスティング（例: Vercel, Cloudflare Pages, S3等）を想定しています。運用環境の指定があれば合わせます。' }
+];
+
+const meta = {
+  title: '中小企業向けWeb制作 | FALXTER株式会社',
+  description: '中小企業向けにミニマルで高速なWebサイトをAstroで制作します。構成・デザイン・実装・公開・改善まで伴走し、本ページ自体も制作サンプルです。'
+};
+---
+<BaseLayout title={meta.title} description={meta.description} path="/web">
+  <section class="bg-gradient-to-b from-white to-gray-50 py-14">
+    <div class="container-responsive space-y-6">
+      <p class="inline-flex w-fit items-center rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">中小企業向けWeb制作</p>
+      <h1 class="text-3xl font-bold text-gray-900 sm:text-4xl">伝わる構成で、小さく速く公開するコーポレートサイト</h1>
+      <p class="max-w-4xl text-lg leading-relaxed text-gray-700">
+        まずは必要十分な構成で公開し、運用状況を見ながら堅実に育てます。デザインや文章はミニマルに整え、アクセシビリティと高速表示を重視。<strong>本ページは制作サンプルとしてもご覧いただけます。</strong>
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a
+          href="/contact"
+          class="inline-flex items-center justify-center rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand/90 focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+        >
+          制作を相談する
+        </a>
+        <a
+          href={`mailto:${siteConfig.email}`}
+          class="inline-flex items-center justify-center rounded-lg border border-gray-300 px-5 py-3 text-sm font-semibold text-gray-800 transition hover:border-brand hover:text-brand focus:outline-none focus:ring-2 focus:ring-brand focus:ring-offset-2"
+        >
+          メールで問い合わせ
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-responsive space-y-8 py-14">
+    <SectionHeading title="対象" description="中小企業のコーポレート/採用/サービス紹介サイトを中心に、シンプルで運用しやすい構成を提案します。" />
+    <div class="grid gap-6 md:grid-cols-3">
+      {[{
+        title: 'コーポレートサイト',
+        desc: '会社概要、サービス一覧、問い合わせ導線を整理し、信用を補強する構成。'
+      }, {
+        title: '採用/募集ページ',
+        desc: '求める人物像や文化が伝わるシンプルな採用情報。エントリー導線も整備。'
+      }, {
+        title: 'サービス紹介/LP',
+        desc: '1〜5ページ程度の構成で、特徴と問い合わせ導線を明確に設計。'
+      }].map((item) => (
+        <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+          <h2 class="text-lg font-semibold text-gray-900">{item.title}</h2>
+          <p class="mt-3 text-sm leading-relaxed text-gray-700">{item.desc}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="bg-gray-50 py-14">
+    <div class="container-responsive space-y-8">
+      <SectionHeading title="提供範囲" description="構成から実装、公開後の改善までをワンストップで支援します。" />
+      <div class="grid gap-4 md:grid-cols-2">
+        {[{
+          title: '構成/導線設計',
+          desc: 'サイトマップ、CTA、フォーム導線の設計。'
+        }, {
+          title: 'デザイン',
+          desc: 'ブランドカラーと余白を活かしたミニマルデザイン。'
+        }, {
+          title: '実装',
+          desc: 'Astro + Tailwind + Flowbiteで静的に実装し、高速&アクセシブルに。'
+        }, {
+          title: '公開/計測',
+          desc: 'OGP、sitemap、robots、計測タグ設定、ホスティング設定。'
+        }, {
+          title: '改善/保守（任意）',
+          desc: '速度改善、軽微修正、導線改善、定期ヘルスチェック。'
+        }, {
+          title: 'コンテンツ追加',
+          desc: '実績やFAQなど、増やしやすいデータ構造で追加を高速化。'
+        }].map((item) => (
+          <div class="flex items-start gap-3 rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+            <div class="mt-1 h-3 w-3 rounded-full bg-brand" aria-hidden="true"></div>
+            <div>
+              <h3 class="font-semibold text-gray-900">{item.title}</h3>
+              <p class="text-sm text-gray-700">{item.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="container-responsive space-y-8 py-14">
+    <SectionHeading title="制作フロー" description="確認ポイントを明確にし、着実に進めます。" />
+    <ol class="grid gap-4 md:grid-cols-3">
+      {steps.map((step) => (
+        <li class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+          <p class="text-xs font-semibold uppercase tracking-wide text-brand">{step.title}</p>
+          <p class="mt-3 text-sm leading-relaxed text-gray-700">{step.desc}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="bg-gray-50 py-14">
+    <div class="container-responsive space-y-10">
+      <SectionHeading title="料金プラン" description="税込表記です。要件やページ数に合わせて柔軟に調整します。" />
+      <div class="grid gap-6 md:grid-cols-3">
+        {plans.map((plan) => (
+          <div class={`flex h-full flex-col rounded-2xl border ${plan.highlighted ? 'border-brand shadow-lg' : 'border-gray-200 shadow-sm'} bg-white p-6`}>
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-semibold text-gray-900">{plan.name}</h3>
+              {plan.highlighted && <span class="rounded-full bg-brand px-3 py-1 text-xs font-semibold text-white">おすすめ</span>}
+            </div>
+            <p class="mt-2 text-2xl font-bold text-brand">{plan.price}</p>
+            <p class="mt-2 text-sm text-gray-700">{plan.detail}</p>
+            <ul class="mt-4 space-y-2 text-sm text-gray-700">
+              {plan.features.map((feature) => (
+                <li class="flex items-start gap-2">
+                  <span class="mt-1 h-2 w-2 rounded-full bg-brand" aria-hidden="true"></span>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold text-gray-900">オプション</h3>
+        <div class="grid gap-4 md:grid-cols-2">
+          {options.map((opt) => (
+            <div class="flex items-center justify-between rounded-xl border border-gray-200 bg-white p-4 text-sm text-gray-800 shadow-sm">
+              <div>
+                <p class="font-semibold text-gray-900">{opt.title}</p>
+                {opt.note && <p class="text-xs text-gray-600">{opt.note}</p>}
+              </div>
+              <p class="font-semibold text-brand">{opt.price}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-responsive space-y-10 py-14">
+    <SectionHeading title="品質項目" description="高速表示とアクセシビリティを重視した設計です。" />
+    <div class="grid gap-4 md:grid-cols-3">
+      {qualityItems.map((item) => (
+        <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+          <h3 class="text-lg font-semibold text-gray-900">{item.title}</h3>
+          <p class="mt-3 text-sm leading-relaxed text-gray-700">{item.desc}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="bg-gray-50 py-14">
+    <div class="container-responsive space-y-8">
+      <SectionHeading title="FAQ" description="よくある質問への回答です。" />
+      <div class="space-y-4">
+        {faqs.map((faq) => (
+          <details class="group rounded-2xl border border-gray-200 bg-white p-5 shadow-sm" open={false}>
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2">
+              {faq.question}
+              <span class="text-brand transition group-open:rotate-90" aria-hidden="true">▶</span>
+            </summary>
+            <p class="mt-3 text-sm text-gray-700">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-brand text-white">
+    <div class="container-responsive flex flex-col gap-6 py-12 md:flex-row md:items-center md:justify-between">
+      <div class="space-y-2">
+        <h2 class="text-2xl font-bold">制作のご相談はこちら</h2>
+        <p class="text-sm text-white/90">2営業日以内の返信を心がけています。メールかフォームからご連絡ください。</p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a
+          href="/contact"
+          class="inline-flex items-center justify-center rounded-lg bg-white px-5 py-3 text-sm font-semibold text-brand shadow-sm transition hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-brand"
+        >
+          問い合わせフォームへ
+        </a>
+        <a
+          href={`mailto:${siteConfig.email}`}
+          class="inline-flex items-center justify-center rounded-lg border border-white px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-brand"
+        >
+          メールで相談
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

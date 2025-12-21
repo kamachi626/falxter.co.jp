@@ -1,0 +1,31 @@
+---
+import { siteConfig } from '../site.config';
+
+const orgJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: siteConfig.companyName,
+  alternateName: siteConfig.companyNameEn,
+  url: siteConfig.domain,
+  logo: new URL(siteConfig.logoPath, siteConfig.domain).toString(),
+  email: siteConfig.email,
+  telephone: siteConfig.phone,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: siteConfig.address,
+    addressLocality: '八王子市',
+    addressRegion: '東京都',
+    addressCountry: 'JP'
+  },
+  contactPoint: [
+    {
+      '@type': 'ContactPoint',
+      contactType: 'customer support',
+      email: siteConfig.email,
+      telephone: siteConfig.phone,
+      areaServed: 'JP'
+    }
+  ]
+};
+---
+<script type="application/ld+json">{JSON.stringify(orgJsonLd)}</script>

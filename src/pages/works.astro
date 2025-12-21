@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import { getCollection } from 'astro:content';
+
+const works = await getCollection('works');
+const meta = {
+  title: '実績 | FALXTER株式会社',
+  description: '守秘のため社名は非公開ですが、匿名の実績概要を掲載しています。'
+};
+---
+<BaseLayout title={meta.title} description={meta.description} path="/works">
+  <section class="bg-white py-14">
+    <div class="container-responsive space-y-10">
+      <SectionHeading
+        title="実績概要"
+        description="守秘義務のため、社名・案件名は非公開です。詳細は守秘の範囲で個別にお話しします。"
+      />
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {works.map((item) => (
+          <article class="flex h-full flex-col rounded-2xl border border-gray-200 bg-gray-50 p-6 shadow-sm">
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-semibold text-gray-900">{item.data.title}</h2>
+              <span class="rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold text-brand">{item.data.industry}</span>
+            </div>
+            <dl class="mt-4 space-y-3 text-sm text-gray-700">
+              <div>
+                <dt class="font-semibold text-gray-800">担当範囲</dt>
+                <dd>{item.data.role}</dd>
+              </div>
+              <div>
+                <dt class="font-semibold text-gray-800">技術</dt>
+                <dd>{item.data.tech}</dd>
+              </div>
+              <div>
+                <dt class="font-semibold text-gray-800">成果・効果</dt>
+                <dd>{item.data.impact}</dd>
+              </div>
+              <div>
+                <dt class="font-semibold text-gray-800">備考</dt>
+                <dd>{item.data.note ?? '守秘のため非公開'}</dd>
+              </div>
+            </dl>
+          </article>
+        ))}
+      </div>
+      <div class="rounded-2xl border border-dashed border-brand/40 bg-brand/5 p-6 text-sm text-gray-800">
+        公開可能な範囲が限られるため、追加の実績はお問い合わせ後に口頭でお伝えします。
+      </div>
+    </div>
+  </section>
+</BaseLayout>
