@@ -1,0 +1,24 @@
+services:
+  app:
+    image: node:24-alpine
+    working_dir: /app
+    command: sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm dev:docker"
+    env_file: .env
+    environment:
+      NODE_ENV: development
+      HOST: 0.0.0.0
+      PORT: 4321
+      VITE_USE_POLLING: "true"
+    ports: ["4321:4321"]
+    tmpfs:
+      - /app/.astro
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+      - pnpm_store:/pnpm/store
+    networks: [development]
+volumes:
+  node_modules:
+  pnpm_store:
+networks:
+  development: {driver: bridge}

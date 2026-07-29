@@ -1,0 +1,58 @@
+---
+import Footer from "../components/common/Footer.astro";
+import Header from "../components/common/Header.astro";
+import { company } from "../data/company";
+import "../styles/global.css";
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  noindex?: boolean;
+  type?: "website" | "article";
+  breadcrumbs?: { name: string; url: string }[];
+}
+const {
+  title,
+  description,
+  image = "/og-default.svg",
+  noindex = company.flags.noindex,
+  type = "website",
+  breadcrumbs = [],
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const imageUrl = new URL(image, Astro.site);
+const organization = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: company.companyName,
+  url: Astro.site?.toString(),
+};
+const website = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: company.companyName,
+  url: Astro.site?.toString(),
+};
+const breadcrumbLd = breadcrumbs.length
+  ? {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: breadcrumbs.map((b, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: b.name,
+        item: new URL(b.url, Astro.site).toString(),
+      })),
+    }
+  : null;
+const csp =
+  "default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; connect-src 'self' https://challenges.cloudflare.com; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests";
+Astro.response.headers.set("Content-Security-Policy", csp);
+Astro.response.headers.set("X-Content-Type-Options", "nosniff");
+Astro.response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+Astro.response.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+Astro.response.headers.set("Cross-Origin-Opener-Policy", "same-origin");
+if (import.meta.env.PROD)
+  Astro.response.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+---
+<!doctype html><html lang="ja"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width"/><title>{title}</title><meta name="description" content={description}/><link rel="canonical" href={canonical}/><link rel="icon" href="/favicon.svg"/><link rel="preload" as="image" href="/images/logo.png?v=20260728" fetchpriority="high"/><meta property="og:type" content={type}/><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:url" content={canonical}/><meta property="og:image" content={imageUrl}/><meta property="og:locale" content="ja_JP"/><meta name="twitter:card" content="summary_large_image"/>{noindex&&<meta name="robots" content="noindex,nofollow"/>}<script is:inline type="application/ld+json" set:html={JSON.stringify([organization,website,breadcrumbLd].filter(Boolean))}/><slot name="head"/></head><body><a class="skip" href="#main">本文へ移動</a><Header/><main id="main"><slot/></main><Footer/></body></html>

@@ -1,0 +1,73 @@
+import { expect, test } from "@playwright/test";
+
+const pages = [
+  "/",
+  "/services/",
+  "/services/corporate-website/",
+  "/services/system-assessment/",
+  "/services/system-maintenance/",
+  "/cases/",
+  "/company/",
+  "/contact/",
+  "/privacy/",
+];
+
+test("各ページにSEO基本要素がある", async ({ page }) => {
+  for (const path of pages) {
+    await page.goto(path);
+    await expect(page).toHaveTitle(/FALXTER/);
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /.+/);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /^http/);
+    await expect(page.locator("h1")).toHaveCount(1);
+  }
+});
+
+test("トップのdescriptionは既存システム支援を主軸にする", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+    "content",
+    "FALXTER株式会社は、資料や仕様が不足した既存業務システムやWebアプリケーションの調査、引き継ぎ、保守・改修を代表エンジニアが直接支援します。周辺機能や中小規模の新規システム開発、コーポレートサイト制作にも対応します。",
+  );
+});
+test("sitemapは3商品を含み技術記事を含まない", async ({ request }) => {
+  const index = await request.get("/sitemap-index.xml");
+  expect(index.ok()).toBe(true);
+  const indexBody = await index.text();
+  const sitemapPath = new URL(
+    indexBody.match(/<loc>(.*?)<\/loc>/)?.[1] ?? "",
+    "http://127.0.0.1:4321",
+  ).pathname;
+  const sitemap = await request.get(sitemapPath);
+  expect(sitemap.ok()).toBe(true);
+  const body = await sitemap.text();
+  for (const path of [
+    "/services/corporate-website/",
+    "/services/system-assessment/",
+    "/services/system-maintenance/",
+  ]) {
+    expect(body).toContain(path);
+  }
+  expect(body).not.toContain("/insights/");
+  expect(body).not.toContain("/blog/");
+  expect(body).not.toContain("/news/");
+  expect((await request.get("/robots.txt")).ok()).toBe(true);
+});
+
+test("health checkが200を返す", async ({ request }) => {
+  const response = await request.get("/api/health/");
+  expect(response.status()).toBe(200);
+});
+
+test("Web制作詳細のSEOとOGPに2つの固定料金プランを反映する", async ({ page }) => {
+  const title = "中小企業向けWebサイト制作・15万円／30万円固定｜FALXTER株式会社";
+  const description =
+    "中小企業向けに、1ページ15万円と最大5ページ30万円の固定料金でコーポレートサイトを制作します。スマートフォン対応、問い合わせフォーム、基本SEO、公開作業まで対応します。";
+  await page.goto("/services/corporate-website/");
+  await expect(page).toHaveTitle(title);
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", description);
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", title);
+  await expect(page.locator('meta[property="og:description"]')).toHaveAttribute(
+    "content",
+    description,
+  );
+});

@@ -1,0 +1,107 @@
+---
+import CasesSection from "../components/home/CasesSection.astro";
+import FaqSection from "../components/home/FaqSection.astro";
+import ServicesSection from "../components/home/ServicesSection.astro";
+import { company } from "../data/company";
+import { contactAssurances, contactCondition } from "../data/home";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const issueGroups = [
+  {
+    title: "既存システムの課題",
+    items: [
+      "担当者が退職し、仕様や運用方法が分からない",
+      "前任会社からの資料が不足し、引き継ぎを進められない",
+      "古い業務システムやWebアプリケーションを改修できる人がいない",
+      "障害原因を特定できず、業務への影響が続いている",
+      "全面刷新と段階改修のどちらを選ぶべきか判断できない",
+    ],
+  },
+  {
+    title: "Webサイトの課題",
+    items: [
+      "会社サイトが古く、スマートフォンに対応していない",
+      "事業内容や強みが伝わらない",
+      "制作会社との契約が終了し、更新や修正ができない",
+      "問い合わせにつながる導線がない",
+      "ドメインやサーバーの管理状況が分からない",
+    ],
+  },
+];
+const features = [
+  {
+    title: "相談内容を、そのまま技術判断へ",
+    text: "相談から調査、実装、納品まで、代表エンジニアが一貫して担当します。",
+  },
+  {
+    title: "事前情報をもとに対応範囲を整理",
+    text: "確認できる資料から対応範囲と概算を整理し、ご契約後にコードや実行環境を詳しく調査します。",
+  },
+  {
+    title: "必要以上の作り直しを前提としない",
+    text: "活かせる部分と改善すべき部分を分け、段階的に対応します。",
+  },
+  {
+    title: "作業範囲、費用、優先順位を明確化",
+    text: "着手前に対象範囲と前提を揃え、優先順位を明確にします。",
+  },
+];
+const flow = [
+  "お問い合わせ",
+  "事前ヒアリング",
+  "対応範囲・概算見積もり",
+  "ご契約",
+  "調査・制作・改修",
+  "報告・納品／継続支援",
+];
+const supportedWork = [
+  "既存コードとDBを含むシステム調査",
+  "前任者不在システムの引き継ぎ",
+  "障害原因の調査と不具合修正",
+  "バッチ処理と外部システム連携の改修",
+  "AWS上の既存環境の運用",
+  "要件確認、実装、テスト、リリース",
+];
+---
+<BaseLayout
+  title="既存システムの調査・引き継ぎ・保守・改修｜FALXTER株式会社"
+  description="FALXTER株式会社は、資料や仕様が不足した既存業務システムやWebアプリケーションの調査、引き継ぎ、保守・改修を代表エンジニアが直接支援します。周辺機能や中小規模の新規システム開発、コーポレートサイト制作にも対応します。"
+>
+  <section class="hero">
+    <div class="container hero-content">
+      <p class="hero-message">技術者が直接、最後まで。</p>
+      <h1><span>引き継げない、直せない、</span><span>仕様が分からない。</span><span class="hero-emphasis"><span>既存システムの調査から</span><span class="keep-together">改善まで。</span></span></h1>
+      <p class="lead">資料が不足した既存システムも、コードやデータ、運用状況から調査します。調査・引き継ぎから保守・改修、新規開発まで、状況を理解した技術者が一貫して対応します。</p>
+      <p class="hero-sub">中小企業向けコーポレートサイトの制作・リニューアルもご相談いただけます。</p>
+      <div class="actions"><a class="button" href="/contact/">まずは相談する</a><a class="button secondary" href="#services">サービス・料金を見る</a></div>
+    </div>
+  </section>
+
+  <section class="section issues-section">
+    <div class="container"><p class="eyebrow">Common issues</p><h2 class="heading">このような状況からご相談ください</h2><div class="issue-groups">{issueGroups.map((group) => <section><h3>{group.title}</h3><ol>{group.items.map((item) => <li>{item}</li>)}</ol></section>)}</div></div>
+  </section>
+
+  <ServicesSection />
+  <CasesSection />
+
+  <section class="section dark">
+    <div class="container feature-grid"><div><p class="eyebrow">Our approach</p><h2 class="heading approach-heading"><span>既存の仕組みを活かし、</span><span>必要な改善を見極めます。</span></h2></div><ol>{features.map((feature, index) => <li><span>{String(index + 1).padStart(2, "0")}</span><div><h3>{feature.title}</h3><p>{feature.text}</p></div></li>)}</ol></div>
+  </section>
+
+  <section class="section process-section" id="process">
+    <div class="container"><p class="eyebrow">Process</p><h2 class="heading">ご依頼の流れ</h2><ol class="flow">{flow.map((item, index) => <li><b>{String(index + 1).padStart(2, "0")}</b><span>{item}</span></li>)}</ol></div>
+  </section>
+
+  <section class="section representative-section">
+    <div class="container representative-grid"><div><p class="eyebrow">Representative</p><h2 class="representative-heading">代表者紹介</h2><h3 class="representative-name">{company.representativeName}</h3><p class="representative-role">{company.representativeTitle}</p></div><div class="representative-copy">{company.homepageProfile.map((item) => <p>{item}</p>)}<div class="capability-grid"><section><h3>対応可能な作業</h3><ul class="supported-work">{supportedWork.map((item) => <li>{item}</li>)}</ul></section><section><h3>得意領域</h3><ul class="specialties">{company.specialties.map((item) => <li>{item}</li>)}</ul></section><section class="technology-card"><h3>主な経験技術</h3><p class="technologies">{company.primarySkills.join(" / ")}</p></section></div><a class="text-link" href="/company/">代表者プロフィールを見る <span aria-hidden="true">→</span></a></div></div>
+  </section>
+
+  <FaqSection />
+
+  <section class="section final">
+    <div class="narrow"><p class="eyebrow">Contact</p><h2 class="cta-heading"><span>状況が整理できて</span><span>いなくても、</span><span>まずご相談ください。</span></h2><p>既存システムの調査・改修、周辺機能や新規システムの開発、Webサイト制作のいずれも、分かる範囲の情報から進め方を整理します。</p>{contactAssurances.length > 0 && <ul class="assurances">{contactAssurances.map((item) => <li>{item}</li>)}</ul>}<p class="contact-condition">{contactCondition}</p><div class="actions final-actions"><a class="button" href="/contact/">まずは相談する</a><a class="text-link" href="/services/">サービス・料金を見る <span aria-hidden="true">→</span></a></div></div>
+  </section>
+</BaseLayout>
+<style>
+  .hero{padding:clamp(4rem,7vw,6rem) 0 clamp(3.5rem,6vw,5rem)}.hero-message{margin:0;color:var(--color-primary);font-size:clamp(1.125rem,1.5vw,1.375rem);font-weight:800;letter-spacing:.015em;line-height:1.5}.hero-content{max-width:70rem}.hero h1{margin:1rem 0 1.75rem;font-size:clamp(2.6rem,5vw,4.7rem);line-height:1.13;letter-spacing:-.05em;word-break:keep-all}.hero h1>span{display:block}.hero-emphasis{color:var(--color-primary);white-space:nowrap}.hero-emphasis span{display:inline}.keep-together{white-space:nowrap}.hero .lead{max-width:58rem;font-size:clamp(1.125rem,1.8vw,1.3rem);line-height:1.85}.hero-sub{max-width:52rem;margin-top:.8rem;color:var(--color-body);font-size:1rem;line-height:1.8}.actions{display:flex;flex-wrap:wrap;align-items:center;gap:.8rem;margin-top:1.75rem}.issues-section{padding-top:clamp(3.5rem,6vw,5rem)}.issue-groups{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(2rem,5vw,5rem);margin-top:2rem}.issue-groups h3{margin:0;padding-bottom:.9rem;border-bottom:3px solid var(--color-primary);font-size:clamp(1.35rem,2vw,1.6rem)}.issue-groups ol{margin:0;padding:0;list-style:none}.issue-groups li{display:grid;grid-template-columns:1.5rem 1fr;gap:.5rem;padding:1rem 0;border-bottom:1px solid var(--color-border);color:var(--color-body);font-size:1.0625rem;font-weight:650;line-height:1.75}.issue-groups li::before{content:"—";color:var(--color-primary);font-weight:800}.dark{background:#241b1e;color:#fff}.dark .eyebrow{color:#d0b87e}.feature-grid{display:grid;grid-template-columns:minmax(18rem,.85fr) minmax(0,1.15fr);gap:clamp(3rem,7vw,7rem)}.approach-heading{font-size:clamp(1.75rem,2.6vw,2.25rem);line-height:1.5}.approach-heading span{display:block;white-space:nowrap}.feature-grid ol{margin:0;padding:0;list-style:none}.feature-grid li{display:grid;grid-template-columns:2.5rem 1fr;gap:1rem;padding:1.2rem 0;border-bottom:1px solid #ffffff38}.feature-grid li>span{color:#d0b87e;font-size:.9rem;font-weight:800}.feature-grid h3{margin:0 0 .4rem;font-size:1.25rem;line-height:1.55}.feature-grid p{max-width:36rem;margin:0;color:#f5f1f2;font-size:1.0625rem;line-height:1.75}.process-section{padding-block:clamp(2.75rem,4.8vw,4.4rem);background:var(--color-background)}.flow{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));margin:2rem auto 0;padding:0;list-style:none}.flow li{display:grid;grid-template-rows:auto 1fr;align-content:start;gap:.7rem;min-width:0;min-height:7rem;padding:1.15rem 1rem;border-top:2px solid var(--color-primary);border-bottom:1px solid var(--color-border);border-left:1px solid var(--color-border)}.flow li:first-child{border-left:0}.flow b{color:var(--color-primary);font:800 1.25rem/1 ui-monospace,SFMono-Regular,Consolas,monospace}.flow span{font-size:1rem;font-weight:700;line-height:1.55}.representative-section{padding-block:clamp(3rem,5vw,4.75rem);background:#fff}.representative-grid{display:grid;grid-template-columns:minmax(13rem,.55fr) minmax(0,1.45fr);gap:clamp(2.5rem,6vw,5rem);max-width:68rem}.representative-heading{margin:.7rem 0 2.25rem;font-size:clamp(1.8rem,3vw,2.5rem)}.representative-name{margin:0 0 .3rem;font-size:clamp(1.6rem,3vw,2.2rem)}.representative-role{margin:0;color:var(--color-primary);font-size:1.0625rem;font-weight:750}.representative-copy p{margin:0 0 1rem;color:var(--color-body);font-size:1.0625rem;line-height:1.85}.representative-copy h3{margin:0 0 .65rem;font-size:1.15rem}.capability-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1.6rem}.capability-grid section{padding:clamp(1.35rem,2vw,1.65rem);border:1px solid var(--color-border);background:var(--color-background)}.technology-card{grid-column:1/-1}.supported-work,.specialties{display:grid;grid-template-columns:1fr;gap:.65rem;margin:0;padding:0;list-style:none}.supported-work li,.specialties li{display:grid;grid-template-columns:1.25rem minmax(0,1fr);color:var(--color-body);font-size:1rem;line-height:1.75}.supported-work li::before,.specialties li::before{content:"—";margin:0;color:var(--color-accent)}.technologies{margin:0!important;color:var(--color-body);font-size:1rem!important;line-height:1.8}.text-link{display:inline-flex;min-height:44px;align-items:center;color:var(--color-primary);font-weight:750}.final{border-top:1px solid var(--color-border);text-align:center}.final h2{margin:.8rem 0 1rem;font-size:clamp(1.75rem,3.5vw,3rem);line-height:1.45}.cta-heading span{display:block;white-space:nowrap}.final>div>p:not(.eyebrow){color:var(--color-body);font-size:1.0625rem}.assurances{display:flex;flex-wrap:wrap;justify-content:center;gap:.65rem 1.5rem;margin:1.4rem 0 .6rem;padding:0;list-style:none}.assurances li{color:var(--color-text);font-size:1rem;font-weight:750}.assurances li::before{content:"✓";margin-right:.45rem;color:var(--color-primary);font-weight:800}.contact-condition{margin:.25rem auto 0!important;color:var(--color-muted)!important;font-size:.875rem!important}.final-actions{justify-content:center}.final-actions .text-link{margin-left:.35rem}@media(max-width:1100px){.feature-grid{grid-template-columns:1fr}.flow{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:800px){.hero h1{font-size:clamp(2.25rem,7.2vw,3.5rem)}.hero-emphasis{font-size:.8em}.issue-groups,.feature-grid,.representative-grid{grid-template-columns:1fr}.flow{grid-template-columns:repeat(2,minmax(0,1fr))}.representative-heading{margin-bottom:1.5rem}}@media(max-width:560px){.hero{padding:3.5rem 0 3rem}.hero h1{font-size:clamp(2rem,10.4vw,2.65rem);line-height:1.2;letter-spacing:-.035em}.hero h1>span{display:block}.hero-emphasis{font-size:1em;white-space:normal}.hero-emphasis span{display:inline}.hero-emphasis span:first-child::after{content:" "}.actions .button{width:100%}.flow{grid-template-columns:1fr}.flow li,.flow li:first-child{grid-template-rows:none;grid-template-columns:2.6rem minmax(0,1fr);align-items:center;min-height:auto;padding:.9rem 1rem;border-top:0;border-right:0;border-bottom:1px solid var(--color-border);border-left:2px solid var(--color-primary)}.capability-grid{grid-template-columns:1fr}.technology-card{grid-column:auto}.supported-work,.specialties{grid-template-columns:1fr}.approach-heading{font-size:clamp(1.7rem,7vw,2rem)}.final-actions .text-link{margin-left:0}}
+</style>

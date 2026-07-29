@@ -1,0 +1,89 @@
+---
+import { company } from "../data/company";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const rows = [
+  ["会社名", company.companyName],
+  ["英語表記", company.companyNameEn],
+  ["代表者", company.representativeName],
+  ["所在地", [company.postalCode, company.address].filter(Boolean).join(" ") || null],
+  ["電話番号", company.phone],
+  ["メールアドレス", company.email],
+  ["設立", company.establishedAt],
+  ["資本金", company.capital],
+  ["適格請求書発行事業者登録番号", company.invoiceRegistrationNumber],
+  ["営業時間", company.businessHours],
+  ["対応地域", company.serviceArea],
+];
+const placeholder = "未設定";
+---
+<BaseLayout title="会社情報｜FALXTER株式会社" description="Javaを中心としたサーバーサイド開発、Webサイト制作、既存システムの保守・改修に対応するFALXTER株式会社の会社情報です。">
+  <header class="page-head">
+    <div class="container">
+      <p class="breadcrumbs"><a href="/">トップ</a> / 会社情報</p>
+      <p class="eyebrow">Company</p>
+      <h1 class="heading">会社情報</h1>
+      <p class="lead">Webサイト制作と既存業務システムの調査・改善を支援します。</p>
+    </div>
+  </header>
+
+  <section class="section narrow company-content">
+    <section aria-labelledby="overview-heading">
+      <p class="eyebrow">Overview</p>
+      <h2 id="overview-heading" class="section-heading">会社概要</h2>
+      <dl class="company-table">
+        {rows.map(([label, value]) => <div><dt>{label}</dt><dd class:list={{ unset: !value }}>{value || placeholder}</dd></div>)}
+        <div><dt>事業内容</dt><dd>中小企業向けコーポレートサイト制作、既存業務システムの診断・引き継ぎ・保守・改修</dd></div>
+      </dl>
+    </section>
+
+    <section class="representative" aria-labelledby="representative-heading">
+      <p class="eyebrow">Representative</p>
+      <h2 id="representative-heading" class="section-heading">{company.profileHeading}</h2>
+      <div class="representative-card">
+        <div class="representative-name">
+          <span class="field-label">氏名・役職</span>
+          <h3 class:list={{ unset: !company.representativeName }}>{company.representativeName || placeholder}</h3>
+          <p class:list={{ unset: !company.representativeTitle }}>{company.representativeTitle || placeholder}</p>
+        </div>
+        <div class="profile-block">
+          <h3>経歴</h3>
+          {company.profile.length > 0 ? company.profile.map((item) => <p>{item}</p>) : <p class="unset">{placeholder}</p>}
+        </div>
+        <div class="profile-grid">
+          <section><h3>得意分野</h3>{company.specialties.length > 0 ? <ul>{company.specialties.map((item) => <li>{item}</li>)}</ul> : <p class="unset">{placeholder}</p>}</section>
+          <section><h3>対応工程</h3>{company.deliveryPhases.length > 0 ? <ul>{company.deliveryPhases.map((item) => <li>{item}</li>)}</ul> : <p class="unset">{placeholder}</p>}</section>
+          <section><h3>主要技術</h3><ul>{company.primarySkills.map((item) => <li>{item}</li>)}</ul></section><section><h3>関連経験</h3><ul>{company.relatedSkills.map((item) => <li>{item}</li>)}</ul></section>
+          <section><h3>外部プロフィール</h3>{company.socialLinks.length > 0 ? <ul>{company.socialLinks.map((link) => <li><a href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a></li>)}</ul> : <p class="unset">{placeholder}</p>}</section>
+        </div>
+      </div>
+    </section>
+  </section>
+</BaseLayout>
+
+<style>
+  .company-content { display: grid; gap: clamp(4rem, 8vw, 7rem); }
+  .section-heading { margin: 0.6rem 0 2rem; font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.4; }
+  .company-table { margin: 0; border-bottom: 1px solid var(--color-border); }
+  .company-table div { display: grid; grid-template-columns: minmax(10rem, 13rem) 1fr; gap: 1.5rem; border-top: 1px solid var(--color-border); padding: 1.15rem 0; }
+  dt { font-weight: 700; }
+  dd { margin: 0; }
+  .unset { color: var(--color-muted); font-style: normal; }
+  .representative-card { border-top: 3px solid var(--color-primary); background: var(--color-surface); }
+  .representative-name, .profile-block, .profile-grid > section { padding: clamp(1.5rem, 4vw, 2.5rem); }
+  .representative-name, .profile-block { border-bottom: 1px solid var(--color-border); }
+  .field-label { color: var(--color-muted); font-size: 0.78rem; letter-spacing: 0.08em; }
+  .representative-name h3 { margin: 0.5rem 0 0; font-size: 1.5rem; }
+  .representative-name p { margin: 0.25rem 0 0; }
+  .profile-block h3, .profile-grid h3 { margin: 0 0 0.75rem; font-size: 1rem; }
+  .profile-block p { margin: 0.5rem 0; }
+  .profile-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
+  .profile-grid > section { border-bottom: 1px solid var(--color-border); }
+  .profile-grid > section:nth-child(odd) { border-right: 1px solid var(--color-border); }
+  .profile-grid ul { margin: 0; padding-left: 1.2rem; }
+  @media (max-width: 600px) {
+    .company-table div, .profile-grid { grid-template-columns: 1fr; }
+    .company-table div { gap: 0.3rem; }
+    .profile-grid > section:nth-child(odd) { border-right: 0; }
+  }
+</style>

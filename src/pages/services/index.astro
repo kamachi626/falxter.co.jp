@@ -1,0 +1,47 @@
+﻿---
+import { services } from "../../data/services";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const servicePriority: Record<string, number> = {
+  "system-assessment": 1,
+  "system-maintenance": 2,
+  "corporate-website": 3,
+};
+const orderedServices = [...services].sort(
+  (a, b) => servicePriority[a.slug] - servicePriority[b.slug],
+);
+---
+<BaseLayout title="サービス｜FALXTER株式会社" description="Java、PHP（Laravel）、Ruby on Railsなどの既存システムの診断・引き継ぎ・保守・改修を主軸に、コーポレートサイト制作も提供します。" breadcrumbs={[{ name: "トップ", url: "/" }, { name: "サービス", url: "/services/" }]}>
+  <header class="page-head">
+    <div class="container">
+      <p class="breadcrumbs"><a href="/">トップ</a> / サービス</p>
+      <p class="eyebrow">Services</p>
+      <h1 class="heading">既存システムの調査・改善とWebサイト制作</h1>
+      <p class="lead">中小企業の情報発信と、既存業務システムの調査・改善を、技術者が直接支援します。</p>
+    </div>
+  </header>
+  <section class="section">
+    <div class="container grid cards">
+      {orderedServices.map((service) => (
+        <article class:list={["card", { "web-service-card": service.slug === "corporate-website" }]}>
+          <h2>{service.title}</h2>
+          <p>{service.summary}</p>
+          {service.plans && (
+            <dl class="plan-summary">
+              {service.plans.map((plan) => (
+                <div>
+                  <dt>{plan.name}</dt>
+                  <dd>{plan.price}／{plan.pageCount}／{plan.duration}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+          <a class="button secondary" href={`/services/${service.slug}/`}>詳細を見る</a>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .web-service-card{border-top-color:#a79791;background:#fbfaf8}.plan-summary{margin:1rem 0 1.5rem;border-top:1px solid var(--color-border)}.plan-summary div{padding:.8rem 0;border-bottom:1px solid var(--color-border)}.plan-summary dt{color:var(--color-primary);font-size:.9rem;font-weight:800}.plan-summary dd{margin:.25rem 0 0;color:var(--color-body);font-size:1rem;line-height:1.7}
+</style>

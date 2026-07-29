@@ -1,0 +1,161 @@
+@import "tailwindcss";
+@import "./tokens.css";
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-padding-top: 7.5rem;
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+body {
+  margin: 0;
+  color: var(--color-text);
+  background: var(--color-background);
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+a {
+  color: inherit;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.2em;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+.container {
+  width: min(calc(100% - 2rem), var(--content));
+  margin-inline: auto;
+}
+.narrow {
+  width: min(calc(100% - 2rem), 52rem);
+  margin-inline: auto;
+}
+.section {
+  padding-block: clamp(3.5rem, 6vw, 5.5rem);
+  scroll-margin-top: 7.5rem;
+}
+[id] {
+  scroll-margin-top: 7.5rem;
+}
+
+.eyebrow {
+  color: var(--color-primary);
+  font: 750 0.72rem / 1.4 system-ui;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.heading {
+  margin: 0.7rem 0 1.5rem;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+}
+.lead {
+  color: var(--color-body);
+  font-size: clamp(1.0625rem, 2vw, 1.2rem);
+  line-height: 1.8;
+}
+.button {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--color-primary);
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+.button:hover {
+  background: var(--color-primary-dark);
+}
+.button.secondary {
+  background: transparent;
+  color: var(--color-primary);
+}
+.button.secondary:hover {
+  background: #6e263d0b;
+}
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+.cards {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+}
+.card {
+  padding: clamp(1.4rem, 3vw, 2rem);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+.card h3 {
+  margin: 0 0 0.75rem;
+  line-height: 1.45;
+}
+.card p {
+  color: var(--color-body);
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.85;
+}
+.prose h2 {
+  margin: 3rem 0 1rem;
+  font-size: 1.55rem;
+  line-height: 1.45;
+}
+.prose h3 {
+  margin: 2rem 0 0.5rem;
+}
+.prose p,
+.prose li {
+  color: #34343a;
+}
+.prose a:not(.button) {
+  color: var(--color-primary);
+}
+.skip {
+  position: fixed;
+  z-index: 100;
+  left: 1rem;
+  top: -5rem;
+  padding: 0.75rem;
+  background: #fff;
+}
+.skip:focus {
+  top: 1rem;
+}
+.page-head {
+  padding: clamp(4rem, 10vw, 8rem) 0 3rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.breadcrumbs {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  margin-bottom: 1rem;
+}
+.empty {
+  padding: 2rem;
+  border: 1px dashed var(--color-border);
+  color: var(--color-muted);
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}

@@ -1,0 +1,6 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+Astro.response.status = 404;
+---
+<BaseLayout title="ページが見つかりません｜FALXTER株式会社" description="お探しのページは見つかりませんでした。" noindex={true}><section class="section narrow"><p class="eyebrow">404</p><h1 class="heading">ページが見つかりません</h1><p class="lead">URLが変更されたか、ページが削除された可能性があります。</p><p><a class="button" href="/">トップページへ戻る</a></p></section></BaseLayout>

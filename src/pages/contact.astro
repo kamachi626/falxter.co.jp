@@ -1,0 +1,106 @@
+---
+import {
+  systemContactCategories,
+  websiteConsultCategory,
+  websiteContactCategories,
+} from "../data/services";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+const categories = [
+  ...systemContactCategories,
+  ...websiteContactCategories,
+  "協業・業務委託",
+  "その他",
+] as const;
+const categoryByService: Record<string, (typeof categories)[number]> = {
+  "one-page-website": websiteContactCategories[0],
+  "five-page-website": websiteContactCategories[1],
+  "corporate-website": websiteConsultCategory,
+  "website-consultation": websiteConsultCategory,
+  "system-assessment": systemContactCategories[0],
+  "spot-maintenance": systemContactCategories[1],
+  "continuous-maintenance": systemContactCategories[2],
+  "new-system-development": systemContactCategories[3],
+  "system-maintenance": systemContactCategories[4],
+  "system-consultation": systemContactCategories[4],
+};
+const selectedCategory = categoryByService[Astro.url.searchParams.get("service") ?? ""];
+const budgets = [
+  "未定",
+  "30万円未満",
+  "30万〜50万円",
+  "50万〜100万円",
+  "100万〜300万円",
+  "300万円以上",
+];
+---
+<BaseLayout title="お問い合わせ｜FALXTER株式会社" description="コーポレートサイト制作と、Java、PHP（Laravel）、Ruby on Railsなどの既存システムの診断・保守・改修についてご相談ください。">
+  <Fragment slot="head">
+    {siteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+  </Fragment>
+  <header class="page-head">
+    <div class="narrow">
+      <p class="breadcrumbs"><a href="/">トップ</a> / お問い合わせ</p>
+      <p class="eyebrow">Contact</p>
+      <h1 class="heading">Webサイトやシステムについて相談する</h1>
+      <p class="lead">資料や仕様が十分でない場合も、分かる範囲で状況をお書きください。既存コードや動作を確認し、必要な進め方を整理します。</p>
+    </div>
+  </header>
+  <section class="section narrow">
+    <form id="contact-form" action="/api/contact/" method="post">
+      <div class="form-grid">
+        <label>会社名<span>必須</span><input name="company" required maxlength="120" autocomplete="organization" /></label>
+        <label>氏名<span>必須</span><input name="name" required maxlength="80" autocomplete="name" /></label>
+        <label>メールアドレス<span>必須</span><input name="email" type="email" required maxlength="254" autocomplete="email" /></label>
+        <label>電話番号<small>任意</small><input name="phone" type="tel" maxlength="30" autocomplete="tel" /></label>
+        <label>相談区分・希望プラン<span>必須</span><select name="category" required><option value="">選択してください</option>{categories.map((item) => <option selected={item === selectedCategory}>{item}</option>)}</select></label>
+        <label>希望時期<span>必須</span><input name="timing" required maxlength="80" placeholder="例：未定、3か月以内" /></label>
+        <label>予算帯<span>必須</span><select name="budget" required>{budgets.map((item) => <option>{item}</option>)}</select></label>
+      </div>
+      <label>現在の課題<span>必須</span><textarea name="message" required minlength="20" maxlength="5000" rows="9" aria-describedby="message-help"></textarea><small id="message-help">20〜5,000文字でご記入ください。Web制作の場合は、新規制作かリニューアルか、現在のサイトURL、希望するページや公開時期、原稿・写真の準備状況を分かる範囲でお知らせください。</small></label>
+      <div class="honeypot" aria-hidden="true"><label>ウェブサイト<input name="website" tabindex="-1" autocomplete="off" /></label></div>
+      {siteKey ? <div class="cf-turnstile" data-sitekey={siteKey} data-callback="onTurnstileSuccess" data-error-callback="onTurnstileError"></div> : null}
+      <input type="hidden" name="turnstileToken" id="turnstile-token" value={import.meta.env.DEV ? "development-token" : ""} />
+      <label class="agree"><input type="checkbox" name="privacy" required /> <span><a href="/privacy/" target="_blank" rel="noopener">個人情報の取り扱い</a>に同意する（必須）</span></label>
+      <div id="form-status" role="status" aria-live="polite"></div>
+      <button class="button" type="submit">問い合わせを送信する</button>
+    </form>
+  </section>
+</BaseLayout>
+<script is:inline define:vars={{ hasTurnstile: Boolean(siteKey) }}>
+  window.onTurnstileSuccess = (token) => { document.querySelector("#turnstile-token").value = token; };
+  window.onTurnstileError = () => { document.querySelector("#form-status").textContent = "セキュリティ確認を読み込めませんでした。再読み込みしてください。"; };
+  const form = document.querySelector("#contact-form");
+  const status = document.querySelector("#form-status");
+  const button = form.querySelector('button[type="submit"]');
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    if (hasTurnstile && !document.querySelector("#turnstile-token").value) {
+      status.textContent = "セキュリティ確認を完了してください。";
+      return;
+    }
+    button.disabled = true;
+    button.textContent = "送信中…";
+    status.textContent = "";
+    try {
+      const data = Object.fromEntries(new FormData(form));
+      data.privacy = document.querySelector('[name="privacy"]').checked;
+      const response = await fetch("/api/contact/", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) });
+      const result = await response.json();
+      if (!response.ok || !result.success) throw new Error(result.message || "送信できませんでした。");
+      form.reset();
+      status.textContent = "お問い合わせを受け付けました。自動返信メールをご確認ください。";
+      button.textContent = "送信済み";
+      return;
+    } catch (error) {
+      status.textContent = error.message || "送信できませんでした。時間をおいて再度お試しください。";
+    }
+    button.disabled = false;
+    button.textContent = "問い合わせを送信する";
+  });
+</script>
+<style>
+  form{display:grid;gap:1.5rem}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}label{display:grid;gap:.4rem;font-weight:700}label span{color:var(--color-primary);font-size:.78rem;margin-left:.4rem}label small{color:var(--color-muted);font-weight:400;line-height:1.7}input,select,textarea{width:100%;border:1px solid #aaa39b;background:#fff;padding:.75rem;border-radius:0;min-height:48px}textarea{resize:vertical}.agree{display:flex;align-items:start;gap:.4rem}.agree input{width:1.4rem;min-height:auto;height:1.4rem;margin-top:.2rem}.agree span{color:inherit;font-size:1rem;font-weight:400}.honeypot{position:absolute;left:-10000px}#form-status:not(:empty){padding:1rem;border-left:4px solid var(--color-primary);background:#fff}.button:disabled{opacity:.65;cursor:not-allowed}@media(max-width:650px){.form-grid{grid-template-columns:1fr}}
+</style>

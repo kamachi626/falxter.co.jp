@@ -1,0 +1,28 @@
+---
+import { supportExamples } from "../../data/home";
+---
+<section class="section cases-section" aria-labelledby="cases-heading">
+  <div class="container">
+    <p class="eyebrow">Cases</p>
+    <h2 class="heading" id="cases-heading">対応例</h2>
+    <p class="section-intro">ご相談内容に応じた対応の進め方を、代表的な例としてご紹介します。</p>
+    <div class="case-grid">
+      {supportExamples.map((item) => (
+        <article class="card case-card">
+          <p class="case-category">{item.category}</p>
+          <p class="case-hook">{item.hook}</p>
+          <h3>{item.title}</h3>
+          <dl>
+            <div><dt>課題</dt><dd>{item.challenge}</dd></div>
+            <div><dt>対応内容</dt><dd>{item.response}</dd></div>
+
+            <div><dt>目指す状態</dt><dd>{item.expectedState}</dd></div>
+          </dl>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+<style>
+  .cases-section{padding-block:clamp(3rem,5vw,4.75rem)}.section-intro{max-width:48rem;margin:-.4rem 0 2rem;color:var(--color-body);font-size:1.0625rem}.case-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.case-card{min-width:0}.case-category{margin-bottom:.8rem!important;color:var(--color-primary)!important;font-size:.875rem!important;font-weight:800}.case-hook{margin:0 0 .55rem!important;color:var(--color-text)!important;font-size:1.1rem!important;font-weight:800;line-height:1.5!important}.case-card h3{font-size:1.35rem}.case-card dl{margin:1.3rem 0 0}.case-card dl div{padding:.8rem 0;border-top:1px solid var(--color-border)}dt{margin-bottom:.25rem;color:var(--color-primary);font-size:.875rem;font-weight:800}dd{margin:0;color:var(--color-body);font-size:1rem;line-height:1.75}@media(max-width:960px){.case-grid{grid-template-columns:1fr}}
+</style>
