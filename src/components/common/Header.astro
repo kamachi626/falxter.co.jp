@@ -1,32 +1,205 @@
 ---
-import { navigation } from "../../data/navigation";
+import { navigation, serviceNavigation } from "../../data/navigation";
+import "../../styles/header.css";
 
 const pathname = Astro.url.pathname;
 const isActive = (href: string) => pathname === href || (href !== "/" && pathname.startsWith(href));
+const isServiceSection = pathname.startsWith("/services/");
+const isServiceItemActive = (paths: string[]) => paths.includes(pathname);
+const desktopServiceNavigation = serviceNavigation.filter((item) => item.href !== "/services/");
 ---
-<header class="site-header"><div class="container bar"><a class="brand" href="/" aria-label="FALXTER トップ"><span class="brand-image"><img src="/images/logo.png?v=20260728" alt="" width="1000" height="250" fetchpriority="high" decoding="sync" /></span></a><nav aria-label="メインナビゲーション" class="desktop">{navigation.map((item) => <a class:list={{ active: isActive(item.href) }} href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>{item.label}</a>)}<a class:list={["contact", { active: isActive("/contact/") }]} href="/contact/" aria-current={isActive("/contact/") ? "page" : undefined}>お問い合わせ</a></nav><button class="menu-button" type="button" aria-expanded="false" aria-controls="mobile-menu"><span>メニュー</span></button></div><div id="mobile-menu" class="mobile" hidden><nav aria-label="モバイルナビゲーション">{navigation.map((item) => <a class:list={{ active: isActive(item.href) }} href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>{item.label}</a>)}<a class:list={{ active: isActive("/contact/") }} href="/contact/" aria-current={isActive("/contact/") ? "page" : undefined}>お問い合わせ</a></nav></div></header>
-<noscript><div class="noscript container"><a href="/services/">サービス</a> · <a href="/company/">会社情報</a> · <a href="/contact/">お問い合わせ</a></div></noscript>
+
+<header class="site-header">
+  <div class="container bar">
+    <a class="brand" href="/" aria-label="FALXTER トップ">
+      <span class="brand-image">
+        <img
+          src="/images/logo.png?v=20260728"
+          alt=""
+          width="1000"
+          height="250"
+          fetchpriority="high"
+          decoding="sync"
+        />
+      </span>
+    </a>
+
+    <nav aria-label="メインナビゲーション" class="desktop">
+      <div class:list={["desktop-service-nav", { active: isServiceSection }]}>
+        <a
+          class="service-trigger"
+          href="/services/"
+          aria-current={isServiceSection ? "page" : undefined}
+        >
+          サービス<span aria-hidden="true"></span>
+        </a>
+        <div class="service-submenu" role="group" aria-label="サービスメニュー">
+          {
+            desktopServiceNavigation.map((item) => (
+              <a
+                class:list={{ active: isServiceItemActive(item.paths) }}
+                href={item.href}
+                aria-current={isServiceItemActive(item.paths) ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+      {
+        navigation.map((item) => (
+          <a
+            class:list={{ active: isActive(item.href) }}
+            href={item.href}
+            aria-current={isActive(item.href) ? "page" : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <a
+        class:list={["contact", { active: isActive("/contact/") }]}
+        href="/contact/"
+        aria-current={isActive("/contact/") ? "page" : undefined}
+      >
+        お問い合わせ
+      </a>
+    </nav>
+
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="mobile-menu">
+      <span>メニュー</span>
+    </button>
+  </div>
+
+</header>
+
+<button class="mobile-menu-backdrop" type="button" aria-label="メニューを閉じる" hidden></button>
+
+<div id="mobile-menu" class="mobile-menu" role="dialog" aria-modal="true" aria-label="モバイルメニュー" hidden>
+    <nav aria-label="モバイルナビゲーション">
+      <details class:list={["mobile-service-nav", { active: isServiceSection }]}>
+        <summary>サービス</summary>
+        <div class="mobile-service-submenu" role="group" aria-label="サービスメニュー">
+          {
+            serviceNavigation.map((item) => (
+              <a
+                class:list={{ active: isServiceItemActive(item.paths) }}
+                href={item.href}
+                aria-current={isServiceItemActive(item.paths) ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </div>
+      </details>
+      {
+        navigation.map((item) => (
+          <a
+            class:list={{ active: isActive(item.href) }}
+            href={item.href}
+            aria-current={isActive(item.href) ? "page" : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <a
+        class:list={{ active: isActive("/contact/") }}
+        href="/contact/"
+        aria-current={isActive("/contact/") ? "page" : undefined}
+      >
+        お問い合わせ
+      </a>
+    </nav>
+  </div>
+
+<noscript>
+  <div class="noscript container">
+    <a href="/services/">サービス</a> · <a href="/company/">会社情報</a> ·
+    <a href="/contact/">お問い合わせ</a>
+  </div>
+</noscript>
+
 <script is:inline>
-(()=>{const b=document.querySelector('.menu-button'),m=document.querySelector('#mobile-menu');if(!b||!m)return;let previous;const close=()=>{m.hidden=true;b.setAttribute('aria-expanded','false');document.body.style.overflow='';previous?.focus()};b.addEventListener('click',()=>{const open=b.getAttribute('aria-expanded')==='true';if(open){close();return}previous=document.activeElement;m.hidden=false;b.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';m.querySelector('a')?.focus()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!m.hidden)close();if(e.key==='Tab'&&!m.hidden){const links=[b,...m.querySelectorAll('a')],first=links[0],last=links[links.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});m.addEventListener('click',e=>{if(e.target.tagName==='A')close()})})();
+  (() => {
+    const header = document.querySelector(".site-header");
+    const button = document.querySelector(".menu-button");
+    const mobileMenu = document.querySelector("#mobile-menu");
+    const mobileBackdrop = document.querySelector(".mobile-menu-backdrop");
+    const desktopService = document.querySelector(".desktop-service-nav");
+    const mobileService = document.querySelector(".mobile-service-nav");
+    if (
+      !(button instanceof HTMLElement) ||
+      !(mobileMenu instanceof HTMLElement) ||
+      !(mobileBackdrop instanceof HTMLElement)
+    )
+      return;
+
+    let previous;
+    const mobileFocusable = () =>
+      [button, ...mobileMenu.querySelectorAll("summary, a")].filter(
+        (element) => element instanceof HTMLElement && element.offsetParent !== null,
+      );
+    const closeMobile = () => {
+      mobileMenu.hidden = true;
+      mobileBackdrop.hidden = true;
+      header?.classList.remove("menu-open");
+      button.setAttribute("aria-expanded", "false");
+      if (mobileService instanceof HTMLDetailsElement) mobileService.open = false;
+      previous?.focus();
+    };
+
+    button.addEventListener("click", () => {
+      const open = button.getAttribute("aria-expanded") === "true";
+      if (open) {
+        closeMobile();
+        return;
+      }
+      previous = document.activeElement instanceof HTMLElement ? document.activeElement : undefined;
+      header?.classList.add("menu-open");
+      mobileBackdrop.hidden = false;
+      mobileMenu.hidden = false;
+      button.setAttribute("aria-expanded", "true");
+    });
+
+    if (desktopService instanceof HTMLElement) {
+      const restoreDesktopPopup = () => desktopService.classList.remove("dismissed");
+      desktopService.addEventListener("mouseenter", restoreDesktopPopup);
+      desktopService.addEventListener("mouseleave", restoreDesktopPopup);
+      desktopService.addEventListener("focusin", restoreDesktopPopup);
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        if (
+          desktopService instanceof HTMLElement &&
+          (desktopService.matches(":hover") || desktopService.contains(document.activeElement))
+        ) {
+          desktopService.querySelector(".service-trigger")?.focus();
+          desktopService.classList.add("dismissed");
+        }
+        if (!mobileMenu.hidden) closeMobile();
+      }
+      if (event.key === "Tab" && !mobileMenu.hidden) {
+        const focusable = mobileFocusable();
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
+    });
+
+    mobileBackdrop.addEventListener("click", closeMobile);
+
+    mobileMenu.addEventListener("click", (event) => {
+      if (event.target instanceof Element && event.target.closest("a")) closeMobile();
+    });
+  })();
 </script>
-<style>
-  .site-header{position:sticky;top:0;z-index:50;background:#f7f4eff5;border-bottom:1px solid var(--color-border);backdrop-filter:blur(12px)}
-  .bar{height:88px;display:flex;align-items:center;justify-content:space-between;gap:2rem}
-  .brand{display:block;flex:none;width:260px;text-decoration:none}
-  .brand-image{display:flex;width:100%;height:72px;align-items:center;justify-content:center;overflow:visible}
-  .brand img{display:block;width:240px;height:60px;object-fit:contain}
-  .desktop{display:flex;min-width:0;align-items:center;gap:clamp(1rem,2.3vw,2rem)}
-  .desktop a{position:relative;padding:.7rem 0;text-decoration:none;font-size:.94rem;font-weight:700;white-space:nowrap}
-  .desktop a:not(.contact)::after{position:absolute;right:0;bottom:.35rem;left:0;height:2px;background:var(--color-primary);content:"";transform:scaleX(0);transform-origin:left}
-  .desktop a:hover::after,.desktop a.active::after{transform:scaleX(1)}
-  .desktop .contact{padding:.7rem 1.35rem;border:1px solid var(--color-primary);color:var(--color-primary)}
-  .desktop .contact:hover,.desktop .contact.active{background:var(--color-primary);color:#fff}
-  .menu-button{display:none;min-width:52px;min-height:48px;padding:0 .8rem;background:transparent;border:1px solid var(--color-border);font-weight:700}
-  .mobile{position:fixed;inset:88px 0 0;background:var(--color-background);padding:2rem}
-  .mobile nav{display:grid}
-  .mobile a{padding:1rem;border-bottom:1px solid var(--color-border);font-size:1.1rem;font-weight:700;text-decoration:none}
-  .mobile a.active{border-left:3px solid var(--color-primary);padding-left:calc(1rem - 3px);color:var(--color-primary)}
-  .noscript{padding:.7rem 0;font-size:.9rem}
-  @media(max-width:900px){.desktop{display:none}.menu-button{display:block}}
-  @media(max-width:420px){.bar{height:82px}.brand{width:210px}.brand-image{height:64px}.brand img{width:200px;height:50px}.mobile{inset:82px 0 0}}
-</style>

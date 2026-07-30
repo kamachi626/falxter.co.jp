@@ -1,20 +1,23 @@
 ---
 import { services, systemSupportAudiences, systemSupportMethods } from "../../data/services";
+import SystemSupportFlow from "./SystemSupportFlow.astro";
 
 const webService = services.find((service) => service.slug === "corporate-website");
 if (!webService) throw new Error("corporate-website service is not defined");
 ---
 <section class="section surface" id="services">
   <div class="container">
-    <p class="eyebrow">Services</p>
-    <h2 class="heading">既存システムの調査・引き継ぎから、継続的な改善まで</h2>
-    <p class="section-intro">状況が分からないシステムの整理を主軸に、必要な保守・改修、周辺機能や中小規模の新規開発まで一貫して対応します。コーポレートサイト制作もご相談いただけます。</p>
-    <div class="service-grid">
+    <div class="section-heading" data-reveal>
+      <p class="eyebrow">Services</p>
+      <h2 class="heading">既存システムの調査・引き継ぎから、継続的な改善まで</h2>
+      <p class="section-intro">状況が分からないシステムの整理を主軸に、必要な保守・改修、周辺機能や中小規模の新規開発まで一貫して対応します。コーポレートサイト制作もご相談いただけます。</p>
+    </div>
+    <SystemSupportFlow />
+    <div class="service-grid" data-reveal>
       <article class="card service service-primary system-service">
         <div class="service-labels"><p class="service-number">01</p><span>既存システム支援</span><strong>まずはこちら</strong></div>
         <h3>既存システムの調査・引き継ぎ・保守・改修</h3>
         <p class="service-summary">仕様や管理状況が分からないシステムを調査し、必要な対応を整理します。</p>
-        <p class="included-summary">調査・引き継ぎから、スポット改修・継続保守・周辺機能開発まで</p>
         <dl class="service-meta">
           <div><dt>対象</dt><dd>業務システム、Webアプリケーション、クラウド環境</dd></div>
 

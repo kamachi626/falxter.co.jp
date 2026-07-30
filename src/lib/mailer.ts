@@ -18,7 +18,7 @@ export async function sendContactMail(data: ContactInput) {
     replyTo = import.meta.env.CONTACT_REPLY_TO_EMAIL;
   if (!apiKey || !from || !to) throw new Error("Mail configuration is incomplete");
   const resend = new Resend(apiKey);
-  const text = `会社名: ${data.company}\n氏名: ${data.name}\nメール: ${data.email}\n電話: ${data.phone || "未入力"}\n相談区分: ${data.category}\n希望時期: ${data.timing}\n予算帯: ${data.budget}\n\n${data.message}`;
+  const text = `会社名・屋号: ${data.company || "未入力"}\n氏名: ${data.name}\nメール: ${data.email}\n電話: ${data.phone || "未入力"}\n相談区分: ${data.category}\n希望時期: ${data.timing}\n予算帯: ${data.budget}\n\n${data.message}`;
   const html = `<h1>お問い合わせ</h1><pre>${escapeHtml(text)}</pre>`;
   const notice = await resend.emails.send({
     from,

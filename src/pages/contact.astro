@@ -1,4 +1,5 @@
 ---
+import { contactBudgets, contactTimings, otherContactCategories } from "../data/contact";
 import {
   systemContactCategories,
   websiteConsultCategory,
@@ -7,11 +8,15 @@ import {
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+const categoryGroups = [
+  { label: "既存システム支援", options: systemContactCategories },
+  { label: "Webサイト制作", options: websiteContactCategories },
+  { label: "その他", options: otherContactCategories },
+] as const;
 const categories = [
   ...systemContactCategories,
   ...websiteContactCategories,
-  "協業・業務委託",
-  "その他",
+  ...otherContactCategories,
 ] as const;
 const categoryByService: Record<string, (typeof categories)[number]> = {
   "one-page-website": websiteContactCategories[0],
@@ -26,16 +31,8 @@ const categoryByService: Record<string, (typeof categories)[number]> = {
   "system-consultation": systemContactCategories[4],
 };
 const selectedCategory = categoryByService[Astro.url.searchParams.get("service") ?? ""];
-const budgets = [
-  "未定",
-  "30万円未満",
-  "30万〜50万円",
-  "50万〜100万円",
-  "100万〜300万円",
-  "300万円以上",
-];
 ---
-<BaseLayout title="お問い合わせ｜FALXTER株式会社" description="コーポレートサイト制作と、Java、PHP（Laravel）、Ruby on Railsなどの既存システムの診断・保守・改修についてご相談ください。">
+<BaseLayout title="お問い合わせ｜FALXTER株式会社" description="既存システムの調査・引き継ぎ・保守・改修、周辺機能や新規システムの開発、コーポレートサイト制作についてご相談ください。">
   <Fragment slot="head">
     {siteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
   </Fragment>
@@ -43,22 +40,23 @@ const budgets = [
     <div class="narrow">
       <p class="breadcrumbs"><a href="/">トップ</a> / お問い合わせ</p>
       <p class="eyebrow">Contact</p>
-      <h1 class="heading">Webサイトやシステムについて相談する</h1>
-      <p class="lead">資料や仕様が十分でない場合も、分かる範囲で状況をお書きください。既存コードや動作を確認し、必要な進め方を整理します。</p>
+      <h1 class="heading contact-heading">システム・Webのご相談</h1>
+      <p class="lead contact-lead">資料や仕様が十分でない場合も、分かる範囲で状況をお書きください。既存コードや動作を確認し、必要な進め方を整理します。</p>
     </div>
   </header>
   <section class="section narrow">
     <form id="contact-form" action="/api/contact/" method="post">
+      <noscript><p class="form-notice">このフォームの送信にはJavaScriptが必要です。ブラウザのJavaScriptを有効にしてご利用ください。</p></noscript>
       <div class="form-grid">
-        <label>会社名<span>必須</span><input name="company" required maxlength="120" autocomplete="organization" /></label>
+        <label>会社名・屋号<small>任意</small><input name="company" maxlength="120" autocomplete="organization" /></label>
         <label>氏名<span>必須</span><input name="name" required maxlength="80" autocomplete="name" /></label>
         <label>メールアドレス<span>必須</span><input name="email" type="email" required maxlength="254" autocomplete="email" /></label>
         <label>電話番号<small>任意</small><input name="phone" type="tel" maxlength="30" autocomplete="tel" /></label>
-        <label>相談区分・希望プラン<span>必須</span><select name="category" required><option value="">選択してください</option>{categories.map((item) => <option selected={item === selectedCategory}>{item}</option>)}</select></label>
-        <label>希望時期<span>必須</span><input name="timing" required maxlength="80" placeholder="例：未定、3か月以内" /></label>
-        <label>予算帯<span>必須</span><select name="budget" required>{budgets.map((item) => <option>{item}</option>)}</select></label>
+        <label class="full-width">相談区分・希望プラン<span>必須</span><select name="category" required><option value="">選択してください</option>{categoryGroups.map((group) => <optgroup label={group.label}>{group.options.map((item) => <option selected={item === selectedCategory}>{item}</option>)}</optgroup>)}</select></label>
+        <label>希望時期<span>必須</span><select name="timing" required>{contactTimings.map((item) => <option>{item}</option>)}</select></label>
+        <label>予算帯<small>任意</small><select name="budget">{contactBudgets.map((item) => <option>{item}</option>)}</select></label>
       </div>
-      <label>現在の課題<span>必須</span><textarea name="message" required minlength="20" maxlength="5000" rows="9" aria-describedby="message-help"></textarea><small id="message-help">20〜5,000文字でご記入ください。Web制作の場合は、新規制作かリニューアルか、現在のサイトURL、希望するページや公開時期、原稿・写真の準備状況を分かる範囲でお知らせください。</small></label>
+      <label>ご相談内容<span>必須</span><textarea name="message" required minlength="20" maxlength="5000" rows="9" aria-describedby="message-help"></textarea><small id="message-help">現在の状況、希望する対応、対象システムやWebサイト、希望時期などを、分かる範囲でご記入ください。資料や仕様が整理されていなくても問題ありません。Webサイト制作の場合は、新規制作かリニューアルか、現在のサイトURL、希望するページ、原稿・写真の準備状況もお知らせください。20〜5,000文字でご記入ください。</small></label>
       <div class="honeypot" aria-hidden="true"><label>ウェブサイト<input name="website" tabindex="-1" autocomplete="off" /></label></div>
       {siteKey ? <div class="cf-turnstile" data-sitekey={siteKey} data-callback="onTurnstileSuccess" data-error-callback="onTurnstileError"></div> : null}
       <input type="hidden" name="turnstileToken" id="turnstile-token" value={import.meta.env.DEV ? "development-token" : ""} />
@@ -102,5 +100,5 @@ const budgets = [
   });
 </script>
 <style>
-  form{display:grid;gap:1.5rem}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}label{display:grid;gap:.4rem;font-weight:700}label span{color:var(--color-primary);font-size:.78rem;margin-left:.4rem}label small{color:var(--color-muted);font-weight:400;line-height:1.7}input,select,textarea{width:100%;border:1px solid #aaa39b;background:#fff;padding:.75rem;border-radius:0;min-height:48px}textarea{resize:vertical}.agree{display:flex;align-items:start;gap:.4rem}.agree input{width:1.4rem;min-height:auto;height:1.4rem;margin-top:.2rem}.agree span{color:inherit;font-size:1rem;font-weight:400}.honeypot{position:absolute;left:-10000px}#form-status:not(:empty){padding:1rem;border-left:4px solid var(--color-primary);background:#fff}.button:disabled{opacity:.65;cursor:not-allowed}@media(max-width:650px){.form-grid{grid-template-columns:1fr}}
+  .contact-heading{font-size:clamp(1.75rem,4vw,3rem);letter-spacing:-.035em;white-space:nowrap}.contact-lead{word-break:keep-all;overflow-wrap:normal}form{display:grid;gap:1.5rem}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}.full-width{grid-column:1/-1}label{display:grid;gap:.4rem;font-weight:700}label span{color:var(--color-primary);font-size:.78rem;margin-left:.4rem}label small{color:var(--color-muted);font-weight:400;line-height:1.7}input,select,textarea{width:100%;border:1px solid #aaa39b;background:#fff;padding:.75rem;border-radius:0;min-height:48px}textarea{resize:vertical}.agree{display:flex;align-items:start;gap:.4rem}.agree input{width:1.4rem;min-height:auto;height:1.4rem;margin-top:.2rem}.agree span{color:inherit;font-size:1rem;font-weight:400}.honeypot{position:absolute;left:-10000px}.form-notice{margin:0;padding:1rem;border-left:4px solid var(--color-primary);background:#fff;color:var(--color-body);font-weight:400}#form-status:not(:empty){padding:1rem;border-left:4px solid var(--color-primary);background:#fff}.button:disabled{opacity:.65;cursor:not-allowed}@media(max-width:650px){.form-grid{grid-template-columns:1fr}}@media(max-width:420px){.contact-heading{font-size:clamp(1.55rem,7.4vw,1.8rem)}}
 </style>

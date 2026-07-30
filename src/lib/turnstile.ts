@@ -1,7 +1,7 @@
 const VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 export async function verifyTurnstile(token: string, ip?: string) {
   const secret = import.meta.env.TURNSTILE_SECRET_KEY;
-  if (import.meta.env.MODE === "test" || import.meta.env.PLAYWRIGHT_TEST === "1") return true;
+  if (import.meta.env.MODE === "test" || process.env.PLAYWRIGHT_TEST === "1") return true;
   if (!secret || !token) return false;
   const body = new URLSearchParams({ secret, response: token });
   if (ip) body.set("remoteip", ip);

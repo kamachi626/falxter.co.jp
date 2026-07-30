@@ -1,4 +1,5 @@
 ---
+import { company } from "../../data/company";
 ---
-<footer><div class="container footer-grid"><div><b>FALXTER</b><p>既存業務システムの調査・引き継ぎ・保守・改修を主軸に、周辺機能や中小規模の新規開発、コーポレートサイト制作にも対応します。</p></div><nav aria-label="フッターナビゲーション"><a href="/services/">サービス</a><a href="/company/">会社情報</a><a href="/privacy/">プライバシーポリシー</a><a href="/contact/">お問い合わせ</a></nav></div><div class="container legal"><small>© {new Date().getFullYear()} FALXTER株式会社</small></div></footer>
+<footer><div class="container footer-grid"><div><b>{company.companyName}</b><p>既存業務システムの調査・引き継ぎ・保守・改修を主軸に、周辺機能や中小規模の新規開発、コーポレートサイト制作にも対応します。</p></div><nav aria-label="フッターナビゲーション"><a href="/services/">サービス</a><a href="/company/">会社情報</a><a href="/privacy/">プライバシーポリシー</a><a href="/contact/">お問い合わせ</a></nav></div><div class="container legal"><small>© {new Date().getFullYear()} {company.companyNameEn}</small></div></footer>
 <style>footer{padding:4rem 0 2rem;background:#231b1e;color:#f7f4ef}.footer-grid{display:grid;grid-template-columns:2fr 1fr;gap:3rem}.footer-grid b{letter-spacing:.15em}.footer-grid p{color:#d9d2d4;max-width:38rem}.footer-grid nav{display:grid;align-content:start;gap:.5rem}.legal{border-top:1px solid #ffffff24;margin-top:3rem;padding-top:1.5rem;color:#aaa}@media(max-width:600px){.footer-grid{grid-template-columns:1fr}}</style>

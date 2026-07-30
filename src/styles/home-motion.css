@@ -1,0 +1,179 @@
+@media (prefers-reduced-motion: no-preference) {
+  html.motion-ready [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  html.motion-ready [data-reveal].is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 500ms ease,
+      transform 500ms ease;
+  }
+
+  .button {
+    transition:
+      background-color 180ms ease,
+      border-color 180ms ease,
+      color 180ms ease;
+  }
+
+  .text-link > span[aria-hidden="true"],
+  .service-links a > span[aria-hidden="true"] {
+    display: inline-block;
+    transition: transform 180ms ease;
+  }
+
+  .text-link:hover > span[aria-hidden="true"],
+  .text-link:focus-visible > span[aria-hidden="true"],
+  .service-links a:hover > span[aria-hidden="true"],
+  .service-links a:focus-visible > span[aria-hidden="true"] {
+    transform: translateX(3px);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .case-card {
+      position: relative;
+    }
+
+    .case-card::before {
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      width: 0;
+      height: 2px;
+      background: var(--color-primary);
+      content: "";
+      transition: width 220ms ease;
+    }
+
+    .case-card:hover::before,
+    .case-card:focus-within::before {
+      width: 4rem;
+    }
+  }
+
+  @media (min-width: 701px) {
+    html.motion-ready .system-support-flow[data-reveal="flow"] .flow-step:not(:last-child)::after {
+      opacity: 0;
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+
+    html.motion-ready
+      .system-support-flow[data-reveal="flow"].is-revealed
+      .flow-step:nth-child(1)::after {
+      opacity: 1;
+      transform: scaleX(1);
+      transition:
+        opacity 180ms ease 140ms,
+        transform 220ms ease 140ms;
+    }
+
+    html.motion-ready
+      .system-support-flow[data-reveal="flow"].is-revealed
+      .flow-step:nth-child(2)::after {
+      opacity: 1;
+      transform: scaleX(1);
+      transition:
+        opacity 180ms ease 230ms,
+        transform 220ms ease 230ms;
+    }
+
+    html.motion-ready .system-support-flow[data-reveal="flow"] .flow-options::before {
+      opacity: 0;
+      transform: scaleY(0);
+      transform-origin: top;
+    }
+
+    html.motion-ready .system-support-flow[data-reveal="flow"] .flow-options-list::before {
+      opacity: 0;
+      transform: scaleX(0);
+      transform-origin: center;
+    }
+
+    html.motion-ready .system-support-flow[data-reveal="flow"] .flow-options-list li {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    html.motion-ready .system-support-flow[data-reveal="flow"] .flow-options-list li::before {
+      opacity: 0;
+      transform: scaleY(0);
+      transform-origin: top;
+    }
+
+    html.motion-ready .system-support-flow[data-reveal="flow"].is-revealed .flow-options::before {
+      opacity: 1;
+      transform: scaleY(1);
+      transition:
+        opacity 180ms ease 330ms,
+        transform 200ms ease 330ms;
+    }
+
+    html.motion-ready
+      .system-support-flow[data-reveal="flow"].is-revealed
+      .flow-options-list::before {
+      opacity: 1;
+      transform: scaleX(1);
+      transition:
+        opacity 180ms ease 420ms,
+        transform 220ms ease 420ms;
+    }
+
+    html.motion-ready
+      .system-support-flow[data-reveal="flow"].is-revealed
+      .flow-options-list
+      li::before {
+      opacity: 1;
+      transform: scaleY(1);
+      transition:
+        opacity 160ms ease 500ms,
+        transform 180ms ease 500ms;
+    }
+
+    html.motion-ready .system-support-flow[data-reveal="flow"].is-revealed .flow-options-list li {
+      opacity: 1;
+      transform: translateY(0);
+      transition:
+        opacity 240ms ease,
+        transform 240ms ease;
+    }
+
+    html.motion-ready
+      .system-support-flow[data-reveal="flow"].is-revealed
+      .flow-options-list
+      li:nth-child(1) {
+      transition-delay: 520ms;
+    }
+
+    html.motion-ready
+      .system-support-flow[data-reveal="flow"].is-revealed
+      .flow-options-list
+      li:nth-child(2) {
+      transition-delay: 590ms;
+    }
+
+    html.motion-ready
+      .system-support-flow[data-reveal="flow"].is-revealed
+      .flow-options-list
+      li:nth-child(3) {
+      transition-delay: 660ms;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-reveal]::before,
+  [data-reveal]::after,
+  [data-reveal] *,
+  [data-reveal] *::before,
+  [data-reveal] *::after {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}

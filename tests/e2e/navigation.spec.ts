@@ -98,8 +98,8 @@ test("対応例3件とFAQを表示する", async ({ page }) => {
   await expect(faqs).toHaveCount(8);
   const technologyFaq = faqs.filter({ hasText: "どのような技術のシステムに対応できますか？" });
   await technologyFaq.locator("summary").click();
-  await expect(technologyFaq.locator("p")).toContainText(
-    "主な経験技術は、Java、PHP、Ruby on Rails、JavaScript、TypeScriptなどです。",
+  await expect(technologyFaq.locator("p")).toHaveText(
+    "主な経験技術は、Java、PHP、Ruby on Rails、JavaScript、TypeScriptなどです。記載のない技術についても、バージョン、依存ライブラリ、実行環境を確認した上で対応可否をご案内します。",
   );
   await faqs.first().locator("summary").click();
   await expect(faqs.first().locator("p")).toBeVisible();
@@ -124,9 +124,17 @@ test("公開中ページの主要ナビゲーションを表示する", async ({
   await page.goto("/");
   await expect(page.locator('header img[src^="/images/logo.png"]')).toBeVisible();
   const links = page.locator("nav.desktop a");
-  await expect(links).toHaveCount(3);
-  await expect(links).toHaveText(["サービス", "会社情報", "お問い合わせ"]);
+  await expect(links).toHaveCount(5);
+  await expect(links).toHaveText([
+    "サービス",
+    "既存システム支援",
+    "コーポレートサイト制作",
+    "会社情報",
+    "お問い合わせ",
+  ]);
   await expect(page.locator('header a[href="/cases/"]')).toHaveCount(0);
+  await expect(page.locator("footer .footer-grid b")).toHaveText("FALXTER株式会社");
+  await expect(page.locator("footer .legal")).toHaveText("© 2026 FALXTER K.K.");
   await expect(page.locator("footer")).toContainText(
     "既存業務システムの調査・引き継ぎ・保守・改修を主軸に、周辺機能や中小規模の新規開発、コーポレートサイト制作にも対応します。",
   );
@@ -135,7 +143,7 @@ test("公開中ページの主要ナビゲーションを表示する", async ({
 test("モバイルメニューをキーボードで開閉できる", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/");
-  const button = page.getByRole("button", { name: "メニュー" });
+  const button = page.getByRole("button", { name: "メニュー", exact: true });
   await button.click();
   await expect(button).toHaveAttribute("aria-expanded", "true");
   await page.keyboard.press("Escape");
@@ -151,8 +159,28 @@ test("404を表示する", async ({ page }) => {
 test("代表者プロフィールと対応可能な作業を表示する", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "蒲地 章悟" })).toBeVisible();
+  await expect(page.locator(".representative-role span")).toHaveText([
+    "代表取締役",
+    "ソフトウェアエンジニア",
+  ]);
   await expect(page.getByRole("heading", { name: "対応可能な作業" })).toBeVisible();
   await expect(page.getByText("既存コードとDBを含むシステム調査")).toBeVisible();
+  const technologyCard = page.locator(".technology-card");
+  await expect(technologyCard.getByRole("heading", { name: "主な経験技術" })).toBeVisible();
+  await expect(technologyCard.locator("dt")).toHaveText([
+    "言語・フレームワーク",
+    "データベース",
+    "インフラ・運用",
+  ]);
+  await expect(technologyCard.locator("dd")).toHaveText([
+    "Java / PHP（Laravel） / Ruby on Rails / TypeScript / JavaScript",
+    "MySQL / PostgreSQL",
+    "AWS / Linux / Docker",
+  ]);
+  await expect(technologyCard.locator(".technology-note")).toHaveText(
+    "上記は主な経験技術です。記載のない技術についても、システム構成、バージョン、依存ライブラリ、実行環境を確認した上で対応可否をご案内します。",
+  );
+  await expect(page.getByText("主な使用技術", { exact: true })).toHaveCount(0);
 });
 
 test("draft事例を公開事例一覧に表示しない", async ({ page }) => {
@@ -202,7 +230,8 @@ for (const width of [375, 768, 1024, 1440]) {
       .getByRole("link", { name: "まずは相談する" })
       .evaluate((element) => element.getBoundingClientRect().height);
     expect(buttonHeight).toBeGreaterThanOrEqual(44);
-    if (width <= 768) await expect(page.getByRole("button", { name: "メニュー" })).toBeVisible();
+    if (width <= 768)
+      await expect(page.getByRole("button", { name: "メニュー", exact: true })).toBeVisible();
   });
 }
 
@@ -228,7 +257,7 @@ test("ヒーローの改善までを分割せず、モバイルメニュー後�
     expect(keepTogetherLines).toBe(1);
   }
   await page.setViewportSize({ width: 375, height: 812 });
-  const menu = page.getByRole("button", { name: "メニュー" });
+  const menu = page.getByRole("button", { name: "メニュー", exact: true });
   await menu.click();
   await page.keyboard.press("Escape");
   await page.locator("#faq").scrollIntoViewIfNeeded();
@@ -320,7 +349,7 @@ test("方針とCTAの見出しを泣き別れさせず、代表者の作業・�
         return range.getClientRects().length;
       }),
     );
-    expect(ctaLineCounts, `${width}px .cta-heading span`).toEqual([1, 1, 1]);
+    expect(ctaLineCounts, `${width}px .cta-heading span`).toEqual([1, 1]);
 
     for (const selector of [".supported-work", ".specialties"]) {
       const gridColumns = await page
@@ -360,8 +389,15 @@ test("Web制作を副次サービス内の2つの固定料金プランとして�
   await page.goto("/services/");
   const webService = page.locator("article.web-service-card");
   await expect(webService).toHaveCount(1);
-  await expect(webService.getByText("15万円（税別）／1ページ／3〜4週間")).toBeVisible();
-  await expect(webService.getByText("30万円（税別）／最大5ページ／4〜6週間")).toBeVisible();
+  await expect(webService.locator(".website-plan")).toHaveCount(2);
+  await expect(webService.locator(".website-plan-facts dd")).toHaveText([
+    "15万円（税別）",
+    "1ページ・8セクションまで",
+    "3〜4週間",
+    "30万円（税別）",
+    "最大5ページ",
+    "4〜6週間",
+  ]);
 });
 test("Web制作詳細で2プランの条件、SEO、CTAを表示する", async ({ page }) => {
   await page.goto("/services/corporate-website/");
@@ -454,4 +490,452 @@ test("Web制作CTAの文字色と背景色のコントラストを保つ", async
   await button.focus();
   await expect(button).toBeFocused();
   await expect(button).toHaveCSS("color", "rgb(255, 255, 255)");
+});
+test("既存システム支援フローをHTMLの読み順とレスポンシブ表示で保つ", async ({ page }) => {
+  await page.goto("/");
+
+  const servicesSection = page.locator("#services");
+  const supportFlow = servicesSection.locator("figure.system-support-flow");
+  await expect(supportFlow).toHaveCount(1);
+  await expect(
+    supportFlow.getByRole("heading", { level: 3, name: "既存システム支援の進め方" }),
+  ).toBeVisible();
+  await expect(supportFlow.locator("ol.flow-steps > li h4")).toHaveText([
+    "状況確認",
+    "調査・引き継ぎ",
+    "構成・課題を整理",
+  ]);
+  await expect(supportFlow.locator("ol.flow-steps > li > p")).toHaveText([
+    "現在の課題と管理状況を確認します。",
+    "コード、DB、実行環境を調査します。",
+    "リスクと対応の優先順位を明確にします。",
+  ]);
+  await expect(supportFlow.locator("ul.flow-options-list > li h4")).toHaveText([
+    "スポット保守・改修",
+    "継続保守・改修",
+    "周辺機能・新規開発",
+  ]);
+  await expect(supportFlow.locator("ul.flow-options-list > li > p")).toHaveText([
+    "不具合修正・機能追加",
+    "継続改修・運用支援",
+    "管理画面・APIなどの新規開発",
+  ]);
+  await expect(supportFlow.getByText("その後の対応", { exact: true })).toBeVisible();
+  expect(
+    await servicesSection.evaluate((section) => {
+      const flow = section.querySelector(".system-support-flow");
+      const cards = section.querySelector(".service-grid");
+      return Boolean(
+        flow && cards && flow.compareDocumentPosition(cards) & Node.DOCUMENT_POSITION_FOLLOWING,
+      );
+    }),
+  ).toBe(true);
+
+  const systemCard = servicesSection.locator("article.system-service");
+  const webCard = servicesSection.locator("article.web-service");
+  await expect(systemCard.locator(".included-summary")).toHaveCount(0);
+  await expect(webCard.locator(".included-summary")).toHaveText(
+    "スマートフォン対応・問い合わせフォーム・基本SEO・公開作業込み",
+  );
+  await systemCard.locator("summary").click();
+  await expect(systemCard.locator(".method-grid")).toBeVisible();
+
+  for (const viewport of [
+    { width: 375, height: 812 },
+    { width: 1440, height: 1000 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    const responsiveFlow = page.locator(".system-support-flow");
+    expect(
+      await responsiveFlow.evaluate((element) => element.scrollWidth <= element.clientWidth + 1),
+    ).toBe(true);
+    expect(
+      await page
+        .locator("body")
+        .evaluate((element) => element.scrollWidth <= element.clientWidth + 1),
+    ).toBe(true);
+
+    const stepBoxes = await responsiveFlow.locator(".flow-step").evaluateAll((items) =>
+      items.map((item) => {
+        const rect = item.getBoundingClientRect();
+        return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+      }),
+    );
+    const optionBoxes = await responsiveFlow
+      .locator(".flow-options-list > li")
+      .evaluateAll((items) =>
+        items.map((item) => {
+          const rect = item.getBoundingClientRect();
+          return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+        }),
+      );
+
+    if (viewport.width === 1440) {
+      expect(
+        Math.max(...stepBoxes.map((box) => box.y)) - Math.min(...stepBoxes.map((box) => box.y)),
+      ).toBeLessThan(2);
+      expect(
+        Math.max(...optionBoxes.map((box) => box.y)) - Math.min(...optionBoxes.map((box) => box.y)),
+      ).toBeLessThan(2);
+      expect(Math.min(...optionBoxes.map((box) => box.y))).toBeGreaterThan(
+        Math.max(...stepBoxes.map((box) => box.y)),
+      );
+      const flowHeight = await responsiveFlow.evaluate(
+        (element) => element.getBoundingClientRect().height,
+      );
+      expect(flowHeight).toBeGreaterThanOrEqual(250);
+      expect(flowHeight).toBeLessThanOrEqual(340);
+      const connectors = await responsiveFlow.evaluate((element) => {
+        const arrow = element.querySelector(".flow-step");
+        const branch = element.querySelector(".flow-options");
+        if (!arrow || !branch) throw new Error("Flow connectors are missing");
+        return {
+          arrowWidth: Number.parseFloat(getComputedStyle(arrow, "::after").width),
+          branchWidth: getComputedStyle(branch, "::before").borderLeftWidth,
+        };
+      });
+      expect(connectors.arrowWidth).toBeGreaterThan(0);
+      expect(connectors.branchWidth).toBe("2px");
+    } else {
+      expect(stepBoxes[1].y).toBeGreaterThan(stepBoxes[0].y);
+      expect(stepBoxes[2].y).toBeGreaterThan(stepBoxes[1].y);
+      expect(optionBoxes[0].y).toBeGreaterThan(stepBoxes[2].y);
+      expect(optionBoxes[1].y).toBeGreaterThan(optionBoxes[0].y);
+      expect(optionBoxes[2].y).toBeGreaterThan(optionBoxes[1].y);
+    }
+  }
+});
+test("サービス小メニューをPCとモバイルで操作できる", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+
+  const desktopMenu = page.locator(".desktop-service-nav");
+  const desktopTrigger = desktopMenu.locator(".service-trigger");
+  const desktopSubmenu = desktopMenu.locator(".service-submenu");
+  await expect(desktopTrigger).toHaveAttribute("href", "/services/");
+  await expect(desktopSubmenu).toHaveCSS("visibility", "hidden");
+
+  await desktopMenu.hover();
+  await expect(desktopSubmenu).toHaveCSS("visibility", "visible");
+  await expect(desktopSubmenu).toHaveCSS("opacity", "1");
+  await expect(desktopSubmenu.locator("a")).toHaveText([
+    "既存システム支援",
+    "コーポレートサイト制作",
+  ]);
+  const submenuLayout = await desktopSubmenu.evaluate((menu) => {
+    const rect = menu.getBoundingClientRect();
+    const firstLink = menu.querySelector("a");
+    return {
+      display: getComputedStyle(menu).display,
+      position: getComputedStyle(menu).position,
+      height: rect.height,
+      withinViewport: rect.left >= 0 && rect.right <= window.innerWidth,
+      linkDisplay: firstLink ? getComputedStyle(firstLink).display : "",
+      linkMinHeight: firstLink ? Number.parseFloat(getComputedStyle(firstLink).minHeight) : 0,
+    };
+  });
+  expect(submenuLayout).toMatchObject({
+    display: "grid",
+    position: "absolute",
+    withinViewport: true,
+    linkDisplay: "flex",
+    linkMinHeight: 46,
+  });
+  expect(submenuLayout.height).toBeGreaterThanOrEqual(92);
+  expect(
+    await desktopSubmenu
+      .locator("a")
+      .evaluateAll((links) => links.map((link) => link.getAttribute("href"))),
+  ).toEqual(["/services/system-assessment/", "/services/corporate-website/"]);
+
+  await page.mouse.move(0, 0);
+  await expect(desktopSubmenu).toHaveCSS("visibility", "hidden");
+  await desktopTrigger.focus();
+  await expect(desktopSubmenu).toHaveCSS("visibility", "visible");
+  await page.keyboard.press("Escape");
+  await expect(desktopTrigger).toBeFocused();
+  await expect(desktopSubmenu).toHaveCSS("visibility", "hidden");
+
+  await page.goto("/services/system-maintenance/");
+  await expect(page.locator(".desktop-service-nav")).toHaveClass(/active/);
+  await expect(page.locator('.service-submenu a[aria-current="page"]')).toHaveText(
+    "既存システム支援",
+  );
+
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/");
+  await page.locator("#faq").scrollIntoViewIfNeeded();
+  await page.waitForTimeout(600);
+  expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+  expect((await page.locator(".site-header").boundingBox())?.y).toBe(0);
+  const menuButton = page.getByRole("button", { name: "メニュー", exact: true });
+  const scrollBeforeOpen = await page.evaluate(() => window.scrollY);
+  const menuButtonBox = await menuButton.boundingBox();
+  if (!menuButtonBox) throw new Error("メニューボタンが表示されていません");
+  await page.mouse.click(
+    menuButtonBox.x + menuButtonBox.width / 2,
+    menuButtonBox.y + menuButtonBox.height / 2,
+  );
+  expect(await page.evaluate(() => window.scrollY)).toBe(scrollBeforeOpen);
+  const mobilePanel = page.locator("#mobile-menu");
+  const mobileBackdrop = page.locator(".mobile-menu-backdrop");
+  const mobileServiceMenu = page.locator(".mobile-service-nav");
+  await expect(menuButton).toBeFocused();
+  await expect(mobilePanel).toHaveCSS("position", "fixed");
+  await expect(mobilePanel).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  await expect(mobileBackdrop).toBeVisible();
+  const headerBox = await page.locator(".site-header").boundingBox();
+  const panelBox = await mobilePanel.boundingBox();
+  expect(Math.abs((panelBox?.y ?? 0) - (headerBox?.height ?? 0) - 12)).toBeLessThanOrEqual(1);
+  expect(panelBox?.x).toBe(16);
+  expect(panelBox?.width).toBe(343);
+  expect(panelBox?.height ?? 999).toBeLessThan(260);
+  await mobileServiceMenu.locator("summary").click();
+  await expect(mobileServiceMenu).toHaveAttribute("open", "");
+  await expect(mobileServiceMenu.locator(".mobile-service-submenu a")).toHaveText([
+    "サービス一覧",
+    "既存システム支援",
+    "コーポレートサイト制作",
+  ]);
+  expect(
+    await mobileServiceMenu
+      .locator(".mobile-service-submenu a")
+      .evaluateAll((links) => links.map((link) => link.getAttribute("href"))),
+  ).toEqual(["/services/", "/services/system-assessment/", "/services/corporate-website/"]);
+  await page.keyboard.press("Escape");
+  await expect(menuButton).toHaveAttribute("aria-expanded", "false");
+  await expect(mobileServiceMenu).not.toHaveAttribute("open", "");
+});
+test("スクロール後もモバイルメニューをコンパクトに固定表示する", async ({ page }) => {
+  for (const viewport of [
+    { width: 375, height: 812 },
+    { width: 550, height: 900 },
+    { width: 768, height: 900 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    await page.locator("#faq").scrollIntoViewIfNeeded();
+    await page.waitForTimeout(600);
+    expect(
+      await page.evaluate(() => window.scrollY),
+      `${viewport.width}pxのスクロール位置`,
+    ).toBeGreaterThan(0);
+
+    const header = page.locator(".site-header");
+    const panel = page.locator("#mobile-menu");
+    const backdrop = page.locator(".mobile-menu-backdrop");
+    const menuButton = page.getByRole("button", { name: "メニュー", exact: true });
+    const scrollBeforeOpen = await page.evaluate(() => window.scrollY);
+    const menuButtonBox = await menuButton.boundingBox();
+    if (!menuButtonBox) throw new Error("メニューボタンが表示されていません");
+    await page.mouse.click(
+      menuButtonBox.x + menuButtonBox.width / 2,
+      menuButtonBox.y + menuButtonBox.height / 2,
+    );
+    expect(await page.evaluate(() => window.scrollY)).toBe(scrollBeforeOpen);
+
+    await expect(panel).toBeVisible();
+    await expect(backdrop).toBeVisible();
+    await expect(panel).toHaveCSS("position", "fixed");
+    await expect(panel).toHaveCSS("background-color", "rgb(255, 255, 255)");
+    const headerBox = await header.boundingBox();
+    const panelBox = await panel.boundingBox();
+    expect(headerBox?.y, `${viewport.width}pxでヘッダーを固定`).toBe(0);
+    const expectedWidth = Math.min(352, viewport.width - 32);
+    expect(
+      Math.abs((panelBox?.x ?? 0) + (panelBox?.width ?? 0) - (viewport.width - 16)),
+      `${viewport.width}pxの右端`,
+    ).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs((panelBox?.y ?? 999) - (headerBox?.height ?? 0) - 12),
+      `${viewport.width}pxの上端`,
+    ).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs((panelBox?.width ?? 0) - expectedWidth),
+      `${viewport.width}pxの横幅`,
+    ).toBeLessThanOrEqual(1);
+    expect((panelBox?.height ?? viewport.height) < viewport.height / 2).toBe(true);
+    expect(
+      await page.evaluate(() =>
+        document
+          .elementFromPoint(8, window.innerHeight / 2)
+          ?.classList.contains("mobile-menu-backdrop"),
+      ),
+      `${viewport.width}pxで背面を覆う`,
+    ).toBe(true);
+
+    await page.keyboard.press("Escape");
+    await expect(panel).toBeHidden();
+    await expect(backdrop).toBeHidden();
+  }
+});
+
+test("トップページのモーションを一度だけ実行し、軽減設定では無効化する", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+
+  await expect(page.locator("html")).toHaveClass(/motion-ready/);
+  await expect(page.locator(".hero-message")).toHaveCSS("opacity", "1");
+
+  const flow = page.locator(".system-support-flow[data-reveal='flow']");
+  await flow.scrollIntoViewIfNeeded();
+  await expect(flow).toHaveClass(/is-revealed/);
+  await expect
+    .poll(
+      () =>
+        flow.evaluate((element) => {
+          const firstStep = element.querySelector(".flow-step");
+          const branch = element.querySelector(".flow-options");
+          const options = [...element.querySelectorAll(".flow-options-list > li")];
+          if (!firstStep || !branch) throw new Error("フロー図の要素が見つかりません");
+          return (
+            Number.parseFloat(getComputedStyle(firstStep, "::after").opacity) >= 0.95 &&
+            Number.parseFloat(getComputedStyle(branch, "::before").opacity) >= 0.95 &&
+            options.every((option) => Number.parseFloat(getComputedStyle(option).opacity) >= 0.95)
+          );
+        }),
+      { timeout: 1500 },
+    )
+    .toBe(true);
+
+  await page.locator(".hero").scrollIntoViewIfNeeded();
+  await flow.scrollIntoViewIfNeeded();
+  await expect(flow).toHaveClass(/is-revealed/);
+
+  const detailLinkArrow = page.locator(".service-links a").first().locator("span");
+  await detailLinkArrow.locator("..").hover();
+  await expect(detailLinkArrow).toHaveCSS("transform", "matrix(1, 0, 0, 1, 3, 0)");
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.reload();
+  await expect(page.locator("html")).not.toHaveClass(/motion-ready/);
+  const reducedTarget = page.locator("[data-reveal]").first();
+  await expect(reducedTarget).toHaveCSS("opacity", "1");
+  await expect(reducedTarget).toHaveCSS("transform", "none");
+});
+
+test("サービス一覧を主従のある2領域として表示する", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/services/");
+
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "既存システム支援とコーポレートサイト制作",
+  );
+  await expect(page.getByRole("heading", { level: 2 })).toHaveText([
+    "既存システム支援",
+    "コーポレートサイト制作",
+    "どのサービスが適切か分からない場合も、ご相談ください。",
+  ]);
+  await expect(page.locator(".service-card h3")).toHaveText([
+    "既存システムの調査・引き継ぎ",
+    "既存システムの保守・改修",
+    "中小企業向けコーポレートサイト制作",
+  ]);
+  await expect(page.locator("main")).not.toContainText("診断");
+
+  await expect(page.locator("#system-support")).toHaveCount(1);
+
+  const systemCards = page.locator(".system-service-grid > .service-card");
+  const webCard = page.locator(".web-domain > .web-service-card");
+  await expect(systemCards).toHaveCount(2);
+  await expect(webCard).toHaveCount(1);
+  await expect(page.locator(".system-service-grid .web-service-card")).toHaveCount(0);
+
+  await expect(
+    systemCards.nth(0).getByText("担当者不在、資料不足、構成や仕様が分からないシステム"),
+  ).toBeVisible();
+  await expect(systemCards.nth(0).locator(".price-list dd")).toHaveText("50万円〜（税別）");
+  await expect(systemCards.nth(1).getByText("周辺機能・新規システム開発にも対応")).toBeVisible();
+  await expect(systemCards.nth(1).locator(".price-list dd")).toHaveText([
+    "個別見積もり",
+    "月額30万円〜（税別）",
+    "個別見積もり",
+  ]);
+  await expect(webCard.getByText("新しく会社サイトを用意したい中小企業・個人事業者")).toBeVisible();
+  const websitePlanPanels = webCard.locator(".website-plan");
+  await expect(websitePlanPanels).toHaveCount(2);
+  await expect(websitePlanPanels.locator("h4")).toHaveText([
+    "1ページ会社サイト制作",
+    "最大5ページのコーポレートサイト制作",
+  ]);
+  await expect(websitePlanPanels.locator(".website-plan-description")).toHaveText([
+    "会社概要、サービス、代表者情報、問い合わせなどを1ページにまとめたい事業者向け",
+    "会社情報やサービス内容をページごとに分け、一般的な会社サイトとして整備したい事業者向け",
+  ]);
+  await expect(websitePlanPanels.locator(".website-plan-facts dd")).toHaveText([
+    "15万円（税別）",
+    "1ページ・8セクションまで",
+    "3〜4週間",
+    "30万円（税別）",
+    "最大5ページ",
+    "4〜6週間",
+  ]);
+  await expect(webCard.locator(".website-plan.service-card")).toHaveCount(0);
+  await expect(webCard.getByRole("link", { name: "詳しく見る" })).toHaveCount(1);
+
+  const cards = page.locator(".service-card");
+  await expect(cards.nth(0).getByRole("link", { name: "詳しく見る" })).toHaveAttribute(
+    "href",
+    "/services/system-assessment/",
+  );
+  await expect(cards.nth(1).getByRole("link", { name: "詳しく見る" })).toHaveAttribute(
+    "href",
+    "/services/system-maintenance/",
+  );
+  await expect(cards.nth(2).getByRole("link", { name: "詳しく見る" })).toHaveAttribute(
+    "href",
+    "/services/corporate-website/",
+  );
+
+  const systemBoxes = await systemCards.evaluateAll((items) =>
+    items.map((item) => {
+      const rect = item.getBoundingClientRect();
+      return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+    }),
+  );
+  expect(Math.abs(systemBoxes[0].y - systemBoxes[1].y)).toBeLessThan(2);
+  expect(systemBoxes[1].x).toBeGreaterThan(systemBoxes[0].x);
+  expect(systemBoxes[0].width).toBeLessThan(systemBoxes[1].width);
+  expect(systemBoxes[0].height).toBeLessThan(systemBoxes[1].height);
+  const systemGridBox = await page.locator(".system-service-grid").boundingBox();
+  const webCardBox = await webCard.boundingBox();
+  expect(Math.abs((systemGridBox?.width ?? 0) - (webCardBox?.width ?? 0))).toBeLessThan(2);
+  const websitePlanBoxes = await websitePlanPanels.evaluateAll((items) =>
+    items.map((item) => {
+      const rect = item.getBoundingClientRect();
+      return { x: rect.x, y: rect.y, height: rect.height };
+    }),
+  );
+  expect(Math.abs(websitePlanBoxes[0].y - websitePlanBoxes[1].y)).toBeLessThan(2);
+  expect(websitePlanBoxes[1].x).toBeGreaterThan(websitePlanBoxes[0].x);
+  expect(Math.abs(websitePlanBoxes[0].height - websitePlanBoxes[1].height)).toBeLessThan(2);
+
+  await expect(page.getByRole("link", { name: "サービスについて相談する" })).toHaveAttribute(
+    "href",
+    "/contact/",
+  );
+
+  for (const viewport of [
+    { width: 375, height: 812 },
+    { width: 768, height: 900 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/services/");
+    const responsiveCards = await page
+      .locator(".service-card")
+      .evaluateAll((items) => items.map((item) => item.getBoundingClientRect().y));
+    expect(responsiveCards[1]).toBeGreaterThan(responsiveCards[0]);
+    expect(responsiveCards[2]).toBeGreaterThan(responsiveCards[1]);
+    if (viewport.width <= 650) {
+      const responsivePlans = await page
+        .locator(".website-plan")
+        .evaluateAll((items) => items.map((item) => item.getBoundingClientRect().y));
+      expect(responsivePlans[1]).toBeGreaterThan(responsivePlans[0]);
+    }
+    expect(
+      await page.locator("body").evaluate((body) => body.scrollWidth <= body.clientWidth + 1),
+      `${viewport.width}pxの横はみ出し`,
+    ).toBe(true);
+  }
 });

@@ -29,6 +29,28 @@ test("トップのdescriptionは既存システム支援を主軸にする", asy
     "FALXTER株式会社は、資料や仕様が不足した既存業務システムやWebアプリケーションの調査、引き継ぎ、保守・改修を代表エンジニアが直接支援します。周辺機能や中小規模の新規システム開発、コーポレートサイト制作にも対応します。",
   );
 });
+test("お問い合わせのdescriptionとOGPを現在のサービス構成へ統一する", async ({ page }) => {
+  const description =
+    "既存システムの調査・引き継ぎ・保守・改修、周辺機能や新規システムの開発、コーポレートサイト制作についてご相談ください。";
+  await page.goto("/contact/");
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", description);
+  await expect(page.locator('meta[property="og:description"]')).toHaveAttribute(
+    "content",
+    description,
+  );
+});
+test("サービス一覧のdescriptionとOGPを2つのサービス領域へ統一する", async ({ page }) => {
+  const description =
+    "既存システムの調査・引き継ぎ・保守・改修、周辺機能や新規システムの開発、中小企業向けコーポレートサイト制作を提供しています。";
+  await page.goto("/services/");
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", description);
+  await expect(page.locator('meta[property="og:description"]')).toHaveAttribute(
+    "content",
+    description,
+  );
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/services\/$/);
+  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", /\/services\/$/);
+});
 test("sitemapは3商品を含み技術記事を含まない", async ({ request }) => {
   const index = await request.get("/sitemap-index.xml");
   expect(index.ok()).toBe(true);

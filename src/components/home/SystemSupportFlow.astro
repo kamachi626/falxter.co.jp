@@ -1,0 +1,263 @@
+---
+const steps = [
+  {
+    title: "状況確認",
+    description: "現在の課題と管理状況を確認します。",
+  },
+  {
+    title: "調査・引き継ぎ",
+    description: "コード、DB、実行環境を調査します。",
+  },
+  {
+    title: "構成・課題を整理",
+    description: "リスクと対応の優先順位を明確にします。",
+  },
+];
+
+const options = [
+  {
+    title: "スポット保守・改修",
+    description: "不具合修正・機能追加",
+  },
+  {
+    title: "継続保守・改修",
+    description: "継続改修・運用支援",
+  },
+  {
+    title: "周辺機能・新規開発",
+    description: "管理画面・APIなどの新規開発",
+  },
+];
+---
+
+<figure
+  class="system-support-flow"
+  data-reveal="flow"
+  aria-labelledby="system-support-flow-title"
+  aria-describedby="system-support-flow-description"
+>
+  <figcaption class="flow-caption">
+    <h3 id="system-support-flow-title">既存システム支援の進め方</h3>
+    <p id="system-support-flow-description">
+      状況や仕様が分からない場合も、調査と整理を起点に、必要な対応へ進めます。
+    </p>
+  </figcaption>
+
+  <ol class="flow-steps">
+    {
+      steps.map((step, index) => (
+        <li class="flow-step">
+          <div class="step-heading">
+            <span class="step-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+            <h4>{step.title}</h4>
+          </div>
+          <p>{step.description}</p>
+        </li>
+      ))
+    }
+  </ol>
+
+  <div class="flow-options">
+    <p class="options-label">その後の対応</p>
+    <ul class="flow-options-list">
+      {
+        options.map((option) => (
+          <li>
+            <h4>{option.title}</h4>
+            <p>{option.description}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</figure>
+
+<style>
+  .system-support-flow {
+    --flow-gap: clamp(2.25rem, 5vw, 4.5rem);
+    margin: 0 0 clamp(2rem, 3.5vw, 3rem);
+    padding: 1rem clamp(1.35rem, 2.5vw, 1.9rem);
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+  .flow-caption {
+    display: grid;
+    grid-template-columns: minmax(14rem, 0.75fr) minmax(0, 1.25fr);
+    align-items: end;
+    gap: clamp(1rem, 3vw, 3rem);
+    margin-bottom: 0.9rem;
+  }
+  .flow-caption h3 {
+    margin: 0;
+    color: var(--color-text);
+    font-size: clamp(1.3rem, 2.2vw, 1.65rem);
+    line-height: 1.45;
+  }
+  .flow-caption p,
+  .flow-step p,
+  .flow-options-list p {
+    margin: 0;
+    color: var(--color-body);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+  .flow-steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--flow-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .flow-step {
+    position: relative;
+    min-width: 0;
+    padding-top: 0.75rem;
+    border-top: 2px solid var(--color-primary);
+  }
+  .flow-step:not(:last-child)::after {
+    position: absolute;
+    top: 0.82rem;
+    left: calc(100% + 0.5rem);
+    width: calc(var(--flow-gap) - 1rem);
+    height: 0.6rem;
+    background: var(--color-primary);
+    clip-path: polygon(0 45%, 82% 45%, 82% 0, 100% 50%, 82% 100%, 82% 55%, 0 55%);
+    content: "";
+  }
+  .step-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 0.65rem;
+    margin-bottom: 0.3rem;
+  }
+  .step-number {
+    flex: 0 0 auto;
+    color: var(--color-primary);
+    font: 800 0.9rem/1 ui-monospace, SFMono-Regular, Consolas, monospace;
+    letter-spacing: 0.08em;
+  }
+  .flow-step h4,
+  .flow-options-list h4 {
+    margin: 0;
+    color: var(--color-text);
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    word-break: keep-all;
+  }
+  .flow-options {
+    position: relative;
+    margin-top: 1.5rem;
+  }
+  .flow-options::before {
+    position: absolute;
+    top: -1.5rem;
+    left: 83.333%;
+    height: 4rem;
+    border-left: 2px solid var(--color-primary);
+    content: "";
+  }
+  .options-label {
+    margin: 0 0 0.55rem;
+    color: var(--color-primary);
+    font: 800 0.75rem/1.4 system-ui, sans-serif;
+    letter-spacing: 0.08em;
+  }
+  .flow-options-list {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0;
+    padding: 0.75rem 0 0;
+    list-style: none;
+  }
+  .flow-options-list::before {
+    position: absolute;
+    top: 0;
+    right: 16.667%;
+    left: 16.667%;
+    border-top: 2px solid var(--color-primary);
+    content: "";
+  }
+  .flow-options-list li {
+    position: relative;
+    min-width: 0;
+    padding: 0.5rem clamp(0.8rem, 2vw, 1.4rem) 0;
+  }
+  .flow-options-list li + li {
+    border-left: 1px solid var(--color-border);
+  }
+  .flow-options-list li::before {
+    position: absolute;
+    top: -0.75rem;
+    left: 50%;
+    height: 0.75rem;
+    border-left: 2px solid var(--color-primary);
+    content: "";
+  }
+  .flow-options-list h4 {
+    margin-bottom: 0.25rem;
+  }
+  @media (max-width: 700px) {
+    .system-support-flow {
+      padding: 1.25rem;
+    }
+    .flow-caption {
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
+      margin-bottom: 1.5rem;
+    }
+    .flow-steps {
+      grid-template-columns: 1fr;
+      gap: 0;
+      margin-left: 0.4rem;
+      padding-left: 1.25rem;
+      border-left: 2px solid var(--color-primary);
+    }
+    .flow-step {
+      padding: 0 0 1.4rem;
+      border-top: 0;
+    }
+    .flow-step::before {
+      position: absolute;
+      top: 0.85rem;
+      left: -1.25rem;
+      width: 0.65rem;
+      border-top: 2px solid var(--color-primary);
+      content: "";
+    }
+    .flow-step:not(:last-child)::after {
+      display: none;
+    }
+    .flow-options {
+      margin: -0.15rem 0 0 0.4rem;
+      padding-left: 1.25rem;
+      border-left: 2px solid var(--color-primary);
+    }
+    .flow-options::before,
+    .flow-options-list::before {
+      display: none;
+    }
+    .options-label {
+      margin-bottom: 0.8rem;
+    }
+    .flow-options-list {
+      grid-template-columns: 1fr;
+      padding: 0 0 0 1rem;
+      border-left: 1px solid var(--color-border);
+    }
+    .flow-options-list li,
+    .flow-options-list li + li {
+      padding: 0 0 1rem 1rem;
+      border-left: 0;
+    }
+    .flow-options-list li::before {
+      top: 0.8rem;
+      left: -1rem;
+      width: 0.65rem;
+      height: 0;
+      border-top: 1px solid var(--color-border);
+      border-left: 0;
+    }
+  }
+</style>

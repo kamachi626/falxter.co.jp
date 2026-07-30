@@ -31,7 +31,7 @@ export type Company = {
 
 export const company: Company = {
   companyName: "FALXTER株式会社",
-  companyNameEn: "FALXTER",
+  companyNameEn: "FALXTER K.K.",
   representativeName: "蒲地 章悟",
   representativeTitle: "代表取締役／ソフトウェアエンジニア",
   profileHeading: "サーバーサイド開発と既存システム保守を中心に対応",
