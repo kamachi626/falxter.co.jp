@@ -7,10 +7,8 @@ const services = [
 
 test("トップと主要ページを表示できる", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator(".hero-message")).toHaveText("既存システムの調査・引き継ぎ・改修");
-  await expect(
-    page.locator(".site-header").getByText("既存システムの調査・引き継ぎ・改修"),
-  ).toHaveCount(0);
+  await expect(page.locator(".hero-message")).toHaveText("技術者が直接、最後まで。");
+  await expect(page.locator(".site-header").getByText("技術者が直接、最後まで。")).toHaveCount(0);
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "引き継げない、直せない、仕様が分からない。既存システムの調査から改善まで。",
   );
