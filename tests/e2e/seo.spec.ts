@@ -4,8 +4,7 @@ const pages = [
   "/",
   "/services/",
   "/services/corporate-website/",
-  "/services/system-assessment/",
-  "/services/system-maintenance/",
+  "/services/system-support/",
   "/cases/",
   "/company/",
   "/contact/",
@@ -51,7 +50,7 @@ test("サービス一覧のdescriptionとOGPを2つのサービス領域へ統�
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/services\/$/);
   await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", /\/services\/$/);
 });
-test("sitemapは3商品を含み技術記事を含まない", async ({ request }) => {
+test("sitemapは統合した2商品を含み技術記事を含まない", async ({ request }) => {
   const index = await request.get("/sitemap-index.xml");
   expect(index.ok()).toBe(true);
   const indexBody = await index.text();
@@ -62,13 +61,11 @@ test("sitemapは3商品を含み技術記事を含まない", async ({ request }
   const sitemap = await request.get(sitemapPath);
   expect(sitemap.ok()).toBe(true);
   const body = await sitemap.text();
-  for (const path of [
-    "/services/corporate-website/",
-    "/services/system-assessment/",
-    "/services/system-maintenance/",
-  ]) {
+  for (const path of ["/services/corporate-website/", "/services/system-support/"]) {
     expect(body).toContain(path);
   }
+  expect(body).not.toContain("/services/system-assessment/");
+  expect(body).not.toContain("/services/system-maintenance/");
   expect(body).not.toContain("/insights/");
   expect(body).not.toContain("/blog/");
   expect(body).not.toContain("/news/");

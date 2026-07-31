@@ -6,7 +6,9 @@ import { services } from "../../data/services";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 export function getStaticPaths() {
-  return services.map((service) => ({ params: { slug: service.slug }, props: { service } }));
+  return services
+    .filter((service) => service.slug !== "corporate-website")
+    .map((service) => ({ params: { slug: service.slug }, props: { service } }));
 }
 const { service } = Astro.props;
 const isCorporateWebsite = service.slug === "corporate-website";

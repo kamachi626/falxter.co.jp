@@ -10,9 +10,6 @@ export type Company = {
   email: string | null;
   establishedAt: string | null;
   capital: string | null;
-  invoiceRegistrationNumber: string | null;
-  businessHours: string | null;
-  serviceArea: string | null;
   profile: string[];
   homepageProfile: string[];
   specialties: string[];
@@ -35,15 +32,12 @@ export const company: Company = {
   representativeName: "蒲地 章悟",
   representativeTitle: "代表取締役／ソフトウェアエンジニア",
   profileHeading: "サーバーサイド開発と既存システム保守を中心に対応",
-  postalCode: null,
-  address: null,
-  phone: null,
-  email: null,
-  establishedAt: null,
-  capital: null,
-  invoiceRegistrationNumber: null,
-  businessHours: null,
-  serviceArea: null,
+  postalCode: "〒285-0859",
+  address: "千葉県佐倉市南ユーカリが丘23-10",
+  phone: "050-3697-8926",
+  email: "customer@falxter.co.jp",
+  establishedAt: "2014年9月12日",
+  capital: "1,000,000円",
   profile: [
     "ソフトウェア開発者として、Javaを中心とした業務システム開発に長く従事してきました。現在はサーバーサイド開発を主軸に、既存システムの機能追加、不具合調査、保守運用、リリースまで一貫して対応しています。",
     "PHP（Laravel）、Ruby on Rails、JavaScript、MySQL、PostgreSQL、AWSなどを利用したWebシステムの開発・保守に加え、WordPress、EC-CUBE、Shopifyを利用したコーポレートサイトおよびECサイトの構築・改修経験があります。",

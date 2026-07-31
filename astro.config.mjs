@@ -7,6 +7,16 @@ export default defineConfig({
   output: "server",
   adapter: node({ mode: "standalone" }),
   trailingSlash: "always",
+  redirects: {
+    "/services/system-assessment/": {
+      status: 301,
+      destination: "/services/system-support/#assessment",
+    },
+    "/services/system-maintenance/": {
+      status: 301,
+      destination: "/services/system-support/#spot-maintenance",
+    },
+  },
   integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()],

@@ -14,7 +14,7 @@ export type WebsitePlan = {
   exclusions: string[];
 };
 
-const sharedWebsiteInclusions = [
+export const sharedWebsiteInclusions = [
   "セミオリジナルデザイン1案",
   "スマートフォン・タブレット対応",
   "問い合わせフォーム",
@@ -22,10 +22,10 @@ const sharedWebsiteInclusions = [
   "OGP設定",
   "Google Analytics 4等の基本的なアクセス解析設定",
   "本番環境への公開作業",
-  "初稿確認後の修正1回",
+  "初稿に対する一括修正1回",
 ];
 
-const sharedWebsiteExclusions = [
+export const sharedWebsiteExclusions = [
   "原稿の新規作成、取材、インタビュー",
   "写真撮影、ロゴ・イラスト制作",
   "WordPressなどのCMS、ブログ・お知らせ更新機能",
@@ -68,27 +68,27 @@ export const systemSupportMethods = [
     description:
       "コード、データベース、実行環境、運用状況を確認し、システム構成、技術上のリスク、優先すべき改善項目を整理します。",
     price: "50万円〜（税別）",
-    href: "/services/system-assessment/",
+    href: "/services/system-support/#assessment",
   },
   {
     title: "スポット保守・改修",
     description:
       "不具合調査、障害原因調査、小規模な機能追加、既存機能の修正、更新作業などに対応します。",
     price: "個別見積もり",
-    href: "/services/system-maintenance/",
+    href: "/services/system-support/#spot-maintenance",
   },
   {
     title: "継続保守・改修",
     description: "月次の保守、継続的な改修、AWS等の実行環境の運用支援に対応します。",
     price: "月額30万円〜（税別）",
-    href: "/services/system-maintenance/",
+    href: "/services/system-support/#ongoing-maintenance",
   },
   {
     title: "周辺機能・新規システム開発",
     description:
       "既存システムと連携する管理画面、業務支援ツール、Webアプリケーション、API、バッチ処理などの新規開発にも対応します。",
     price: "個別見積もり",
-    href: "/services/system-maintenance/",
+    href: "/services/system-support/#development",
   },
 ] as const;
 
@@ -103,7 +103,7 @@ export const websitePlans: WebsitePlan[] = [
     structure: "8セクションまで",
     duration: "3〜4週間",
     design: "セミオリジナルデザイン1案",
-    revision: "1回",
+    revision: "初稿に対する一括修正1回",
     audience: "会社や事業の概要を簡潔にまとめたい場合",
     included: [
       "1ページ完結",
@@ -120,7 +120,7 @@ export const websitePlans: WebsitePlan[] = [
   },
   {
     id: "five-page",
-    name: "中小企業向けコーポレートサイト制作",
+    name: "最大5ページのコーポレートサイト制作",
     shortName: "最大5ページプラン",
     contactCategory: websiteContactCategories[1],
     price: "30万円（税別）",
@@ -128,7 +128,7 @@ export const websitePlans: WebsitePlan[] = [
     structure: "最大5ページの範囲で構成を調整",
     duration: "4〜6週間",
     design: "セミオリジナルデザイン1案",
-    revision: "1回",
+    revision: "初稿に対する一括修正1回",
     audience: "サービスや会社情報を複数ページに分けて整理したい場合",
     included: ["最大5ページ", ...sharedWebsiteInclusions],
     exclusions: ["6ページ目以降の追加ページ", ...sharedWebsiteExclusions],
@@ -162,13 +162,6 @@ export type Service = {
   plans?: WebsitePlan[];
   faqs: { question: string; answer: string }[];
 };
-const systemProcess = [
-  "初回ヒアリング",
-  "対象範囲と前提の確認",
-  "調査・実施",
-  "報告と次のアクション整理",
-];
-
 export const services: Service[] = [
   {
     slug: "corporate-website",
@@ -232,7 +225,7 @@ export const services: Service[] = [
       "基本SEO・SNS共有設定",
       "アクセス解析の基本設定",
       "本番環境への公開作業",
-      "初稿確認後の修正1回",
+      "初稿に対する一括修正1回",
     ],
     scope: [
       "1ページ・8セクションまで、または最大5ページ",
@@ -367,7 +360,12 @@ export const services: Service[] = [
       {
         question: "15万円・30万円の料金には何が含まれますか？",
         answer:
-          "どちらのプランにも、セミオリジナルデザイン、スマートフォン対応、問い合わせフォーム、基本SEO、アクセス解析の基本設定、公開作業、修正1回が含まれます。原稿、写真、ロゴ、会社情報は、原則としてお客様にご用意いただきます。",
+          "どちらのプランにも、セミオリジナルデザイン、スマートフォン対応、問い合わせフォーム、基本SEO、アクセス解析の基本設定、公開作業、初稿に対する一括修正1回が含まれます。原稿、写真、ロゴ、会社情報は、原則としてお客様にご用意いただきます。",
+      },
+      {
+        question: "修正1回とは、どのような意味ですか？",
+        answer:
+          "初稿をご確認いただいた後、修正内容をまとめてご連絡いただき、その内容を一括して反映する1回を指します。制作範囲や構成を大きく変更する場合は、個別にお見積もりします。",
       },
       {
         question: "原稿や写真も作成してもらえますか？",
@@ -388,165 +386,6 @@ export const services: Service[] = [
         question: "制作後の保守も依頼できますか？",
         answer:
           "公開後の保守は標準料金に含みません。更新内容や頻度を確認した上で、対応範囲と料金をご案内します。",
-      },
-    ],
-  },
-  {
-    slug: "system-assessment",
-    contactService: "system-assessment",
-    title: "既存システム診断・引き継ぎ",
-    seoTitle: "既存システム診断・引き継ぎ｜FALXTER株式会社",
-    seoDescription:
-      "担当者の退職や資料不足、技術の老朽化で状況が分からない既存システムを調査し、引き継ぎ情報と改善方針を整理します。",
-    summary:
-      "担当者の退職、資料不足、技術の老朽化などにより状況が分からなくなった既存システムを調査します。コード、データベース、実行環境、運用方法を確認し、引き継ぎに必要な情報と今後の改善方針を整理します。",
-    cardSummary: "コードや実行環境を調査し、引き継ぎに必要な情報と現実的な改善方針を整理します。",
-    cardAudience: "担当者退職、仕様書不足、老朽化",
-    cardDeliverables: "診断レポート、改善方針、引き継ぎ資料",
-    cardDuration: "2〜4週間程度（調査対象範囲と必要なアクセス環境が確定してからの目安）",
-    homeDetails: [
-      { label: "構成整理", value: "システム構成とソースコードの状態を確認" },
-      { label: "技術確認", value: "使用技術、依存ライブラリ、DB、実行環境を確認" },
-      { label: "リスク整理", value: "運用上・技術上のリスクと優先項目を整理" },
-      {
-        label: "納品物",
-        value:
-          "システム構成、使用技術、主要機能、運用・技術リスク、改修優先順位、概算をまとめた調査報告書",
-      },
-      { label: "判断材料", value: "改修・保守の概算と引き継ぎ可否を整理" },
-      {
-        label: "調査範囲",
-        value:
-          "事前に合意した対象範囲に基づき作成。すべての機能や仕様を完全に復元するものではありません",
-      },
-    ],
-    audience: [
-      "担当者が退職したシステム",
-      "仕様書が不足しているシステム",
-      "Java、PHP（Laravel）、Ruby on Railsなどの既存環境",
-      "他社から引き継ぐ必要があるシステム",
-      "全面刷新か段階改修か判断できないシステム",
-    ],
-    challenges: [
-      "仕様や構成を把握している担当者がいない",
-      "技術的負債や運用リスクを説明できない",
-      "全面刷新か段階改修か判断できない",
-    ],
-    work: [
-      "ソースコードの構成確認",
-      "使用技術とバージョンの確認",
-      "データベース構成の確認",
-      "バッチおよび外部連携の確認",
-      "サーバー、クラウド構成の確認",
-      "実行、テスト、リリース方法の確認",
-      "保守上の問題点の整理",
-      "引き継ぎ資料の作成",
-      "段階改修とリプレイスの比較",
-      "改修範囲と概算工数の整理",
-    ],
-    scope: ["アプリケーション", "インフラ・デプロイ", "運用・テスト・監視・保守体制"],
-    deliverables: [
-      "診断レポート",
-      "リスク一覧",
-      "改善ロードマップ",
-      "概算工数の前提",
-      "引き継ぎ資料",
-    ],
-    process: systemProcess,
-    duration: "2〜4週間程度。調査対象範囲と必要なアクセス環境が確定してからの目安です。",
-    price: "50万円〜（税別）",
-    notice:
-      "調査報告書は、事前に合意した調査対象範囲に基づいて作成します。すべての機能や仕様を完全に復元するものではありません。",
-    exclusions: [
-      "法令・契約上アクセスできない環境の調査",
-      "前提情報なしでの成果保証",
-      "合意範囲外の運用代行",
-    ],
-    faqs: [
-      {
-        question: "診断後の改修も依頼できますか？",
-        answer: "はい。診断と改修を分けて契約でき、診断・引き継ぎ資料の作成のみでも相談可能です。",
-      },
-    ],
-  },
-  {
-    slug: "system-maintenance",
-    contactService: "system-maintenance",
-    title: "既存システムの保守・改修",
-    seoTitle: "既存システムの保守・改修｜FALXTER株式会社",
-    seoDescription:
-      "Java、PHP（Laravel）、Ruby on Railsなどの既存システムを確認し、不具合調査、機能追加、テスト、リリース、運用保守を支援します。",
-    summary:
-      "既存の業務システムやWebアプリケーションを対象に、不具合調査、機能追加、テスト、リリース、運用保守を行います。既存環境と連携する周辺機能や、中小規模の業務システムの新規開発もご相談いただけます。",
-    cardSummary:
-      "既存の業務システムやWebアプリケーションを対象に、不具合調査、機能追加、更新、継続保守、新規開発を行います。",
-    cardAudience: "業務システム、Webアプリケーション、クラウド環境",
-    cardDeliverables: "改修コード、テスト、変更・運用手順",
-    cardDuration: "内容確認後に提示",
-    homeDetails: [
-      { label: "対応内容", value: "スポット調査、不具合修正、小規模な機能追加、障害原因調査" },
-      { label: "継続支援", value: "月次保守、AWS環境の運用支援" },
-      { label: "新規開発", value: "既存環境と連携する周辺機能、中小規模の業務システム" },
-      { label: "契約・料金", value: "月額保守または個別見積もり。対象範囲を確認後に提示" },
-      {
-        label: "対応時間・緊急対応",
-        value: "通常対応時間および緊急対応の可否・条件は、保守契約時に個別に定めます",
-      },
-    ],
-    audience: [
-      "保守担当者が不足している企業",
-      "障害や不具合の原因を特定できないシステム",
-      "古い環境を段階的に更新したい企業",
-      "他社や前任者から引き継いだシステム",
-      "既存環境と連携する新規機能や周辺システム",
-    ],
-    challenges: [
-      "変更の影響範囲が分からない",
-      "障害原因を追える担当者がいない",
-      "バージョン更新やテスト整備が進まない",
-    ],
-    work: [
-      "既存仕様とコードの解析",
-      "障害・不具合調査",
-      "原因分析・データ確認と補正",
-      "機能追加",
-      "バッチ改修",
-      "外部システム連携",
-      "ライブラリ更新",
-      "バージョンアップ",
-      "性能改善",
-      "テスト・リリース",
-      "ドキュメント整備",
-      "運用保守と既存コードの段階的な改善",
-      "既存システムと連携する管理画面・業務支援ツールの新規開発",
-      "Webアプリケーション、API、バッチ・データ連携処理の新規開発",
-    ],
-    scope: [
-      "Java",
-      "PHP（Laravel）",
-      "Ruby on Rails",
-      "C#",
-      "JavaScript / TypeScript",
-      "MySQL・PostgreSQL",
-      "Linux・AWS",
-    ],
-    deliverables: ["調査報告", "改修コードとテスト", "変更・運用手順", "課題と優先順位の一覧"],
-    process: systemProcess,
-    duration: "対象範囲を確認後に提示します。",
-    price:
-      "スポット調査・改修：個別見積もり／継続保守・改修：月額30万円〜（税別）／周辺機能・新規システム開発：個別見積もり",
-    exclusions: [
-      "法令・契約上アクセスできない環境の調査",
-      "前提情報なしでの成果保証",
-      "合意範囲外の運用代行",
-    ],
-    notice:
-      "新規開発を含む対応可否は、使用技術、バージョン、要件、規模、体制、期間、システム構成、契約条件を確認した上で判断します。",
-    faqs: [
-      {
-        question: "仕様書がなくても相談できますか？",
-        answer:
-          "はい。閲覧可能なコード、ログ、画面、関係者へのヒアリングから調査範囲を組み立てます。",
       },
     ],
   },

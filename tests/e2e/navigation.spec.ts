@@ -2,8 +2,7 @@ import { expect, test } from "@playwright/test";
 
 const services = [
   { title: "中小企業向けコーポレートサイト制作", path: "/services/corporate-website/" },
-  { title: "既存システム診断・引き継ぎ", path: "/services/system-assessment/" },
-  { title: "既存システムの保守・改修", path: "/services/system-maintenance/" },
+  { title: "既存システム支援", path: "/services/system-support/" },
 ];
 
 test("トップと主要ページを表示できる", async ({ page }) => {
@@ -60,11 +59,11 @@ test("トップに2サービスと具体的な条件を表示する", async ({ p
   ]);
   await expect(systemCard.getByRole("link", { name: /調査・引き継ぎの詳細/ })).toHaveAttribute(
     "href",
-    "/services/system-assessment/",
+    "/services/system-support/#assessment",
   );
   await expect(
     systemCard.getByRole("link", { name: /保守・改修・新規開発の詳細/ }),
-  ).toHaveAttribute("href", "/services/system-maintenance/");
+  ).toHaveAttribute("href", "/services/system-support/#spot-maintenance");
 
   const webCard = serviceCards.filter({ hasText: "中小企業向けコーポレートサイト制作" });
   await expect(webCard.getByText("対象", { exact: true })).toBeVisible();
@@ -410,7 +409,7 @@ test("Web制作詳細で2プランの条件、SEO、CTAを表示する", async (
   await expect(plans).toHaveCount(2);
   await expect(plans.locator("h3")).toHaveText([
     "1ページ会社サイト制作",
-    "中小企業向けコーポレートサイト制作",
+    "最大5ページのコーポレートサイト制作",
   ]);
   await expect(plans.first()).toContainText("15万円（税別）");
   await expect(plans.first()).toContainText("8セクションまで");
@@ -420,10 +419,9 @@ test("Web制作詳細で2プランの条件、SEO、CTAを表示する", async (
   await expect(plans.last()).toContainText("4〜6週間");
   await expect(page.getByRole("heading", { name: "両プランに共通して含まれる内容" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "制作の流れ" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Webサイト制作について相談する" })).toHaveAttribute(
-    "href",
-    "/contact/?service=website-consultation",
-  );
+  await expect(
+    page.getByRole("link", { name: "Webサイト制作について相談する" }).first(),
+  ).toHaveAttribute("href", "/contact/?service=website-consultation");
 });
 
 test("Web制作のプラン比較は4画面幅で横にはみ出さない", async ({ page }) => {
@@ -442,7 +440,7 @@ test("Web制作のプラン比較は4画面幅で横にはみ出さない", asyn
         (element) => getComputedStyle(element).gridTemplateColumns.trim().split(/\s+/).length,
       );
     expect(columns, `${width}pxのプラン列数`).toBe(width <= 720 ? 1 : 2);
-    for (const selector of [".plan-card", ".plan-card dd", ".cta"]) {
+    for (const selector of [".plan-card", ".plan-card dd", ".website-cta"]) {
       const overflows = await page
         .locator(selector)
         .evaluateAll((elements) =>
@@ -458,7 +456,7 @@ test("Web制作のプラン比較は4画面幅で横にはみ出さない", asyn
 
 test("Web制作CTAの文字色と背景色のコントラストを保つ", async ({ page }) => {
   await page.goto("/services/corporate-website/");
-  const button = page.locator(".cta a.button");
+  const button = page.locator(".website-cta a.button");
   await expect(button).toHaveText("Webサイト制作について相談する");
 
   const contrast = await button.evaluate((element) => {
@@ -647,7 +645,7 @@ test("サービス小メニューをPCとモバイルで操作できる", async 
     await desktopSubmenu
       .locator("a")
       .evaluateAll((links) => links.map((link) => link.getAttribute("href"))),
-  ).toEqual(["/services/system-assessment/", "/services/corporate-website/"]);
+  ).toEqual(["/services/system-support/", "/services/corporate-website/"]);
 
   await page.mouse.move(0, 0);
   await expect(desktopSubmenu).toHaveCSS("visibility", "hidden");
@@ -657,7 +655,7 @@ test("サービス小メニューをPCとモバイルで操作できる", async 
   await expect(desktopTrigger).toBeFocused();
   await expect(desktopSubmenu).toHaveCSS("visibility", "hidden");
 
-  await page.goto("/services/system-maintenance/");
+  await page.goto("/services/system-support/");
   await expect(page.locator(".desktop-service-nav")).toHaveClass(/active/);
   await expect(page.locator('.service-submenu a[aria-current="page"]')).toHaveText(
     "既存システム支援",
@@ -702,7 +700,7 @@ test("サービス小メニューをPCとモバイルで操作できる", async 
     await mobileServiceMenu
       .locator(".mobile-service-submenu a")
       .evaluateAll((links) => links.map((link) => link.getAttribute("href"))),
-  ).toEqual(["/services/", "/services/system-assessment/", "/services/corporate-website/"]);
+  ).toEqual(["/services/", "/services/system-support/", "/services/corporate-website/"]);
   await page.keyboard.press("Escape");
   await expect(menuButton).toHaveAttribute("aria-expanded", "false");
   await expect(mobileServiceMenu).not.toHaveAttribute("open", "");
@@ -877,11 +875,11 @@ test("サービス一覧を主従のある2領域として表示する", async (
   const cards = page.locator(".service-card");
   await expect(cards.nth(0).getByRole("link", { name: "詳しく見る" })).toHaveAttribute(
     "href",
-    "/services/system-assessment/",
+    "/services/system-support/#assessment",
   );
   await expect(cards.nth(1).getByRole("link", { name: "詳しく見る" })).toHaveAttribute(
     "href",
-    "/services/system-maintenance/",
+    "/services/system-support/#spot-maintenance",
   );
   await expect(cards.nth(2).getByRole("link", { name: "詳しく見る" })).toHaveAttribute(
     "href",

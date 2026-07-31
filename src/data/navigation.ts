@@ -2,8 +2,8 @@ export const serviceNavigation = [
   { label: "サービス一覧", href: "/services/", paths: ["/services/"] },
   {
     label: "既存システム支援",
-    href: "/services/system-assessment/",
-    paths: ["/services/system-assessment/", "/services/system-maintenance/"],
+    href: "/services/system-support/",
+    paths: ["/services/system-support/"],
   },
   {
     label: "コーポレートサイト制作",
