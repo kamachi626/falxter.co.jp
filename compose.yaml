@@ -10,14 +10,21 @@ services:
       NODE_ENV: production
       HOST: 0.0.0.0
       PORT: 4321
+      ASTRO_TELEMETRY_DISABLED: "1"
+      CLOUDFLARE_INCLUDE_PROCESS_ENV: "true"
     ports: ["${APP_PORT:-4321}:4321"]
     restart: unless-stopped
     read_only: true
-    tmpfs: ["/tmp:size=16m,mode=1777"]
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+      - /app/.wrangler/tmp:size=16m,mode=1777
+      - /app/.wrangler/state:size=16m,mode=1777
+      - /app/.astro:size=8m,mode=1777
+      - /app/node_modules/.mf:size=8m,mode=1777
     cap_drop: [ALL]
     security_opt: ["no-new-privileges:true"]
     healthcheck:
-      test: ["CMD","wget","-qO-","http://127.0.0.1:4321/api/health/"]
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4321/api/health/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 30s
       timeout: 5s
       start_period: 10s

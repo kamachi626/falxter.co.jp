@@ -5,6 +5,7 @@ node_modules/
 # Astro build output and caches
 dist/
 .astro/
+.wrangler/
 *.tsbuildinfo
 
 # Local environment files

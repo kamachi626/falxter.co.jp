@@ -1,11 +1,64 @@
-import node from "@astrojs/node";
+import cloudflare from "@astrojs/cloudflare";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
-import { defineConfig } from "astro/config";
+import { defineConfig, envField } from "astro/config";
+
 export default defineConfig({
   site: process.env.PUBLIC_SITE_URL || "http://localhost:4321",
   output: "server",
-  adapter: node({ mode: "standalone" }),
+  adapter: cloudflare({
+    imageService: "compile",
+    prerenderEnvironment: "node",
+  }),
+  env: {
+    schema: {
+      PUBLIC_TURNSTILE_SITE_KEY: envField.string({
+        context: "client",
+        access: "public",
+        default: "",
+      }),
+      TURNSTILE_SECRET_KEY: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      TURNSTILE_EXPECTED_HOSTNAME: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      MAIL_TRANSPORT: envField.string({
+        context: "server",
+        access: "secret",
+        default: "mock",
+      }),
+      RESEND_API_KEY: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      CONTACT_FROM_EMAIL: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      CONTACT_TO_EMAIL: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      CONTACT_REPLY_TO_EMAIL: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      PLAYWRIGHT_TEST: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+    },
+  },
   trailingSlash: "always",
   redirects: {
     "/services/system-assessment/": {

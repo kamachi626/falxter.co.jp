@@ -1,4 +1,5 @@
 ---
+import { PUBLIC_TURNSTILE_SITE_KEY } from "astro:env/client";
 import { contactBudgets, contactTimings, otherContactCategories } from "../data/contact";
 import {
   systemContactCategories,
@@ -7,7 +8,7 @@ import {
 } from "../data/services";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+const siteKey = PUBLIC_TURNSTILE_SITE_KEY;
 const categoryGroups = [
   { label: "既存システム支援", options: systemContactCategories },
   { label: "Webサイト制作", options: websiteContactCategories },

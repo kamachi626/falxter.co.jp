@@ -1,16 +1,16 @@
 # FALXTER株式会社 コーポレートサイト
 
-中小企業向けコーポレートサイト制作と、既存システムの診断・引き継ぎ・保守・改修の相談獲得を目的としたAstro製コーポレートサイトです。会社・代表者・実績の未確認情報は表示しません。
+既存システムの調査・引き継ぎ・保守・改修を主軸に、周辺機能・新規システム開発とコーポレートサイト制作を案内するAstro製コーポレートサイトです。
 
 ## 技術構成
 
-Astro 7 / TypeScript 5.9 / Node adapter standalone / Tailwind CSS 4 / Zod 4 / Resend / Cloudflare Turnstile / Biome 2 / Playwright 1.61 / pnpm 10 / Node.js 24 / Docker。
+Astro 7 / TypeScript 5.9 / `@astrojs/cloudflare` / Cloudflare Workers / Tailwind CSS 4 / Zod 4 / Resend / Cloudflare Turnstile / Biome 2 / Playwright 1.61 / pnpm 11.17.0 / Node.js 24 / Docker。
 
 ## 必要環境
 
-Node.js 24、Corepack、pnpm 11.17.0。Docker起動ではDocker EngineとComposeのみ必要です。
+Node.js 24、Corepack、pnpm 11.17.0。Docker開発ではDocker DesktopまたはDocker EngineとComposeを使用します。
 
-## 非Dockerでの開発
+## ローカル開発
 
 ```bash
 cp .env.example .env
@@ -19,93 +19,119 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-`http://localhost:4321` を開きます。検証は `pnpm check`、`pnpm test`、`pnpm build` です。初回E2E前に `pnpm exec playwright install chromium` を実行してください。
+`http://localhost:4321`を開きます。Astro 7とCloudflare adapterの組み合わせでは、`astro dev`もCloudflare Workersと同じworkerdランタイムを使います。APIルートや`astro:env`もWorkersに近い条件で確認できます。
 
-## Docker開発起動
+## Docker開発
 
 ```bash
 cp .env.example .env
 docker compose -f compose.dev.yaml up --build
 ```
 
-ソースをbind mountし、`node_modules`とpnpm storeは名前付きvolumeへ分離します。Windows、WSL2、Linuxで変更監視を安定させるためpollingを有効にしています。
+ソースをbind mountし、`node_modules`とpnpm storeは名前付きvolumeへ分離しています。ファイル監視はpollingを使うため、Docker Desktopから起動した場合も変更が自動反映されます。
 
-## Docker本番起動
-
-`.env`の本番値を設定し、`MAIL_TRANSPORT=resend` に変更してください。mockのままでは本番送信時に明示的に失敗します。
+Alpine版の旧開発コンテナから移行する初回だけは、Linuxバイナリの不整合を避けるため依存volumeを作り直してください。次の2コマンドは、ソースや`.env`ではなくComposeの依存キャッシュvolumeを削除して再作成します。
 
 ```bash
-cp .env.example .env
+docker compose -f compose.dev.yaml down -v
+docker compose -f compose.dev.yaml up --build
+```
+
+## 本番相当のローカル確認
+
+```bash
+pnpm build
+pnpm preview
+```
+
+`astro preview`はビルド済み成果物をworkerdで実行します。Dockerでも同じ確認ができます。
+
+```bash
 docker compose up --build -d
 docker compose ps
 docker compose logs -f app
 ```
 
-停止:
+このDocker構成はローカルまたは検証環境向けのWorkersプレビューです。本番ホスティング先はCloudflare Workersです。
+
+## Cloudflare Workersへのデプロイ
+
+ローカルからデプロイする場合:
 
 ```bash
-docker compose down
+pnpm deploy
 ```
 
-更新:
+Cloudflare Workers Buildsを使用する場合は、Gitリポジトリを接続し、次を設定します。
 
-```bash
-git pull
-docker compose build --pull
-docker compose up -d
-docker image prune -f
-```
+- Build command: `pnpm build`
+- Deploy command: `pnpm exec wrangler deploy`
+- Node.js: `24`
+- pnpm: `11.17.0`
+
+`wrangler.jsonc`はAstro Cloudflare adapterのWorkersエントリーポイントと`dist`の静的アセットを使用します。`keep_vars: true`のため、Wranglerからのデプロイ時もCloudflare Dashboardで設定した通常変数は維持されます。Astroのセッション用`SESSION` KVは、初回デプロイ時にWranglerの自動プロビジョニングで作成されます。
 
 ## 環境変数
 
-- `NODE_ENV`, `HOST`, `PORT`: 実行環境。コンテナは `0.0.0.0:4321`。
-- `PUBLIC_SITE_URL`: canonicalとsitemapの公開URL。
-- `PUBLIC_TURNSTILE_SITE_KEY`: Cloudflare Turnstile site key（公開値）。
-- `TURNSTILE_SECRET_KEY`: Siteverify用secret。
-- `TURNSTILE_EXPECTED_HOSTNAME`: 任意のhostname照合値。
-- `MAIL_TRANSPORT`: ローカルは`mock`、本番は`resend`。
-- `RESEND_API_KEY`: Resend API key。
+ローカルでは`.env.example`を`.env`へコピーします。`.env`はGit管理しません。
+
+### ビルド時に必要な公開値
+
+- `PUBLIC_SITE_URL`: canonical、OG URL、sitemapの公開URL。本番は`https://falxter.co.jp`。
+- `PUBLIC_TURNSTILE_SITE_KEY`: Cloudflare Turnstileのsite key。
+
+### Workersランタイムの通常変数
+
+- `TURNSTILE_EXPECTED_HOSTNAME`: Turnstile応答で照合する本番hostname。
+- `MAIL_TRANSPORT`: 本番は`resend`。
 - `CONTACT_FROM_EMAIL`: Resendで検証済みドメインのFrom。
-- `CONTACT_TO_EMAIL`: 通知先。
+- `CONTACT_TO_EMAIL`: 問い合わせ通知先。
 - `CONTACT_REPLY_TO_EMAIL`: 自動返信のReply-To。
-- `SITE_DOMAIN`, `ACME_EMAIL`: Caddy利用時のみ必須。
 
-secretに既定値はありません。`.env`はGit管理されません。Turnstileでは本番ドメインを登録し、開発・E2EにはCloudflareの公式テストキーまたはテストmockを使います。問い合わせ者のメールアドレスは通知メールのReply-Toにのみ設定されます。
+### Workersランタイムのシークレット
 
-## Resend / Turnstile
+- `TURNSTILE_SECRET_KEY`: Turnstile Siteverify用secret。
+- `RESEND_API_KEY`: Resend API key。
 
-Resendで送信ドメインを検証し、API keyと3つのメールアドレスを設定します。Turnstileウィジェットを作成しsite keyとsecretを設定します。キー未設定のローカル開発はmockメールを使えますが、本番は両サービスの実値が必要です。
+DashboardのWorkers設定から登録するか、ローカルから次のコマンドで登録します。値をコマンドラインへ直接書かず、表示される入力欄へ入力してください。
+
+```bash
+pnpm exec wrangler secret put TURNSTILE_SECRET_KEY
+pnpm exec wrangler secret put RESEND_API_KEY
+```
+
+`PLAYWRIGHT_TEST`はE2E専用の内部フラグです。本番環境には設定しないでください。`CLOUDFLARE_INCLUDE_PROCESS_ENV=true`はローカルおよびDockerで`.env`の値をworkerdへ渡すために使用します。
+
+## 検証
+
+```bash
+pnpm check
+pnpm build
+pnpm test
+```
+
+初回E2E前にChromiumを導入します。
+
+```bash
+pnpm exec playwright install chromium
+```
+
+Playwrightはビルド済みサイトを`astro preview`で起動し、workerd上で問い合わせAPIを含むE2Eを実行します。
 
 ## GitHub Actions / GHCR
 
-`ci.yml`はPRとmain pushでinstall、check、build、Chromium E2E、Docker buildを実行します。`docker.yml`はmainとsemverタグでBuildxを使い、`ghcr.io/<OWNER>/falxter-corporate-site`へSHA、semver、latestタグ、SBOM、provenance付きでpushします。`<OWNER>`は`github.repository_owner`から自動取得します。
-
-## 一般的なDockerサーバーへのデプロイ
-
-```bash
-docker pull ghcr.io/<OWNER>/falxter-corporate-site:latest
-docker compose up -d
-```
-
-アプリはHTTP 4321番で動作します。HTTPSはCloudflare、ALB、Cloud Run、Caddy、nginx、Traefikなどで終端してください。Caddy併用例は`Caddyfile`と`compose.proxy.yaml`です。`SITE_DOMAIN`と実際に受信できる`ACME_EMAIL`を設定し、次で起動します。
-
-```bash
-docker compose -f compose.yaml -f compose.proxy.yaml up -d
-```
+`ci.yml`はinstall、check、build、Chromium E2E、Docker buildを実行します。`docker.yml`はworkerdプレビュー用のコンテナイメージをGHCRへ公開します。Cloudflare Workersへの本番デプロイとは別の検証・移植用成果物です。
 
 ## 運用・セキュリティ
 
-問い合わせはDBや平文ファイルへ保存せずメール送信します。バックアップ対象はリポジトリ、環境変数の安全な原本、Caddyの証明書volumeです。アプリ内IPレート制限は単一プロセスだけに有効で、複数コンテナでは共有されません。本番はCDN、WAF、ロードバランサーまたはリバースプロキシでレート制限してください。`X-Forwarded-For`はアプリで直接信用せず、Astro adapterが提供する接続元情報を使用します。
+問い合わせ内容はDBや平文ファイルへ保存せず、Resend経由でメール送信します。本番ではTurnstile、Workers側のrate limitingまたはWAFも併用してください。Worker isolate内のメモリだけを使うレート制限は、全リージョン・全インスタンスで共有されないため、主防御にはしません。
 
 プライバシーポリシーは実運用に合わせて更新し、必要に応じて専門家へ確認してください。本READMEおよびサイトの記載は法的助言ではありません。
 
 ## トラブルシューティング
 
-- healthcheck: `curl http://localhost:4321/api/health/` が`{"status":"ok"}`を返すか確認。
-- メール失敗: Resendのドメイン検証、From、API keyを確認。個人情報はアプリログへ出ません。
-- Turnstile失敗: site key/secret、許可hostname、HTTPS終端後の公開hostnameを確認。
-- hot reload: Docker DesktopでWSLディレクトリが共有対象か確認し、volumeを作り直す場合は内容を確認してから操作。
-
-## 未設定情報
-
-`src/data/company.ts`の代表者名、役職、所在地、電話、メール、設立日、資本金、登録番号、営業時間、対応地域、経歴、外部プロフィールは未設定です。補足表示（全国オンライン、法人・開発会社対応、NDA）と料金表示も確認できるまでfalseです。公開事例はdraftサンプルのみです。
+- ヘルスチェック: `http://localhost:4321/api/health/`が`{"status":"ok"}`を返すか確認。
+- workerdが起動しない: Node.js 24と対応OSを確認。Dockerでは`node:24-bookworm-slim`を使用します。
+- メール送信失敗: Resendのドメイン検証、From、API key、`MAIL_TRANSPORT=resend`を確認。
+- Turnstile失敗: site key、secret、許可hostname、公開hostnameを確認。
+- hot reload: Docker DesktopでWSLディレクトリが共有されているか確認。旧Alpine依存volumeが残る場合は、上記の初回移行手順で再作成。

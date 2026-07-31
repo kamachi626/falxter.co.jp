@@ -1,7 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const port = process.env.PLAYWRIGHT_PORT || "4321";
-const baseURL = `http://127.0.0.1:${port}`;
+const host = process.env.PLAYWRIGHT_HOST || "127.0.0.1";
+const baseURL = `http://${host}:${port}`;
 
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -16,14 +17,13 @@ export default defineConfig({
       : undefined,
   },
   webServer: {
-    command: "node ./dist/server/entry.mjs",
+    command: `pnpm exec astro preview --host 127.0.0.1 --port ${port}`,
     url: `${baseURL}/api/health/`,
-    reuseExistingServer: !process.env.CI && !process.env.PLAYWRIGHT_PORT,
+    reuseExistingServer: !process.env.CI,
     env: {
       ...process.env,
       PLAYWRIGHT_TEST: "1",
-      HOST: "127.0.0.1",
-      PORT: port,
+      CLOUDFLARE_INCLUDE_PROCESS_ENV: "true",
       MAIL_TRANSPORT: "mock",
       PUBLIC_SITE_URL: baseURL,
     },

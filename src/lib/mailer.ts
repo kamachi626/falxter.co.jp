@@ -1,10 +1,20 @@
+import {
+  CONTACT_FROM_EMAIL,
+  CONTACT_REPLY_TO_EMAIL,
+  CONTACT_TO_EMAIL,
+  MAIL_TRANSPORT,
+  PLAYWRIGHT_TEST,
+  RESEND_API_KEY,
+} from "astro:env/server";
 import { Resend } from "resend";
 import type { ContactInput } from "./validation";
 import { escapeHtml } from "./validation";
+
 export async function sendContactMail(data: ContactInput) {
-  const transport = import.meta.env.MAIL_TRANSPORT || "mock";
+  const transport = MAIL_TRANSPORT;
   if (transport === "mock") {
-    if (import.meta.env.PROD) throw new Error("MAIL_TRANSPORT=mock is forbidden in production");
+    if (import.meta.env.PROD && PLAYWRIGHT_TEST !== "1")
+      throw new Error("MAIL_TRANSPORT=mock is forbidden in production");
     console.info("[mock-mail] contact received", {
       category: data.category,
       messageLength: data.message.length,
@@ -12,10 +22,10 @@ export async function sendContactMail(data: ContactInput) {
     });
     return;
   }
-  const apiKey = import.meta.env.RESEND_API_KEY,
-    from = import.meta.env.CONTACT_FROM_EMAIL,
-    to = import.meta.env.CONTACT_TO_EMAIL,
-    replyTo = import.meta.env.CONTACT_REPLY_TO_EMAIL;
+  const apiKey = RESEND_API_KEY,
+    from = CONTACT_FROM_EMAIL,
+    to = CONTACT_TO_EMAIL,
+    replyTo = CONTACT_REPLY_TO_EMAIL;
   if (!apiKey || !from || !to) throw new Error("Mail configuration is incomplete");
   const resend = new Resend(apiKey);
   const text = `会社名・屋号: ${data.company || "未入力"}\n氏名: ${data.name}\nメール: ${data.email}\n電話: ${data.phone || "未入力"}\n相談区分: ${data.category}\n希望時期: ${data.timing}\n予算帯: ${data.budget}\n\n${data.message}`;
