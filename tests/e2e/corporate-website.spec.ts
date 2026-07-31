@@ -173,8 +173,11 @@ test("SEO、OGP、パンくず、Service構造化データを設定する", asyn
 
 test("料金プランのアンカーが固定ヘッダーに隠れない", async ({ page }) => {
   for (const id of ["one-page-plan", "five-page-plan"]) {
-    await page.goto(`${corporateWebsitePath}#${id}`);
-    await page.waitForTimeout(100);
+    await page.goto(corporateWebsitePath);
+    await page.evaluate((anchorId) => {
+      window.location.hash = anchorId;
+    }, id);
+    await page.waitForTimeout(800);
 
     const header = await page.locator(".site-header").boundingBox();
     const plan = await page.locator(`#${id}`).boundingBox();

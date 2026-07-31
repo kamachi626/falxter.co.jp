@@ -60,7 +60,7 @@ const selectedCategory = categoryByService[Astro.url.searchParams.get("service")
       <div class="honeypot" aria-hidden="true"><label>ウェブサイト<input name="website" tabindex="-1" autocomplete="off" /></label></div>
       {siteKey ? <div class="cf-turnstile" data-sitekey={siteKey} data-callback="onTurnstileSuccess" data-error-callback="onTurnstileError"></div> : null}
       <input type="hidden" name="turnstileToken" id="turnstile-token" value={import.meta.env.DEV ? "development-token" : ""} />
-      <label class="agree"><input type="checkbox" name="privacy" required /> <span><a href="/privacy/" target="_blank" rel="noopener">個人情報の取り扱い</a>に同意する（必須）</span></label>
+      <label class="agree"><input type="checkbox" name="privacy" required /> <span><a href="/privacy/" target="_blank" rel="noopener">プライバシーポリシー</a>を確認し、個人情報の取扱いに同意する（必須）</span></label>
       <div id="form-status" role="status" aria-live="polite"></div>
       <button class="button" type="submit">問い合わせを送信する</button>
     </form>

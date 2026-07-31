@@ -189,3 +189,28 @@ test("問い合わせ見出しを短くし、1行で表示する", async ({ page
     ).toBe(true);
   }
 });
+test("プライバシーポリシー確認後の同意を必須にし、入力値をURLへ含めない", async ({ page }) => {
+  const leakedRequests: string[] = [];
+  page.on("request", (request) => {
+    const url = decodeURIComponent(request.url());
+    if (url.includes("privacy-test@example.com") || url.includes("漏えい確認用の相談内容")) {
+      leakedRequests.push(url);
+    }
+  });
+
+  await page.goto("/contact/");
+  await expect(
+    page.getByText("プライバシーポリシーを確認し、個人情報の取扱いに同意する（必須）"),
+  ).toBeVisible();
+  expect(
+    await page.locator('input[name="privacy"]').evaluate((element) => element.matches(":required")),
+  ).toBe(true);
+
+  await page.getByLabel(/メールアドレス/).fill("privacy-test@example.com");
+  await page.getByLabel(/ご相談内容/).fill("漏えい確認用の相談内容を入力しています。");
+  await page.waitForTimeout(100);
+
+  expect(decodeURIComponent(page.url())).not.toContain("privacy-test@example.com");
+  expect(decodeURIComponent(page.url())).not.toContain("漏えい確認用の相談内容");
+  expect(leakedRequests).toEqual([]);
+});
