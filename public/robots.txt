@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 Disallow: /api/
-Sitemap: https://falxter.co.jp/sitemap-index.xml
+Sitemap: https://falxter.co.jp/sitemap.xml

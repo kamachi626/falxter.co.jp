@@ -7,8 +7,10 @@ const services = [
 
 test("トップと主要ページを表示できる", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator(".hero-message")).toHaveText("技術者が直接、最後まで。");
-  await expect(page.locator(".site-header").getByText("技術者が直接、最後まで。")).toHaveCount(0);
+  await expect(page.locator(".hero-message")).toHaveText("既存システムの調査・引き継ぎ・改修");
+  await expect(
+    page.locator(".site-header").getByText("既存システムの調査・引き継ぎ・改修"),
+  ).toHaveCount(0);
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "引き継げない、直せない、仕様が分からない。既存システムの調査から改善まで。",
   );
@@ -32,13 +34,18 @@ test("トップに2サービスと具体的な条件を表示する", async ({ p
     systemCard.getByText("業務システム、Webアプリケーション、クラウド環境"),
   ).toBeVisible();
   await expect(systemCard.getByText("対応", { exact: true })).toHaveCount(0);
-  await expect(systemCard.locator(".price-grid dt")).toHaveText([
-    "調査・引き継ぎ",
-    "スポット・新規開発",
-    "継続保守",
+  const assessmentPackage = systemCard.locator(".assessment-package");
+  await expect(assessmentPackage.getByRole("heading", { name: "調査・引き継ぎ" })).toBeVisible();
+  await expect(assessmentPackage.getByText("50万円〜（税別）")).toBeVisible();
+  await expect(assessmentPackage.getByText("標準 2〜4週間程度")).toBeVisible();
+  await expect(assessmentPackage.locator("li")).toHaveText([
+    "調査報告書",
+    "システム構成の整理",
+    "リスク一覧",
+    "改善ロードマップ",
   ]);
+  await expect(systemCard.locator(".price-grid dt")).toHaveText(["スポット・新規開発", "継続保守"]);
   await expect(systemCard.locator(".price-grid dd")).toHaveText([
-    "50万円〜（税別）",
     "個別見積もり",
     "月額30万円〜（税別）",
   ]);
@@ -77,6 +84,10 @@ test("トップに2サービスと具体的な条件を表示する", async ({ p
 });
 test("対応例3件とFAQを表示する", async ({ page }) => {
   await page.goto("/");
+  await expect(page.getByRole("heading", { name: "想定対応例" })).toBeVisible();
+  await expect(page.locator(".cases-section .section-intro")).toContainText(
+    "公開済みの実績ではなく",
+  );
   const cases = page.locator("article.case-card");
   await expect(cases).toHaveCount(3);
   await expect(cases.locator("h3")).toHaveText([
@@ -90,7 +101,7 @@ test("対応例3件とFAQを表示する", async ({ page }) => {
     "稼働中のWebシステムを段階改修",
     "影響範囲を調査して機能修正",
   ]);
-  for (const label of ["課題", "対応内容", "目指す状態"]) {
+  for (const label of ["課題", "対応内容", "対応後の状態（想定）"]) {
     await expect(cases.first().getByText(label, { exact: true })).toBeVisible();
   }
   const faqs = page.locator(".faq-list details");
@@ -274,7 +285,9 @@ test("サービス、代表者、FAQ、CTAの視覚密度を保つ", async ({ pa
     "02Webサイト制作",
   ]);
   await expect(page.locator("article.service.service-secondary")).toHaveCount(1);
-  await expect(page.getByRole("heading", { name: "相談内容を、そのまま技術判断へ" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "営業担当を介さず、代表エンジニアが直接確認" }),
+  ).toBeVisible();
   const flowNumberSize = await page
     .locator(".flow b")
     .first()
@@ -499,9 +512,9 @@ test("既存システム支援フローをHTMLの読み順とレスポンシブ�
     supportFlow.getByRole("heading", { level: 3, name: "既存システム支援の進め方" }),
   ).toBeVisible();
   await expect(supportFlow.locator("ol.flow-steps > li h4")).toHaveText([
-    "状況確認",
-    "調査・引き継ぎ",
-    "構成・課題を整理",
+    "事前確認",
+    "現状調査",
+    "報告・方針決定",
   ]);
   await expect(supportFlow.locator("ol.flow-steps > li > p")).toHaveText([
     "現在の課題と管理状況を確認します。",

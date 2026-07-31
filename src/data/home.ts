@@ -5,6 +5,8 @@ export type SupportExample = {
   challenge: string;
   response: string;
   technologies: string[];
+  duration?: string;
+  deliverables?: string[];
   expectedState: string;
 };
 
@@ -17,26 +19,27 @@ export const supportExamples: SupportExample[] = [
     response:
       "ソースコード、データベース、定期バッチを確認し、構成と障害原因の確認箇所を整理します。",
     technologies: ["Java", "PostgreSQL"],
-    expectedState:
-      "システム構成と運用上の確認箇所を明らかにし、継続的な保守・改修へ進める状態を目指します。",
+    duration: "2〜4週間程度",
+    deliverables: ["調査報告書", "構成整理", "リスク一覧", "改善ロードマップ"],
+    expectedState: "システム構成と運用上の確認箇所が分かり、保守・改修の優先順位を決められる状態。",
   },
   {
     title: "既存Webシステムの段階的な機能改修",
     category: "既存システムの保守・改修",
     hook: "稼働中のWebシステムを段階改修",
     challenge: "既存仕様を確認しながら、現在の稼働環境を維持して改修する必要がある状態。",
-    response: "コードと動作を調査し、影響範囲を確認しながら機能追加と不具合修正を行います。",
+    response: "コードと動作を調査し、影響範囲を記録してから機能追加と不具合修正を行います。",
     technologies: ["MySQL", "AWS"],
-    expectedState: "既存環境を維持しながら、必要な箇所から段階的に改善します。",
+    expectedState: "稼働中の環境を維持しながら、優先度の高い箇所から改修できる状態。",
   },
   {
     title: "会員向けWebシステムの改修",
     category: "既存システムの保守・改修",
     hook: "影響範囲を調査して機能修正",
     challenge: "既存コードの仕様と変更による影響範囲を確認した上で、機能を修正する必要がある状態。",
-    response: "既存コードの調査から機能修正、テスト、リリースまで一貫して対応します。",
+    response: "既存コードを調査し、影響範囲の確認、機能修正、テスト、リリースを行います。",
     technologies: ["JavaScript", "TypeScript", "AWS"],
-    expectedState: "既存の構成を踏まえ、必要な修正を安全にリリースできる状態を目指します。",
+    expectedState: "変更箇所と試験結果が記録され、次回以降の改修判断に使える状態。",
   },
 ];
 

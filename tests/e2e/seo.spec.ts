@@ -25,7 +25,7 @@ test("トップのdescriptionは既存システム支援を主軸にする", asy
   await page.goto("/");
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     "content",
-    "FALXTER株式会社は、資料や仕様が不足した既存業務システムやWebアプリケーションの調査、引き継ぎ、保守・改修を代表エンジニアが直接支援します。周辺機能や中小規模の新規システム開発、コーポレートサイト制作にも対応します。",
+    "FALXTER株式会社は、資料や仕様が不足した既存業務システムやWebアプリケーションの調査、引き継ぎ、保守・改修を代表エンジニアが直接支援します。",
   );
 });
 test("お問い合わせのdescriptionとOGPを現在のサービス構成へ統一する", async ({ page }) => {
@@ -51,6 +51,9 @@ test("サービス一覧のdescriptionとOGPを2つのサービス領域へ統�
   await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", /\/services\/$/);
 });
 test("sitemapは統合した2商品を含み技術記事を含まない", async ({ request }) => {
+  const standard = await request.get("/sitemap.xml");
+  expect(standard.ok()).toBe(true);
+  expect(new URL(standard.url()).pathname).toBe("/sitemap-index.xml");
   const index = await request.get("/sitemap-index.xml");
   expect(index.ok()).toBe(true);
   const indexBody = await index.text();
@@ -69,7 +72,16 @@ test("sitemapは統合した2商品を含み技術記事を含まない", async 
   expect(body).not.toContain("/insights/");
   expect(body).not.toContain("/blog/");
   expect(body).not.toContain("/news/");
-  expect((await request.get("/robots.txt")).ok()).toBe(true);
+  const robots = await request.get("/robots.txt");
+  expect(robots.ok()).toBe(true);
+  expect(await robots.text()).toContain("Sitemap: https://falxter.co.jp/sitemap.xml");
+});
+
+test("CSPでCloudflare Web Analyticsの自動挿入を許可する", async ({ request }) => {
+  const response = await request.get("/");
+  const csp = response.headers()["content-security-policy"] ?? "";
+  expect(csp).toContain("https://static.cloudflareinsights.com");
+  expect(csp).toMatch(/connect-src[^;]*'self'/);
 });
 
 test("health checkが200を返す", async ({ request }) => {

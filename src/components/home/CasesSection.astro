@@ -3,9 +3,9 @@ import { supportExamples } from "../../data/home";
 ---
 <section class="section cases-section" aria-labelledby="cases-heading">
   <div class="container" data-reveal>
-    <p class="eyebrow">Cases</p>
-    <h2 class="heading" id="cases-heading">対応例</h2>
-    <p class="section-intro">ご相談内容に応じた対応の進め方を、代表的な例としてご紹介します。</p>
+    <p class="eyebrow">Sample cases</p>
+    <h2 class="heading" id="cases-heading">想定対応例</h2>
+    <p class="section-intro">以下は公開済みの実績ではなく、代表的なご相談をもとにした想定例です。実際の範囲・期間・費用は、対象システムを確認した上でお見積もりします。</p>
     <div class="case-grid">
       {supportExamples.map((item) => (
         <article class="card case-card">
@@ -15,8 +15,9 @@ import { supportExamples } from "../../data/home";
           <dl>
             <div><dt>課題</dt><dd>{item.challenge}</dd></div>
             <div><dt>対応内容</dt><dd>{item.response}</dd></div>
-
-            <div><dt>目指す状態</dt><dd>{item.expectedState}</dd></div>
+            {item.duration && <div><dt>想定期間</dt><dd>{item.duration}</dd></div>}
+            {item.deliverables && <div><dt>主な成果物</dt><dd>{item.deliverables.join("／")}</dd></div>}
+            <div><dt>対応後の状態（想定）</dt><dd>{item.expectedState}</dd></div>
           </dl>
         </article>
       ))}

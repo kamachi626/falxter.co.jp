@@ -13,14 +13,23 @@ const desktopServiceNavigation = serviceNavigation.filter((item) => item.href !=
   <div class="container bar">
     <a class="brand" href="/" aria-label="FALXTER トップ">
       <span class="brand-image">
-        <img
-          src="/images/logo.png?v=20260728"
-          alt=""
-          width="1000"
-          height="250"
-          fetchpriority="high"
-          decoding="sync"
-        />
+        <picture>
+          <source
+            type="image/webp"
+            srcset="/images/logo-480.webp?v=20260731 480w, /images/logo-720.webp?v=20260731 720w"
+            sizes="(max-width: 420px) 200px, 240px"
+          />
+          <img
+            src="/images/logo-480.png?v=20260731"
+            srcset="/images/logo-480.png?v=20260731 480w, /images/logo-720.png?v=20260731 720w"
+            sizes="(max-width: 420px) 200px, 240px"
+            alt=""
+            width="480"
+            height="120"
+            fetchpriority="high"
+            decoding="sync"
+          />
+        </picture>
       </span>
     </a>
 
