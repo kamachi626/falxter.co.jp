@@ -53,10 +53,7 @@ test("サービス一覧のdescriptionとOGPを2つのサービス領域へ統�
 test("sitemapは統合した2商品を含み技術記事を含まない", async ({ request }) => {
   const standard = await request.get("/sitemap.xml");
   expect(standard.ok()).toBe(true);
-  expect(new URL(standard.url()).pathname).toBe("/sitemap-index.xml");
-  const index = await request.get("/sitemap-index.xml");
-  expect(index.ok()).toBe(true);
-  const indexBody = await index.text();
+  const indexBody = await standard.text();
   const sitemapPath = new URL(
     indexBody.match(/<loc>(.*?)<\/loc>/)?.[1] ?? "",
     "http://127.0.0.1:4321",

@@ -71,10 +71,6 @@ export default defineConfig({
   },
   trailingSlash: "always",
   redirects: {
-    "/sitemap.xml": {
-      status: 301,
-      destination: "/sitemap-index.xml",
-    },
     "/services/system-assessment/": {
       status: 301,
       destination: "/services/system-support/#assessment",
