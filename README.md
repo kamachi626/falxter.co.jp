@@ -4,7 +4,7 @@
 
 ## 技術構成
 
-Astro 7 / TypeScript 5.9 / `@astrojs/cloudflare` / Cloudflare Workers / Tailwind CSS 4 / Zod 4 / Resend / Cloudflare Turnstile / Biome 2 / Playwright 1.61 / pnpm 11.17.0 / Node.js 24 / Docker。
+Astro 7 / TypeScript 5.9 / `@astrojs/cloudflare` / Cloudflare Workers / Tailwind CSS 4 / Zod 4 / Amazon SES / Cloudflare Turnstile / Biome 2 / Playwright 1.61 / pnpm 11.17.0 / Node.js 24 / Docker。
 
 ## 必要環境
 
@@ -83,21 +83,24 @@ Cloudflare Workers Buildsを使用する場合は、Gitリポジトリを接続�
 ### Workersランタイムの通常変数
 
 - `TURNSTILE_EXPECTED_HOSTNAME`: Turnstile応答で照合する本番hostname。
-- `MAIL_TRANSPORT`: 本番は`resend`。
-- `CONTACT_FROM_EMAIL`: Resendで検証済みドメインのFrom。
+- `MAIL_TRANSPORT`: 本番は`ses`。
+- `AWS_REGION`: SES Identityと同じAWSリージョン。本番は`ap-northeast-1`。
+- `CONTACT_FROM_EMAIL`: SESで検証済みドメインのFrom。
 - `CONTACT_TO_EMAIL`: 問い合わせ通知先。
 - `CONTACT_REPLY_TO_EMAIL`: 自動返信のReply-To。
 
 ### Workersランタイムのシークレット
 
 - `TURNSTILE_SECRET_KEY`: Turnstile Siteverify用secret。
-- `RESEND_API_KEY`: Resend API key。
+- `AWS_ACCESS_KEY_ID`: Worker専用IAMユーザーのアクセスキー。
+- `AWS_SECRET_ACCESS_KEY`: Worker専用IAMユーザーのシークレットアクセスキー。
 
 DashboardのWorkers設定から登録するか、ローカルから次のコマンドで登録します。値をコマンドラインへ直接書かず、表示される入力欄へ入力してください。
 
 ```bash
 pnpm exec wrangler secret put TURNSTILE_SECRET_KEY
-pnpm exec wrangler secret put RESEND_API_KEY
+pnpm exec wrangler secret put AWS_ACCESS_KEY_ID
+pnpm exec wrangler secret put AWS_SECRET_ACCESS_KEY
 ```
 
 `PLAYWRIGHT_TEST`はE2E専用の内部フラグです。本番環境には設定しないでください。`CLOUDFLARE_INCLUDE_PROCESS_ENV=true`はローカルおよびDockerで`.env`の値をworkerdへ渡すために使用します。
@@ -124,7 +127,7 @@ Playwrightはビルド済みサイトを`astro preview`で起動し、workerd上
 
 ## 運用・セキュリティ
 
-問い合わせ内容はDBや平文ファイルへ保存せず、Resend経由でメール送信します。本番ではTurnstile、Workers側のrate limitingまたはWAFも併用してください。Worker isolate内のメモリだけを使うレート制限は、全リージョン・全インスタンスで共有されないため、主防御にはしません。
+問い合わせ内容はDBや平文ファイルへ保存せず、Amazon SES経由でメール送信します。本番ではTurnstile、Workers側のrate limitingまたはWAFも併用してください。Worker isolate内のメモリだけを使うレート制限は、全リージョン・全インスタンスで共有されないため、主防御にはしません。
 
 プライバシーポリシーは実運用に合わせて更新し、必要に応じて専門家へ確認してください。本READMEおよびサイトの記載は法的助言ではありません。
 
@@ -132,6 +135,6 @@ Playwrightはビルド済みサイトを`astro preview`で起動し、workerd上
 
 - ヘルスチェック: `http://localhost:4321/api/health/`が`{"status":"ok"}`を返すか確認。
 - workerdが起動しない: Node.js 24と対応OSを確認。Dockerでは`node:24-bookworm-slim`を使用します。
-- メール送信失敗: Resendのドメイン検証、From、API key、`MAIL_TRANSPORT=resend`を確認。
+- メール送信失敗: SESのリージョン、Identity、IAM権限、From、アクセスキー、`MAIL_TRANSPORT=ses`を確認。
 - Turnstile失敗: site key、secret、許可hostname、公開hostnameを確認。
 - hot reload: Docker DesktopでWSLディレクトリが共有されているか確認。旧Alpine依存volumeが残る場合は、上記の初回移行手順で再作成。

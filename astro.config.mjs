@@ -32,7 +32,17 @@ export default defineConfig({
         access: "secret",
         default: "mock",
       }),
-      RESEND_API_KEY: envField.string({
+      AWS_REGION: envField.string({
+        context: "server",
+        access: "secret",
+        default: "ap-northeast-1",
+      }),
+      AWS_ACCESS_KEY_ID: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      AWS_SECRET_ACCESS_KEY: envField.string({
         context: "server",
         access: "secret",
         optional: true,
