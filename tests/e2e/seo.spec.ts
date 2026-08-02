@@ -46,11 +46,14 @@ test("ページごとにOGP画像を切り替える", async ({ page, request }) 
 });
 
 test("トップのtitleとdescriptionは2つのサービス領域を表す", async ({ page }) => {
+  const description =
+    "FALXTER株式会社は、資料や仕様が不足した既存システムの調査・引き継ぎ・保守・改修と、中小企業向けコーポレートサイト制作に対応します。";
   await page.goto("/");
   await expect(page).toHaveTitle("既存システム支援・Webサイト制作｜FALXTER株式会社");
-  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", description);
+  await expect(page.locator('meta[property="og:description"]')).toHaveAttribute(
     "content",
-    "FALXTER株式会社は、資料や仕様が不足した既存業務システムやWebアプリケーションの調査、引き継ぎ、保守・改修を代表エンジニアが直接支援します。",
+    description,
   );
 });
 test("お問い合わせのdescriptionとOGPを現在のサービス構成へ統一する", async ({ page }) => {
