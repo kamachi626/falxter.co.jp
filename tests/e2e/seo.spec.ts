@@ -5,7 +5,6 @@ const pages = [
   "/services/",
   "/services/corporate-website/",
   "/services/system-support/",
-  "/cases/",
   "/company/",
   "/contact/",
   "/privacy/",
@@ -26,7 +25,7 @@ test("ページごとにOGP画像を切り替える", async ({ page, request }) 
     ["/", "/images/og-default.png"],
     ["/company/", "/images/og-default.png"],
     ["/services/system-support/", "/images/og-system-support.png"],
-    ["/services/corporate-website/", "/images/corporate-website.png"],
+    ["/services/corporate-website/", "/images/og-corporate-website.png"],
   ] as const;
 
   for (const [path, expectedImagePath] of pageImages) {
@@ -46,8 +45,9 @@ test("ページごとにOGP画像を切り替える", async ({ page, request }) 
   }
 });
 
-test("トップのdescriptionは既存システム支援を主軸にする", async ({ page }) => {
+test("トップのtitleとdescriptionは2つのサービス領域を表す", async ({ page }) => {
   await page.goto("/");
+  await expect(page).toHaveTitle("既存システム支援・Webサイト制作｜FALXTER株式会社");
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     "content",
     "FALXTER株式会社は、資料や仕様が不足した既存業務システムやWebアプリケーションの調査、引き継ぎ、保守・改修を代表エンジニアが直接支援します。",
@@ -64,9 +64,12 @@ test("お問い合わせのdescriptionとOGPを現在のサービス構成へ統
   );
 });
 test("サービス一覧のdescriptionとOGPを2つのサービス領域へ統一する", async ({ page }) => {
+  const title = "サービス・料金｜既存システム支援・Web制作｜FALXTER株式会社";
   const description =
     "既存システムの調査・引き継ぎ・保守・改修、周辺機能や新規システムの開発、中小企業向けコーポレートサイト制作を提供しています。";
   await page.goto("/services/");
+  await expect(page).toHaveTitle(title);
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", title);
   await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", description);
   await expect(page.locator('meta[property="og:description"]')).toHaveAttribute(
     "content",
@@ -91,6 +94,7 @@ test("sitemapは統合した2商品を含み技術記事を含まない", async 
   }
   expect(body).not.toContain("/services/system-assessment/");
   expect(body).not.toContain("/services/system-maintenance/");
+  expect(body).not.toContain("/cases/");
   expect(body).not.toContain("/insights/");
   expect(body).not.toContain("/blog/");
   expect(body).not.toContain("/news/");

@@ -12,7 +12,7 @@ test("トップと主要ページを表示できる", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "引き継げない、直せない、仕様が分からない。既存システムの調査から改善まで。",
   );
-  for (const path of ["/services/", "/cases/", "/company/", "/contact/", "/privacy/"]) {
+  for (const path of ["/services/", "/company/", "/contact/", "/privacy/"]) {
     await page.goto(path);
     await expect(page.locator("h1")).toHaveCount(1);
   }
@@ -191,10 +191,12 @@ test("代表者プロフィールと対応可能な作業を表示する", async
   await expect(page.getByText("主な使用技術", { exact: true })).toHaveCount(0);
 });
 
-test("draft事例を公開事例一覧に表示しない", async ({ page }) => {
-  await page.goto("/cases/");
-  await expect(page.getByText("公開可能な支援事例は、現在準備中です。")).toBeVisible();
-  await expect(page.getByText("法人向け管理システムの保守・追加開発")).toHaveCount(0);
+test("支援事例ページを公開しない", async ({ page }) => {
+  for (const path of ["/cases/", "/cases/example/"]) {
+    const response = await page.goto(path);
+    expect(response?.status()).toBe(404);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("ページが見つかりません");
+  }
 });
 
 for (const width of [375, 768, 1024, 1440]) {

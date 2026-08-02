@@ -1,7 +1,0 @@
----
-import { getCollection } from "astro:content";
-import BaseLayout from "../../layouts/BaseLayout.astro";
-
-const entries = await getCollection("cases", ({ data }) => !data.draft);
----
-<BaseLayout title="支援事例｜FALXTER株式会社" description="FALXTER株式会社の公開可能な支援事例をご紹介します。"><header class="page-head"><div class="container"><p class="breadcrumbs"><a href="/">トップ</a> / 支援事例</p><p class="eyebrow">Cases</p><h1 class="heading">支援事例</h1></div></header><section class="section container">{entries.length?<div class="grid cards">{entries.map(e=><article class="card"><p>{e.data.category}</p><h2>{e.data.title}</h2><p>{e.data.description}</p><a href={`/cases/${e.id}/`}>詳しく見る</a></article>)}</div>:<div class="empty"><p>公開可能な支援事例は、現在準備中です。</p><p>個別の相談内容に対する対応可否は、<a href="/contact/">お問い合わせ</a>ください。</p></div>}</section></BaseLayout>
