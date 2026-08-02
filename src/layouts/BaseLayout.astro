@@ -7,6 +7,7 @@ interface Props {
   title: string;
   description: string;
   image?: string;
+  imageAlt?: string;
   noindex?: boolean;
   type?: "website" | "article";
   breadcrumbs?: { name: string; url: string }[];
@@ -14,7 +15,8 @@ interface Props {
 const {
   title,
   description,
-  image = "/og-default.svg",
+  image = "/images/og-default.png",
+  imageAlt = title,
   noindex = company.flags.noindex,
   type = "website",
   breadcrumbs = [],
@@ -55,4 +57,4 @@ Astro.response.headers.set("Cross-Origin-Opener-Policy", "same-origin");
 if (import.meta.env.PROD)
   Astro.response.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
 ---
-<!doctype html><html lang="ja"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width"/><title>{title}</title><meta name="description" content={description}/><link rel="canonical" href={canonical}/><link rel="icon" href="/favicon.svg"/><link rel="preload" as="image" href="/images/logo-480.webp?v=20260731" imagesrcset="/images/logo-480.webp?v=20260731 480w, /images/logo-720.webp?v=20260731 720w" imagesizes="(max-width: 420px) 200px, 240px" type="image/webp" fetchpriority="high"/><meta property="og:type" content={type}/><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:url" content={canonical}/><meta property="og:image" content={imageUrl}/><meta property="og:locale" content="ja_JP"/><meta name="twitter:card" content="summary_large_image"/>{noindex&&<meta name="robots" content="noindex,nofollow"/>}<script is:inline type="application/ld+json" set:html={JSON.stringify([organization,website,breadcrumbLd].filter(Boolean))}/><slot name="head"/></head><body><a class="skip" href="#main">本文へ移動</a><Header/><main id="main"><slot/></main><Footer/></body></html>
+<!doctype html><html lang="ja"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width"/><title>{title}</title><meta name="description" content={description}/><link rel="canonical" href={canonical}/><link rel="icon" href="/favicon.svg"/><link rel="preload" as="image" href="/images/logo-480.webp?v=20260731" imagesrcset="/images/logo-480.webp?v=20260731 480w, /images/logo-720.webp?v=20260731 720w" imagesizes="(max-width: 420px) 200px, 240px" type="image/webp" fetchpriority="high"/><meta property="og:type" content={type}/><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:url" content={canonical}/><meta property="og:site_name" content={company.companyName}/><meta property="og:image" content={imageUrl}/><meta property="og:image:secure_url" content={imageUrl}/><meta property="og:image:type" content="image/png"/><meta property="og:image:width" content="3034"/><meta property="og:image:height" content="1260"/><meta property="og:image:alt" content={imageAlt}/><meta property="og:locale" content="ja_JP"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:image" content={imageUrl}/><meta name="twitter:image:alt" content={imageAlt}/>{noindex&&<meta name="robots" content="noindex,nofollow"/>}<script is:inline type="application/ld+json" set:html={JSON.stringify([organization,website,breadcrumbLd].filter(Boolean))}/><slot name="head"/></head><body><a class="skip" href="#main">本文へ移動</a><Header/><main id="main"><slot/></main><Footer/></body></html>

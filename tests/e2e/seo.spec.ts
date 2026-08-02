@@ -21,6 +21,31 @@ test("各ページにSEO基本要素がある", async ({ page }) => {
   }
 });
 
+test("ページごとにOGP画像を切り替える", async ({ page, request }) => {
+  const pageImages = [
+    ["/", "/images/og-default.png"],
+    ["/company/", "/images/og-default.png"],
+    ["/services/system-support/", "/images/og-system-support.png"],
+    ["/services/corporate-website/", "/images/corporate-website.png"],
+  ] as const;
+
+  for (const [path, expectedImagePath] of pageImages) {
+    await page.goto(path);
+    const ogImage = page.locator('meta[property="og:image"]');
+    const ogImageUrl = await ogImage.getAttribute("content");
+    expect(ogImageUrl).not.toBeNull();
+    expect(new URL(ogImageUrl ?? "").pathname).toBe(expectedImagePath);
+    await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute(
+      "content",
+      ogImageUrl ?? "",
+    );
+
+    const imageResponse = await request.get(expectedImagePath);
+    expect(imageResponse.ok()).toBe(true);
+    expect(imageResponse.headers()["content-type"]).toContain("image/png");
+  }
+});
+
 test("トップのdescriptionは既存システム支援を主軸にする", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
