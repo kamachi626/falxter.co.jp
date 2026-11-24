@@ -1,0 +1,306 @@
+---
+import { Image } from "astro:assets";
+import desktopScreenshot from "../assets/works/sankei-desktop.png";
+import mobileScreenshot from "../assets/works/sankei-mobile.png";
+
+const points = [
+  {
+    title: "写真とイラストで伝えるお店の雰囲気",
+    description:
+      "店内の写真とロボットのイラストを組み合わせ、まちのおもちゃ屋の親しみやすさを表現。",
+  },
+  {
+    title: "楽しみ方が見つかる情報構成",
+    description: "おもちゃ・模型、駄菓子、レトロゲーム。それぞれの魅力を、写真と短い言葉で紹介。",
+  },
+  {
+    title: "来店・お問い合わせにつながる導線",
+    description: "営業時間やアクセスをまとめ、地図・電話・メールへ迷わず進める構成に。",
+  },
+];
+---
+
+<section class="section website-showcase" id="website-examples" aria-labelledby="website-examples-heading">
+  <div class="container">
+    <div class="showcase-heading">
+      <div>
+        <p class="eyebrow">Selected work</p>
+        <h2 class="heading" id="website-examples-heading">Webサイト制作の作例</h2>
+      </div>
+      <p class="showcase-intro">お店や事業の魅力を、伝わるかたちに。<br />公開中のサイトをご覧いただけます。</p>
+    </div>
+
+    <article class="showcase-project" aria-labelledby="sankei-heading">
+      <figure class="showcase-preview">
+        <div class="desktop-preview">
+          <div class="browser-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+          <Image
+            src={desktopScreenshot}
+            alt="おもちゃの三景のPC表示"
+            widths={[480, 720, 960, 1440]}
+            sizes="(max-width: 900px) calc(100vw - 5rem), 640px"
+            format="webp"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="mobile-preview">
+          <Image
+            src={mobileScreenshot}
+            alt="おもちゃの三景のスマートフォン表示"
+            widths={[195, 390]}
+            sizes="(max-width: 600px) 100px, 150px"
+            format="webp"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <figcaption>PC・スマートフォンの表示例</figcaption>
+      </figure>
+
+      <div class="showcase-copy">
+        <p class="project-location">東京都町田市・鶴川</p>
+        <h3 id="sankei-heading">おもちゃの三景</h3>
+        <ul class="project-tags" aria-label="サイトの種類と対応">
+          <li>店舗紹介サイト</li>
+          <li>1ページ構成</li>
+          <li>スマートフォン対応</li>
+        </ul>
+        <p class="project-description">町田・鶴川のおもちゃ店の紹介サイト。おもちゃ・駄菓子・レトロゲームの楽しさから、アクセス・お問い合わせまでを1ページにまとめました。</p>
+        <ul class="project-points">
+          {points.map((point) => (
+            <li>
+              <h4>{point.title}</h4>
+              <p>{point.description}</p>
+            </li>
+          ))}
+        </ul>
+        <div class="showcase-actions">
+          <a class="button" href="https://toyshop-sankei.webounds.com/" target="_blank" rel="noopener noreferrer">
+            公開サイトを見る
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M14 3h7v7M21 3 10 14M10 3H3v18h18v-7" /></svg>
+            <span class="new-tab-note">（別タブで開きます）</span>
+          </a>
+          <a class="showcase-contact" href="/contact/?service=website-consultation">Webサイト制作について相談する <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<style>
+  .website-showcase {
+    background: #fff;
+    border-block: 1px solid var(--color-border);
+  }
+  .showcase-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .showcase-heading .heading {
+    margin-bottom: 0;
+  }
+  .showcase-intro {
+    margin: 0;
+    color: var(--color-body);
+    font-size: 0.9375rem;
+    line-height: 1.9;
+  }
+  .showcase-project {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    border: 1px solid var(--color-border);
+  }
+  .showcase-preview {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    margin: 0;
+    padding: 2.5rem 3.25rem 4rem 1.75rem;
+    background: #eee9e0;
+  }
+  .desktop-preview {
+    overflow: hidden;
+    width: 100%;
+    border: 1px solid #d6d0c6;
+    border-radius: 0.45rem;
+    background: #fff;
+    box-shadow: 0 12px 30px #24202212;
+  }
+  .browser-bar {
+    display: flex;
+    gap: 0.3rem;
+    padding: 0.65rem 0.75rem;
+    border-bottom: 1px solid #e8e3db;
+    background: #faf8f5;
+  }
+  .browser-bar span {
+    width: 0.35rem;
+    height: 0.35rem;
+    border-radius: 50%;
+    background: #c4bab0;
+  }
+  .showcase-preview img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .mobile-preview {
+    position: absolute;
+    right: 1.25rem;
+    bottom: 3rem;
+    overflow: hidden;
+    width: 25%;
+    max-width: 150px;
+    border: 5px solid #292426;
+    border-radius: 1rem;
+    background: #faf8f2;
+    box-shadow: 0 12px 28px #24202226;
+  }
+  .showcase-preview figcaption {
+    position: absolute;
+    bottom: 1rem;
+    left: 1.75rem;
+    margin: 0;
+    color: var(--color-body);
+    font-size: 0.75rem;
+  }
+  .showcase-copy {
+    min-width: 0;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+  }
+  .project-location {
+    margin: 0 0 0.45rem;
+    color: var(--color-primary);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .showcase-copy h3 {
+    margin: 0;
+    font-size: clamp(1.7rem, 2.5vw, 2rem);
+    line-height: 1.5;
+  }
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 1rem 0 1.25rem;
+    padding: 0;
+    list-style: none;
+  }
+  .project-tags li {
+    padding: 0.25rem 0.55rem;
+    border: 1px solid var(--color-border);
+    color: var(--color-body);
+    font-size: 0.75rem;
+    line-height: 1.6;
+  }
+  .project-description {
+    margin: 0;
+    color: var(--color-body);
+    font-size: 1rem;
+    line-height: 1.9;
+  }
+  .project-points {
+    display: grid;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    padding: 1.4rem 0 0;
+    border-top: 1px solid var(--color-border);
+    list-style: none;
+  }
+  .project-points h4 {
+    margin: 0 0 0.25rem;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+  .project-points p {
+    margin: 0;
+    color: var(--color-body);
+    font-size: 0.875rem;
+    line-height: 1.8;
+  }
+  .showcase-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.25rem;
+    margin-top: 1.75rem;
+  }
+  .showcase-actions .button {
+    font-size: 0.9375rem;
+  }
+  .new-tab-note {
+    position: absolute;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .showcase-contact {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 44px;
+    color: var(--color-primary);
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1.7;
+  }
+  @media (max-width: 900px) {
+    .showcase-heading {
+      display: block;
+    }
+    .showcase-intro {
+      margin-top: 1rem;
+    }
+    .showcase-project {
+      grid-template-columns: 1fr;
+    }
+    .showcase-preview {
+      padding: 2rem 4rem 3.5rem 2rem;
+    }
+    .mobile-preview {
+      right: 1.5rem;
+    }
+  }
+  @media (max-width: 600px) {
+    .showcase-preview {
+      padding: 1.25rem 2.75rem 3rem 1rem;
+    }
+    .mobile-preview {
+      right: 0.75rem;
+      bottom: 2.5rem;
+      width: 28%;
+      border-width: 3px;
+      border-radius: 0.65rem;
+    }
+    .browser-bar {
+      gap: 0.2rem;
+      padding: 0.45rem;
+    }
+    .browser-bar span {
+      width: 0.25rem;
+      height: 0.25rem;
+    }
+    .showcase-preview figcaption {
+      bottom: 0.8rem;
+      left: 1rem;
+      font-size: 0.6875rem;
+    }
+    .showcase-copy {
+      padding: 1.5rem 1.25rem;
+    }
+    .showcase-actions {
+      align-items: start;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+  }
+</style>

@@ -37,7 +37,7 @@ test("コーポレートサイト制作を専用レイアウトで表示する",
     await expect(card.getByText("初稿に対する一括修正1回", { exact: true })).toBeVisible();
   }
 
-  await expect(page.getByRole("link", { name: "Webサイト制作について相談する" })).toHaveCount(2);
+  await expect(page.getByRole("link", { name: "Webサイト制作について相談する" })).toHaveCount(3);
   await expect(
     page.getByRole("link", { name: "Webサイト制作について相談する" }).first(),
   ).toHaveAttribute("href", "/contact/?service=website-consultation");

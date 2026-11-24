@@ -48,7 +48,8 @@ const breadcrumbLd = breadcrumbs.length
     }
   : null;
 const csp =
-  "default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://static.cloudflareinsights.com; frame-src https://challenges.cloudflare.com; connect-src 'self' https://challenges.cloudflare.com; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests";
+  "default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://static.cloudflareinsights.com; frame-src https://challenges.cloudflare.com; connect-src 'self' https://challenges.cloudflare.com; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'" +
+  (Astro.url.protocol === "https:" ? "; upgrade-insecure-requests" : "");
 Astro.response.headers.set("Content-Security-Policy", csp);
 Astro.response.headers.set("X-Content-Type-Options", "nosniff");
 Astro.response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
