@@ -9,7 +9,10 @@ const showcasePages = [
   },
 ] as const;
 
-const screenshotLabels = ["おもちゃの三景のPC表示", "おもちゃの三景のスマートフォン表示"] as const;
+const screenshotLabels = [
+  "おもちゃの三景様のPC表示",
+  "おもちゃの三景様のスマートフォン表示",
+] as const;
 
 const showcaseHighlights = [
   "写真とイラストで伝えるお店の雰囲気",
@@ -29,7 +32,7 @@ for (const showcasePage of showcasePages) {
       showcase.getByRole("heading", { level: 2, name: "Webサイト制作の作例", exact: true }),
     ).toBeVisible();
     await expect(
-      showcase.getByRole("heading", { level: 3, name: "おもちゃの三景", exact: true }),
+      showcase.getByRole("heading", { level: 3, name: "おもちゃの三景 様", exact: true }),
     ).toBeVisible();
 
     for (const title of showcaseHighlights) {
@@ -134,7 +137,7 @@ for (const showcasePage of showcasePages) {
       await page.goto(showcasePage.path);
       const showcase = page.getByRole("region", { name: "Webサイト制作の作例" });
       await expect(
-        showcase.getByRole("heading", { name: "おもちゃの三景", exact: true }),
+        showcase.getByRole("heading", { name: "おもちゃの三景 様", exact: true }),
       ).toBeVisible();
       await expect(showcase.getByRole("link", { name: /^公開サイトを見る/ })).toBeVisible();
       await expect(
