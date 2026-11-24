@@ -45,6 +45,22 @@ for (const showcasePage of showcasePages) {
     const linkRelations = (await siteLink.getAttribute("rel"))?.split(/\s+/) ?? [];
     expect(linkRelations).toEqual(expect.arrayContaining(["noopener", "noreferrer"]));
 
+    const quality = showcase.getByRole("region", { name: "モバイル・PCともに4項目100点" });
+    await expect(quality).toBeVisible();
+    await expect(quality.locator("time")).toHaveAttribute("datetime", "2026-11-25");
+    for (const report of [
+      { label: "モバイルの測定結果", device: "mobile" },
+      { label: "PCの測定結果", device: "desktop" },
+    ]) {
+      const reportLink = quality.getByRole("link", { name: new RegExp(`^${report.label}`) });
+      await expect(reportLink).toHaveAttribute(
+        "href",
+        `https://pagespeed.web.dev/analysis/https-toyshop-sankei-webounds-com/lth2cqjuqlbghhsd8422fp?form_factor=${report.device}`,
+      );
+      await expect(reportLink).toHaveAttribute("target", "_blank");
+      await expect(reportLink).toHaveAttribute("rel", "noopener noreferrer");
+    }
+
     expect(
       await page.evaluate(({ before, after }) => {
         const showcase = document.querySelector("#website-examples");

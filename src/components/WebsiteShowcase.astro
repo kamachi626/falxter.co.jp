@@ -3,6 +3,13 @@ import { Image } from "astro:assets";
 import desktopScreenshot from "../assets/works/sankei-desktop.png";
 import mobileScreenshot from "../assets/works/sankei-mobile.png";
 
+const reportUrl =
+  "https://pagespeed.web.dev/analysis/https-toyshop-sankei-webounds-com/lth2cqjuqlbghhsd8422fp";
+const reportLinks = [
+  { label: "モバイルの測定結果", href: `${reportUrl}?form_factor=mobile` },
+  { label: "PCの測定結果", href: `${reportUrl}?form_factor=desktop` },
+];
+
 const points = [
   {
     title: "写真とイラストで伝えるお店の雰囲気",
@@ -84,6 +91,24 @@ const points = [
           <a class="showcase-contact" href="/contact/?service=website-consultation">Webサイト制作について相談する <span aria-hidden="true">→</span></a>
         </div>
       </div>
+
+      <section class="quality-proof" aria-labelledby="quality-heading">
+        <p class="quality-score" aria-hidden="true">100<span>/100</span></p>
+        <div class="quality-copy">
+          <p class="quality-tool">Google PageSpeed Insights</p>
+          <h4 id="quality-heading">モバイル・PCともに4項目100点</h4>
+          <p class="quality-categories">パフォーマンス・アクセシビリティ・ベストプラクティス・SEO</p>
+          <p class="quality-note">測定日：<time datetime="2026-11-25">2026年11月25日</time>（日本時間）<br />測定環境によりスコアは変動します。</p>
+        </div>
+        <div class="quality-links">
+          {reportLinks.map((report) => (
+            <a href={report.href} target="_blank" rel="noopener noreferrer">
+              {report.label} <span aria-hidden="true">↗</span>
+              <span class="new-tab-note">（別タブで開きます）</span>
+            </a>
+          ))}
+        </div>
+      </section>
     </article>
   </div>
 </section>
@@ -253,6 +278,65 @@ const points = [
     font-weight: 700;
     line-height: 1.7;
   }
+  .quality-proof {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+    border-top: 1px solid var(--color-border);
+    background: #faf8f5;
+  }
+  .quality-score {
+    margin: 0;
+    color: var(--color-primary);
+    font: 750 3rem / 1.2 system-ui, sans-serif;
+    letter-spacing: -0.05em;
+  }
+  .quality-score span {
+    margin-left: 0.15rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+  .quality-tool {
+    margin: 0 0 0.25rem;
+    color: var(--color-primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+  .quality-copy h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.7;
+  }
+  .quality-categories {
+    margin: 0.3rem 0;
+    color: var(--color-body);
+    font-size: 0.8125rem;
+    line-height: 1.8;
+  }
+  .quality-note {
+    margin: 0.5rem 0 0;
+    color: var(--color-body);
+    font-size: 0.75rem;
+    line-height: 1.8;
+  }
+  .quality-links {
+    display: grid;
+    align-content: center;
+  }
+  .quality-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    color: var(--color-primary);
+    font-size: 0.8125rem;
+    font-weight: 700;
+  }
   @media (max-width: 900px) {
     .showcase-heading {
       display: block;
@@ -271,6 +355,25 @@ const points = [
     }
   }
   @media (max-width: 600px) {
+    .quality-proof {
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: start;
+      gap: 1rem;
+      padding: 1.5rem 1.25rem;
+    }
+    .quality-score {
+      font-size: 2.5rem;
+    }
+    .quality-score span {
+      display: block;
+      margin: 0;
+      text-align: right;
+    }
+    .quality-links {
+      grid-column: 1 / -1;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.5rem;
+    }
     .showcase-preview {
       padding: 1.25rem 2.75rem 3rem 1rem;
     }
